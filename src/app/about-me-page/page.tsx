@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import headshot from '../../components/Photo.png'; 
+import headshot from '../../components/Photo.png';
 
 export default function AboutMe() {
     return (

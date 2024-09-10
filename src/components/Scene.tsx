@@ -1,5 +1,3 @@
-// For three.js scene
-
 "use client";
 
 import { useRef, useEffect } from 'react';
@@ -9,13 +7,16 @@ export default function Scene() {
   const mountRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const currentMount = mountRef.current; // Save current mountRef in a variable
+    const currentMountRef = mountRef.current; // Save the ref value to a local variable
+    
+    if (!currentMountRef) return; // Ensure the ref exists
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    currentMount?.appendChild(renderer.domElement);
+    currentMountRef.appendChild(renderer.domElement);
 
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -35,12 +36,13 @@ export default function Scene() {
 
     animate();
 
+    // Cleanup function
     return () => {
-      if (currentMount) {
-        currentMount.removeChild(renderer.domElement); // Use the saved reference
+      if (currentMountRef) {
+        currentMountRef.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
   return <div ref={mountRef} />;
 }
