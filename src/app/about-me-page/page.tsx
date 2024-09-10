@@ -59,7 +59,6 @@ export default function AboutMe() {
                             <h3 className="text-2xl font-bold mb-2">Three.js</h3>
                             <p className="text-gray-300">Building immersive 3D experiences on the web.</p>
                         </div>
-                        {/* Add more skills as needed */}
                     </div>
                 </div>
             </section>
