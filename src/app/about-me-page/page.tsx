@@ -1,6 +1,5 @@
 import Image from 'next/image';
-{/* Import headshot image */}
-import headshot from '../../components/Photo.png';
+import headshot from '../../components/Photo.png'; 
 
 export default function AboutMe() {
     return (
@@ -13,7 +12,7 @@ export default function AboutMe() {
                         About Me
                     </h1>
                     <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                        Hi, I'm Jeongbin Son, a passionate web developer specializing in creating interactive web applications with React.js, Next.js, and Three.js. I enjoy building websites and learning new technologies to push the limits of what’s possible in web development.
+                        Hi, I&apos;m Jeongbin Son, a passionate web developer specializing in creating interactive web applications with React.js, Next.js, and Three.js. I enjoy building websites and learning new technologies to push the limits of what&apos;s possible in web development.
                     </p>
                 </div>
 
