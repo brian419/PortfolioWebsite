@@ -84,7 +84,7 @@ const ProjectPage = () => {
                     <motion.div
                         className="flex"
                         animate={{ x: offset - currentIndex * cardWidth }} // Centering logic
-                        transition={{ type: "spring", stiffness: 300 }}
+                        transition={{ type: "spring", stiffness: 100 }}
                     >
                         {projects.map((project, index) => (
                             <motion.div
@@ -116,7 +116,7 @@ const ProjectPage = () => {
                 <button
                     onClick={handleNext}
                     className="absolute right-0 z-10 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition"
-                    style={{ marginRight: '-50px' }} // Move the button further to the right to avoid overlap
+                    style={{ marginRight: '-50px' }} 
                 >
                     ▶
                 </button>
@@ -126,11 +126,11 @@ const ProjectPage = () => {
             <div className="mt-8">
                 {selectedProject.id === 1 ? ( //clicked on the first project
                     <a href={selectedProject.link} className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
-                        Go to Tetris Page
+                        Black & White Tetris
                     </a>
                 ) : (
                     <button className="bg-gray-500 text-white font-bold py-2 px-4 rounded cursor-not-allowed" disabled>
-                        No Link Available
+                        Not Implemented Yet
                     </button>
                 )}
             </div>
