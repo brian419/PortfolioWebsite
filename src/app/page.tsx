@@ -15,7 +15,7 @@ export default function Home() {
                             I am a web developer specializing in React.js, Next.js, and Three.js. I create interactive and performant web applications.
                         </p>
                         <a
-                            href="#projects"
+                            href="/projects-page"
                             className="bg-[#49A097] text-white px-8 py-4 rounded-full hover:bg-[#3d857c] transition duration-300"
                         >
                             View My Projects
