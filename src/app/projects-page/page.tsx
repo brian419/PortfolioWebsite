@@ -12,7 +12,7 @@ const projects = [
         title: 'Black and White Tetris',
         description: 'A minimalist Tetris game with black and white design.',
         image: TetrisImage,
-        link: '/tetris-page', // Tetris project link
+        link: '/tetris-page', 
     },
     {
         id: 2,
