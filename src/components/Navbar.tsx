@@ -22,11 +22,11 @@ export default function Navbar() {
                         Contact
                     </Link>
                 </div>
-                <div>
+                {/* <div>
                     <Link href="/login-page" className="bg-white-500 text-white text-lg py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
                         Login
                     </Link>
-                </div>
+                </div> */}
             </div>
         </nav>
     );
