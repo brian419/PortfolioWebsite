@@ -41,8 +41,8 @@ const createGrid = () => {
 };
 
 const TetrisPage = () => {
-    const [grid, setGrid] = useState(createGrid);
-    const [currentTetromino, setCurrentTetromino] = useState(TETROMINOS.T);
+    //const [grid, setGrid] = useState(createGrid);
+    const [currentTetromino] = useState(TETROMINOS.T); //, setCurrentTetromino
     const [position, setPosition] = useState({ x: COLS / 2 - 2, y: 0 }); // Start position for Tetromino
 
     // Drop the Tetromino down every second
