@@ -19,25 +19,25 @@ const projects = [
         title: 'Placeholder Project 2',
         description: 'Placeholder description 2.',
         image: PlaceholderImage,
-        link: '', // No link for now
+        link: '', 
     },
     {
         id: 3,
         title: 'Placeholder Project 3',
         description: 'Placeholder description 3.',
         image: PlaceholderImage,
-        link: '', // No link for now
+        link: '', 
     },
     {
         id: 4,
         title: 'Placeholder Project 4',
         description: 'Placeholder description 4.',
         image: PlaceholderImage,
-        link: '', // No link for now
-    },
+        link: '', 
+    }
 ];
 
-const cardWidth = 340; // Set the width of the card to help in precise movement
+const cardWidth = 340; 
 const visibleCards = 1; // Only the centered card should be fully visible
 
 const ProjectPage = () => {
@@ -124,7 +124,7 @@ const ProjectPage = () => {
 
             {/* Submit Button */}
             <div className="mt-8">
-                {selectedProject.id === 1 ? ( // Only show the button for the Tetris project
+                {selectedProject.id === 1 ? ( //clicked on the first project
                     <a href={selectedProject.link} className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
                         Go to Tetris Page
                     </a>
