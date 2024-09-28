@@ -16,7 +16,7 @@ export default function Home() {
                         </p>
                         <a
                             href="/projects-page"
-                            className="bg-[#49A097] text-white px-8 py-4 rounded-full hover:bg-[#3d857c] transition duration-300"
+                            className="animate-bounce bg-[#49A097] text-white px-8 py-4 rounded-full hover:bg-[#3d857c] transition duration-300"
                         >
                             View My Projects
                         </a>

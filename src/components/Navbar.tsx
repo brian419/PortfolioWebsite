@@ -23,7 +23,7 @@ export default function Navbar() {
                     </Link>
                 </div>
                 <div>
-                    <span className="text-white text-lg">Jeongbin Son</span>
+                    <span className="text-white text-lg animate-pulse">Jeongbin Son</span>
                 </div>
             </div>
         </nav>
