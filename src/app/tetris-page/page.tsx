@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 // Grid dimensions
 const COLS = 10;
-const ROWS = 20;
+const ROWS = 21; // Increase by 1 to add an invisible top row
 
 // Define the Tetromino shapes
 const TETROMINOS = {
@@ -35,7 +35,7 @@ const TETROMINOS = {
     ],
 };
 
-// Create an empty grid (10x20)
+// Create an empty grid (10x21), where the top row is hidden
 const createGrid = () => Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 
 // Generate a random Tetromino
@@ -51,16 +51,20 @@ const TetrisPage = () => {
     const [position, setPosition] = useState({ x: COLS / 2 - 2, y: 0 }); // Tetromino position
     const [gameOver, setGameOver] = useState(false); // Game over state
     const [score, setScore] = useState(0); // Player score
+    const [lockDelay, setLockDelay] = useState(false); // Lock delay to prevent immediate new block spawn
+    const [nextTetromino, setNextTetromino] = useState(randomTetromino); // Queue the next Tetromino
 
     const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
 
-     // Function to restart the game
+    // Function to restart the game
     const restartGame = () => {
         setGrid(createGrid()); // Reset the game grid
         setCurrentTetromino(randomTetromino()); // Generate a new Tetromino
         setPosition({ x: COLS / 2 - 2, y: 0 }); // Reset the position
         setScore(0); // Reset the score
         setGameOver(false); // Set the game as not over
+        setNextTetromino(randomTetromino()); // Generate the next Tetromino
+        setLockDelay(false); // Reset the lock delay
     };
 
     // Check if Tetromino collides with the grid boundaries or other blocks
@@ -99,8 +103,6 @@ const TetrisPage = () => {
         updateScore(linesCleared);
     };
 
-
-
     // Clear completed lines from the grid and return the number of cleared rows
     const checkForCompleteLines = (grid: number[][]) => {
         const newGrid = grid.filter((row) => row.some((cell) => cell === 0)); // Keep incomplete rows
@@ -136,18 +138,19 @@ const TetrisPage = () => {
     const moveDown = () => {
         if (!collides(position.x, position.y + 1, currentTetromino)) {
             setPosition((prev) => ({ ...prev, y: prev.y + 1 }));
-        } else {
-            placeTetromino(); // Place Tetromino when it hits something
-            if (position.y <= 0) {
+        } else if (!lockDelay) {
+            setLockDelay(true); // Trigger lock delay when Tetromino hits something
+            placeTetromino(); // Place Tetromino after collision
+            if (position.y <= 1) { // Check for game over (1 because the top row is hidden)
                 setGameOver(true); // Game over if Tetromino can't be placed
             } else {
-                // Make sure the position and grid are reset cleanly
-                setCurrentTetromino(randomTetromino()); // Spawn new Tetromino
+                setCurrentTetromino(nextTetromino); // Spawn the queued Tetromino
+                setNextTetromino(randomTetromino()); // Queue a new Tetromino
                 setPosition({ x: COLS / 2 - 2, y: 0 }); // Reset position
+                setLockDelay(false); // Reset the lock delay to allow further movement
             }
         }
     };
-
 
     // Move Tetromino left or right
     const move = (dir: number) => {
@@ -169,18 +172,34 @@ const TetrisPage = () => {
     // Handle key presses (left, right, down, rotate)
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
-            e.preventDefault(); // no scrolling
+            e.preventDefault(); // Disable default scrolling behavior
         }
         if (e.key === 'ArrowLeft') {
-            move(-1); 
+            move(-1);
         } else if (e.key === 'ArrowRight') {
-            move(1); 
+            move(1);
         } else if (e.key === 'ArrowDown') {
-            moveDown(); 
+            moveDown();
         } else if (e.key === 'ArrowUp') {
-            rotate(); 
+            rotate();
         }
     };
+
+    // Disable scrolling entirely on arrow keys press
+    useEffect(() => {
+        const preventArrowKeyScroll = (e: KeyboardEvent) => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+            }
+        };
+        window.addEventListener('keydown', preventArrowKeyScroll);
+        window.addEventListener('keypress', preventArrowKeyScroll); // Prevent arrow key scrolling
+        return () => {
+            window.removeEventListener('keydown', preventArrowKeyScroll);
+            window.removeEventListener('keypress', preventArrowKeyScroll); // Clean up both events
+        };
+        
+    }, []);
 
     // Render the Tetromino on the grid
     const renderGrid = () => {
@@ -200,16 +219,14 @@ const TetrisPage = () => {
             row.forEach((value, x) => {
                 const gridY = position.y + y;
                 const gridX = position.x + x;
-                if (value !== 0 && gridY >= 0 && gridY < ROWS && gridX >= 0 && gridX < COLS) {
+                if (value !== 0 && gridY >= 1 && gridY < ROWS && gridX >= 0 && gridX < COLS) {
                     newGrid[gridY][gridX] = value; // Overlay the falling Tetromino on top of the grid
                 }
             });
         });
 
-        return newGrid;  // Return the grid with the Tetromino overlay
+        return newGrid.slice(1);  // Return the grid without the hidden top row
     };
-
-    
 
     // Automatically move Tetromino down every second
     useEffect(() => {
