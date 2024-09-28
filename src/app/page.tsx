@@ -1,5 +1,7 @@
 //Home Page
 
+
+
 export default function Home() {
     return (
         <div className="min-h-screen flex flex-col">
@@ -36,7 +38,7 @@ export default function Home() {
                             Here, you’ll find a selection of my work that demonstrates my
                             skills in web development.
                         </p>
-                        {/* Placeholder for your projects */}
+                        {/* Placeholder for my projects */}
                     </div>
                 </section>
 
