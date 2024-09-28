@@ -82,7 +82,7 @@ const TetrisPage = () => {
     // Place Tetromino on the grid and stack it when it hits something
     const placeTetromino = () => {
         const newGrid = [...grid];
-        
+
         // Place the current Tetromino on the grid
         currentTetromino.forEach((row, y) => {
             row.forEach((value, x) => {
@@ -92,12 +92,14 @@ const TetrisPage = () => {
             });
         });
 
-        setGrid(newGrid);  // Update the state with the new grid
+        setGrid(newGrid);  // Ensure grid is updated with Tetromino placed
         const linesCleared = checkForCompleteLines(newGrid);  // Check for and remove completed lines
-        
+
         // Update score based on lines cleared
         updateScore(linesCleared);
     };
+
+
 
     // Clear completed lines from the grid and return the number of cleared rows
     const checkForCompleteLines = (grid: number[][]) => {
@@ -139,11 +141,13 @@ const TetrisPage = () => {
             if (position.y <= 0) {
                 setGameOver(true); // Game over if Tetromino can't be placed
             } else {
+                // Make sure the position and grid are reset cleanly
                 setCurrentTetromino(randomTetromino()); // Spawn new Tetromino
                 setPosition({ x: COLS / 2 - 2, y: 0 }); // Reset position
             }
         }
     };
+
 
     // Move Tetromino left or right
     const move = (dir: number) => {
@@ -181,7 +185,7 @@ const TetrisPage = () => {
     // Render the Tetromino on the grid
     const renderGrid = () => {
         const newGrid = createGrid();  // Create a new empty grid
-    
+
         // Copy the grid state into newGrid to reflect the current state of the board
         grid.forEach((row, y) => {
             row.forEach((value, x) => {
@@ -190,7 +194,7 @@ const TetrisPage = () => {
                 }
             });
         });
-    
+
         // Overlay the currently falling Tetromino onto the grid
         currentTetromino.forEach((row, y) => {
             row.forEach((value, x) => {
@@ -201,9 +205,10 @@ const TetrisPage = () => {
                 }
             });
         });
-    
+
         return newGrid;  // Return the grid with the Tetromino overlay
     };
+
     
 
     // Automatically move Tetromino down every second
