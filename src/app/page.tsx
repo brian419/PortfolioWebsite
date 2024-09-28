@@ -6,7 +6,7 @@ export default function Home() {
             
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-28">
+                <section className="text-white py-28">
                     <div className="container mx-auto text-center flex flex-col justify-center items-center min-h-[70vh]">
                         <h1 className="text-6xl font-extrabold mb-6 text-[#49A097]">
                             Welcome to My Portfolio

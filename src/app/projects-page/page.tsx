@@ -66,7 +66,7 @@ const ProjectPage = () => {
     const selectedProject = projects[currentIndex];
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white relative">
+        <div className="flex flex-col items-center justify-start mt-[-40px] h-screen text-white relative">
             <h1 className="text-4xl font-bold mb-8">Projects</h1>
 
             <div className="relative w-full max-w-3xl flex items-center justify-center">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // Grid dimensions
 const COLS = 10;
@@ -46,10 +46,22 @@ const randomTetromino = () => {
 };
 
 const TetrisPage = () => {
-    const [grid, setGrid] = useState(createGrid()); // The game grid
+    const [grid, setGrid] = useState(createGrid()); // game board
     const [currentTetromino, setCurrentTetromino] = useState(randomTetromino); // Active Tetromino
     const [position, setPosition] = useState({ x: COLS / 2 - 2, y: 0 }); // Tetromino position
     const [gameOver, setGameOver] = useState(false); // Game over state
+    const [score, setScore] = useState(0); // Player score
+
+    const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
+
+     // Function to restart the game
+    const restartGame = () => {
+        setGrid(createGrid()); // Reset the game grid
+        setCurrentTetromino(randomTetromino()); // Generate a new Tetromino
+        setPosition({ x: COLS / 2 - 2, y: 0 }); // Reset the position
+        setScore(0); // Reset the score
+        setGameOver(false); // Set the game as not over
+    };
 
     // Check if Tetromino collides with the grid boundaries or other blocks
     const collides = (x: number, y: number, tetromino: number[][]) => {
@@ -70,23 +82,52 @@ const TetrisPage = () => {
     // Place Tetromino on the grid and stack it when it hits something
     const placeTetromino = () => {
         const newGrid = [...grid];
+        
+        // Place the current Tetromino on the grid
         currentTetromino.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value !== 0 && position.y + y < ROWS) {
-                    newGrid[position.y + y][position.x + x] = value;
+                    newGrid[position.y + y][position.x + x] = value; // Set the grid cell to the Tetromino value
                 }
             });
         });
-        setGrid(newGrid);
-        checkForCompleteLines(newGrid); // Clear lines if any are complete
+
+        setGrid(newGrid);  // Update the state with the new grid
+        const linesCleared = checkForCompleteLines(newGrid);  // Check for and remove completed lines
+        
+        // Update score based on lines cleared
+        updateScore(linesCleared);
     };
 
-    // Clear completed lines from the grid
+    // Clear completed lines from the grid and return the number of cleared rows
     const checkForCompleteLines = (grid: number[][]) => {
         const newGrid = grid.filter((row) => row.some((cell) => cell === 0)); // Keep incomplete rows
         const rowsCleared = ROWS - newGrid.length;
         const emptyRows = Array.from({ length: rowsCleared }, () => Array(COLS).fill(0)); // Add new empty rows at the top
         setGrid([...emptyRows, ...newGrid]); // Update grid
+        return rowsCleared; // Return the number of lines cleared
+    };
+
+    // Update score based on the number of lines cleared
+    const updateScore = (linesCleared: number) => {
+        let points = 0;
+        switch (linesCleared) {
+            case 1:
+                points = 100;
+                break;
+            case 2:
+                points = 300;
+                break;
+            case 3:
+                points = 500;
+                break;
+            case 4:
+                points = 800;
+                break;
+            default:
+                break;
+        }
+        setScore((prevScore) => prevScore + points);
     };
 
     // Move Tetromino down
@@ -123,33 +164,47 @@ const TetrisPage = () => {
 
     // Handle key presses (left, right, down, rotate)
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
+            e.preventDefault(); // no scrolling
+        }
         if (e.key === 'ArrowLeft') {
-            move(-1); // Move left
+            move(-1); 
         } else if (e.key === 'ArrowRight') {
-            move(1); // Move right
+            move(1); 
         } else if (e.key === 'ArrowDown') {
-            moveDown(); // Soft drop (faster movement down)
+            moveDown(); 
         } else if (e.key === 'ArrowUp') {
-            rotate(); // Rotate
+            rotate(); 
         }
     };
 
     // Render the Tetromino on the grid
     const renderGrid = () => {
-        const newGrid = createGrid();
-        currentTetromino.forEach((row, y) => {
+        const newGrid = createGrid();  // Create a new empty grid
+    
+        // Copy the grid state into newGrid to reflect the current state of the board
+        grid.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value !== 0) {
-                    const gridY = position.y + y;
-                    const gridX = position.x + x;
-                    if (gridY >= 0 && gridY < ROWS && gridX >= 0 && gridX < COLS) {
-                        newGrid[gridY][gridX] = value;
-                    }
+                    newGrid[y][x] = value; // Copy the landed Tetrominoes onto the grid
                 }
             });
         });
-        return newGrid;
+    
+        // Overlay the currently falling Tetromino onto the grid
+        currentTetromino.forEach((row, y) => {
+            row.forEach((value, x) => {
+                const gridY = position.y + y;
+                const gridX = position.x + x;
+                if (value !== 0 && gridY >= 0 && gridY < ROWS && gridX >= 0 && gridX < COLS) {
+                    newGrid[gridY][gridX] = value; // Overlay the falling Tetromino on top of the grid
+                }
+            });
+        });
+    
+        return newGrid;  // Return the grid with the Tetromino overlay
     };
+    
 
     // Automatically move Tetromino down every second
     useEffect(() => {
@@ -159,17 +214,42 @@ const TetrisPage = () => {
         return () => clearInterval(interval);
     }, [position, gameOver]);
 
+    // Focus on the container when the page loads
+    useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.focus({ preventScroll: true });
+        }
+    }, []);
+
     return (
         <div
-            className="h-screen overflow-hidden flex flex-col items-center justify-center bg-gray-900 text-white"
-            tabIndex={0} // Make div focusable for key events
+            ref={containerRef}
+            className="h-screen overflow-hidden flex justify-center mt-[-60px] items-center p-4 select-none focus:outline-none"
+            tabIndex={0}
             onKeyDown={handleKeyDown}
         >
-            <h1 className="text-4xl font-bold mb-4">Black and White Tetris</h1>
-            {gameOver ? (
-                <h2 className="text-3xl">Game Over!</h2>
-            ) : (
-                <div className="w-full h-full flex items-center justify-center">
+            {/* Game Over message with Restart button */}
+            {gameOver && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-75">
+                    <h2 className="text-4xl font-bold text-white mb-4">Game Over!</h2>
+                    <button
+                        onClick={restartGame}
+                        className="bg-white text-black px-4 py-2 rounded-lg shadow-lg hover:bg-gray-300 transition duration-200"
+                    >
+                        Restart Game
+                    </button>
+                </div>
+            )}
+
+            <div className="flex flex-row items-start justify-center space-x-8">
+                <div className="score-and-title flex flex-col items-center text-center">
+                    <h1 className="text-4xl font-bold mt-60 mb-4">Black and White Tetris</h1>
+                    <div id="tetrisScore" className="score-box bg-black text-white p-4 rounded-lg shadow-lg mb-1">
+                        <h2 className="text-xl font-bold">Score</h2>
+                        <p className="text-2xl">{score}</p>
+                    </div>
+                </div>
+                <div className="w-full flex items-center justify-center">
                     <div className="game-container bg-black text-white p-4 rounded-lg shadow-lg">
                         <div className="grid grid-cols-10 gap-1">
                             {renderGrid().map((row, rowIndex) =>
@@ -183,7 +263,7 @@ const TetrisPage = () => {
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 };

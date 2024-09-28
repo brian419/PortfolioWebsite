@@ -1,13 +1,13 @@
 export default function Contact() {
     return (
-        <div className="min-h-screen flex flex-col bg-gray-100 text-gray-800">
+        <div className="min-h-screen flex flex-col text-gray-800">
             {/* Contact Section */}
             <section className="container mx-auto px-4 py-20">
                 <div className="text-center mb-12">
                     <h1 className="text-5xl font-extrabold text-[#49A097] mb-6">
                         Contact Me
                     </h1>
-                    <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                    <p className="text-lg text-white max-w-3xl mx-auto">
                         I would love to hear from you! Whether you have a question, a project you’d like to discuss, or just want to say hello, feel free to get in touch.
                     </p>
                 </div>
@@ -64,7 +64,7 @@ export default function Contact() {
 
                 {/* Contact Information */}
                 <div className="mt-12 text-center">
-                    <p className="text-lg text-gray-600">
+                    <p className="text-lg text-white">
                         You can also reach me via email at <a href="mailto:json10@crimson.ua.edu" target="_blank" className="text-[#49A097] underline">json10@crimson.ua.edu</a>
                     </p>
                 </div>

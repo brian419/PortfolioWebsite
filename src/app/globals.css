@@ -14,7 +14,7 @@
   }
 }
 
-body {
+body, html{
   color: var(--foreground);
   background: linear-gradient(to right, #1f2937, #2d3748, #1f2937);
   background-color: var(--background);
@@ -22,7 +22,9 @@ body {
   
 }
 
-
+#tetrisScore {
+  background: linear-gradient(to right, #1f2937, #2d3748, #1f2937);
+}
 
 @layer utilities {
   .text-balance {

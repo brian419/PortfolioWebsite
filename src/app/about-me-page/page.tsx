@@ -3,7 +3,7 @@ import headshot from '../../components/Photo.png';
 
 export default function AboutMe() {
     return (
-        <div className="min-h-screen flex flex-col bg-gray-100 text-gray-800">
+        <div className="min-h-screen flex flex-col text-gray-800">
             
             {/* About Me Section */}
             <section className="container mx-auto px-4 py-20">
@@ -11,7 +11,7 @@ export default function AboutMe() {
                     <h1 className="text-5xl font-extrabold text-[#49A097] mb-6">
                         About Me
                     </h1>
-                    <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                    <p className="text-lg text-white max-w-3xl mx-auto">
                         Hi, I&apos;m Jeongbin Son, a passionate web developer specializing in creating interactive web applications with React.js, Next.js, and Three.js. I enjoy building websites and learning new technologies to push the limits of what&apos;s possible in web development.
                     </p>
                 </div>
@@ -23,7 +23,7 @@ export default function AboutMe() {
                 
                 <div className="flex flex-wrap justify-center items-start space-y-8 md:space-y-0 md:space-x-8">
                     {/* Personal Section */}
-                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md">
+                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md bg-[#AEADBD]">
                         <h2 className="text-3xl font-bold text-[#49A097] mb-4">Personal Background</h2>
                         <p className="text-gray-700 leading-relaxed">
                             I was born and raised in South Korea and have spent over 15 years in the United States, which has given me a unique perspective on both cultures. With my bilingual skills, I have a deep passion for helping bridge communication gaps through technology and language.
@@ -31,7 +31,7 @@ export default function AboutMe() {
                     </div>
 
                     {/* Professional Section */}
-                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md">
+                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md bg-[#AEADBD]">
                         <h2 className="text-3xl font-bold text-[#49A097] mb-4">Professional Journey</h2>
                         <p className="text-gray-700 leading-relaxed">
                             I am a Computer Science major at the University of Alabama, currently interning at ChemTalk where I build web applications to promote chemistry education. With experience in React.js, Next.js, and Tailwind CSS, I aim to develop intuitive and impactful user experiences.
