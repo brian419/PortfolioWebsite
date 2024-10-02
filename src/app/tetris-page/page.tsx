@@ -225,7 +225,7 @@ const TetrisPage = () => {
             });
         });
 
-        return newGrid.slice(1);  // Return the grid without the hidden top row
+        return newGrid.slice(1);  
     };
 
     // Automatically move Tetromino down every second

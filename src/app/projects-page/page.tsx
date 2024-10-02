@@ -12,32 +12,32 @@ const projects = [
         title: 'Black and White Tetris',
         description: 'A minimalist Tetris game with black and white design.',
         image: TetrisImage,
-        link: '/tetris-page', 
+        link: '/tetris-page',
     },
     {
         id: 2,
         title: 'Placeholder Project 2',
         description: 'Placeholder description 2.',
         image: PlaceholderImage,
-        link: '', 
+        link: '',
     },
     {
         id: 3,
         title: 'Placeholder Project 3',
         description: 'Placeholder description 3.',
         image: PlaceholderImage,
-        link: '', 
+        link: '',
     },
     {
         id: 4,
         title: 'Placeholder Project 4',
         description: 'Placeholder description 4.',
         image: PlaceholderImage,
-        link: '', 
+        link: '',
     }
 ];
 
-const cardWidth = 340; 
+const cardWidth = 340;
 const visibleCards = 1; // Only the centered card should be fully visible
 
 const ProjectPage = () => {
@@ -116,7 +116,7 @@ const ProjectPage = () => {
                 <button
                     onClick={handleNext}
                     className="absolute right-0 z-10 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition"
-                    style={{ marginRight: '-50px' }} 
+                    style={{ marginRight: '-50px' }}
                 >
                     ▶
                 </button>
@@ -125,15 +125,26 @@ const ProjectPage = () => {
             {/* Submit Button */}
             <div className="mt-8">
                 {selectedProject.id === 1 ? ( //clicked on the first project
-                    <a href={selectedProject.link} className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
-                        Black & White Tetris
-                    </a>
+                    <div className="mx-auto flex w-full max-w-lg items-center justify-center mt-8">
+                        <div className="relative z-10 flex w-full cursor-pointer items-center overflow-hidden rounded-xl border border-slate-800 p-[1.5px]">
+                            <div className="animate-rotate absolute inset-0 h-full w-full rounded-full bg-[conic-gradient(#0ea5e9_20deg,transparent_120deg)]"></div>
+                            <div className="relative z-20 flex w-full rounded-[0.60rem] bg-blue-600 p-2">
+                                <a
+                                    href={selectedProject.link}
+                                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded w-full text-center"
+                                >
+                                    Black & White Tetris
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 ) : (
                     <button className="bg-gray-500 text-white font-bold py-2 px-4 rounded cursor-not-allowed" disabled>
                         Not Implemented Yet
                     </button>
                 )}
             </div>
+
         </div>
     );
 };
