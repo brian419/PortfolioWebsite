@@ -131,7 +131,7 @@ const ProjectPage = () => {
                             <div className="relative z-20 flex w-full rounded-[0.60rem] bg-blue-600 p-2">
                                 <a
                                     href={selectedProject.link}
-                                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded w-full text-center"
+                                    className="bg-blue-600 hover:text-black text-white text-xs font-bold py-2 px-4 rounded w-full text-center"
                                 >
                                     Black & White Tetris
                                 </a>

@@ -2,9 +2,15 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
+interface Score {
+    playerName: string;
+    score: number;
+    createdAt: string;
+}
+
 // Grid dimensions
 const COLS = 10;
-const ROWS = 21; // Increase by 1 to add an invisible top row
+const ROWS = 21;
 
 // Define the Tetromino shapes
 const TETROMINOS = {
@@ -53,6 +59,8 @@ const TetrisPage = () => {
     const [score, setScore] = useState(0); // Player score
     const [lockDelay, setLockDelay] = useState(false); // Lock delay to prevent immediate new block spawn
     const [nextTetromino, setNextTetromino] = useState(randomTetromino); // Queue the next Tetromino
+    const [topScores, setTopScores] = useState<Score[]>([]); // Store top scores
+    const [playerName, setPlayerName] = useState(''); // Store player's name
 
     const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
 
@@ -65,6 +73,7 @@ const TetrisPage = () => {
         setGameOver(false); // Set the game as not over
         setNextTetromino(randomTetromino()); // Generate the next Tetromino
         setLockDelay(false); // Reset the lock delay
+        setPlayerName(''); // Reset the player's name
     };
 
     // Check if Tetromino collides with the grid boundaries or other blocks
@@ -198,7 +207,53 @@ const TetrisPage = () => {
             window.removeEventListener('keydown', preventArrowKeyScroll);
             window.removeEventListener('keypress', preventArrowKeyScroll); // Clean up both events
         };
-        
+    }, []);
+
+    // Submit the score when the game is over and name is entered
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('/api/tetrisSubmitScore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    playerName,
+                    score,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit score');
+            }
+
+            const data = await response.json();
+            console.log('Score submitted:', data);
+
+            // Fetch the latest top scores
+            const fetchResponse = await fetch('/api/getScores');
+            const topScoresData = await fetchResponse.json();
+            setTopScores(topScoresData);
+
+        } catch (error) {
+            console.error('Error submitting score:', error);
+        }
+    };
+
+    // Fetch top 10 scores when the component mounts
+    useEffect(() => {
+        const fetchScores = async () => {
+            try {
+                const response = await fetch('/api/getScores');
+                const data = await response.json();
+                console.log('Fetched scores:', data); // Check what's returned
+                setTopScores(data);
+            } catch (error) {
+                console.error('Error fetching scores:', error);
+            }
+        };
+
+        fetchScores();
     }, []);
 
     // Render the Tetromino on the grid
@@ -225,7 +280,7 @@ const TetrisPage = () => {
             });
         });
 
-        return newGrid.slice(1);  
+        return newGrid.slice(1);
     };
 
     // Automatically move Tetromino down every second
@@ -254,6 +309,20 @@ const TetrisPage = () => {
             {gameOver && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-75">
                     <h2 className="text-4xl font-bold text-white mb-4">Game Over!</h2>
+                    <input
+                        type="text"
+                        placeholder="Enter your name"
+                        value={playerName}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                        className="mb-4 p-2 rounded-lg text-black"
+                    />
+                    <button
+                        onClick={handleSubmit}
+                        className="bg-white text-black px-4 py-2 rounded-lg shadow-lg hover:bg-gray-300 transition duration-200 mb-4"
+                        disabled={!playerName}
+                    >
+                        Submit Score
+                    </button>
                     <button
                         onClick={restartGame}
                         className="bg-white text-black px-4 py-2 rounded-lg shadow-lg hover:bg-gray-300 transition duration-200"
@@ -284,6 +353,17 @@ const TetrisPage = () => {
                             )}
                         </div>
                     </div>
+                </div>
+
+                <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-80 text-center">
+                    <h2 className="text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
+                    <ul>
+                        {topScores.map((score, index) => (
+                            <li key={index} className="text-lg text-blue-600">
+                                {score.playerName}: {score.score}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </div>
