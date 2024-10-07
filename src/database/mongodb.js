@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-let cachedClient = null;
+
 let cachedDb = null;
 
 async function connectToDatabase() {
@@ -12,7 +12,7 @@ async function connectToDatabase() {
     await client.connect();
 
     const db = client.db(); // Change this line to return the actual database
-    cachedClient = client;
+
     cachedDb = db; // Cache the db instance
     return db;
 }
