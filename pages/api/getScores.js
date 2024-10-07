@@ -1,4 +1,4 @@
-const { connectToDatabase } = require('../../database/mongodb');
+const { connectToDatabase } = require('../../src/database/mongodb');
 
 export default async function handler(req, res) {
     if (req.method === 'GET') {
@@ -13,6 +13,6 @@ export default async function handler(req, res) {
 
         res.status(200).json(scores);
     } else {
-        res.status(405).json({ message: 'Method not allowed '});
+        res.status(405).json({ message: 'Method not allowed ' });
     }
 };
