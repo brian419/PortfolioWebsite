@@ -7,10 +7,14 @@ async function connectToDatabase() {
         return cachedDb; 
     }
 
-    const client = new MongoClient(process.env.MONGODB_URI);
+    const client = new MongoClient(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+
     await client.connect();
 
-    const db = client.db(); 
+    const db = client.db(''); 
 
     cachedDb = db; // Cache the db instance
     return db;
