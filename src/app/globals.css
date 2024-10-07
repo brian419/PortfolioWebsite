@@ -31,3 +31,26 @@ body, html{
     text-wrap: balance;
   }
 }
+
+.rabbit-container {
+  position: absolute;
+  transition: all 1s ease-in-out;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  animation: shake 10.0s infinite ease-in-out; 
+  z-index: 0;
+}
+
+@keyframes shake {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  10% { transform: translate(-50%, -50%) rotate(10deg); }
+  20% { transform: translate(-50%, -50%) rotate(-10deg); }
+  30% { transform: translate(-50%, -50%) rotate(10deg); }
+  40% { transform: translate(-50%, -50%) rotate(-10deg); }
+  50% { transform: translate(-50%, -50%) rotate(10deg); }
+  60% { transform: translate(-50%, -50%) rotate(-10deg); }
+  70% { transform: translate(-50%, -50%) rotate(10deg); }
+  80% { transform: translate(-50%, -50%) rotate(-10deg); }
+  90% { transform: translate(-50%, -50%) rotate(10deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
