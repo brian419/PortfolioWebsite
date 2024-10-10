@@ -1,7 +1,5 @@
 //Home Page
 
-
-
 export default function Home() {
     return (
         <div className="min-h-screen flex flex-col">
@@ -26,7 +24,7 @@ export default function Home() {
                 </section>
 
                 {/* Horizontal Line */}
-                <div className="w-full border-t-4 border-[#49A097]"></div>
+                <div className="w-full border-t-4 border-[#49A097] border-solid"></div>
 
                 {/* Projects Section */}
                 <section id="projects" className="py-20 bg-gray-100 text-gray-800">
