@@ -7,7 +7,6 @@ const GalaxyScene = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
-        // Initialize the scene, camera, and renderer
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasRef.current! });
@@ -17,13 +16,12 @@ const GalaxyScene = () => {
         renderer.shadowMap.enabled = false;
         renderer.autoClear = false; // allows overlay
 
-        // OrbitControls: Enable camera movement via mouse controls
         const controls = new OrbitControls(camera as THREE.Camera, renderer.domElement);
-        controls.enableDamping = true; // Smooth movement when panning/rotating
-        controls.dampingFactor = 0.05; // Damping for smoother motion
-        controls.enableZoom = true; // Enable zoom with the mouse scroll
-        controls.autoRotate = false; // Optional: Enable automatic rotation
-        controls.autoRotateSpeed = 0.5; // Speed of the auto-rotation if enabled
+        controls.enableDamping = true; 
+        controls.dampingFactor = 0.05; 
+        controls.enableZoom = true; 
+        controls.autoRotate = false; 
+        controls.autoRotateSpeed = 0.5; 
 
         // Resize canvas on window resize
         window.addEventListener('resize', () => {
@@ -99,7 +97,7 @@ const GalaxyScene = () => {
         generateGalaxy();
 
         // Set the camera position
-        camera.position.z = 30; // Adjust based on how zoomed out you want to start
+        camera.position.z = 30; 
 
         // Animation loop
         const animate = () => {
@@ -107,7 +105,7 @@ const GalaxyScene = () => {
             if (points) {
                 points.rotation.y += 0.001; // Slow rotation
             }
-            controls.update(); // Update controls to allow user interaction
+            controls.update(); //user interaction
             renderer.render(scene, camera);
         };
 
