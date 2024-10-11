@@ -18,7 +18,7 @@ const GalaxyScene = () => {
         renderer.autoClear = false; // allows overlay
 
         // OrbitControls: Enable camera movement via mouse controls
-        const controls = new OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls(camera as THREE.Camera, renderer.domElement);
         controls.enableDamping = true; // Smooth movement when panning/rotating
         controls.dampingFactor = 0.05; // Damping for smoother motion
         controls.enableZoom = true; // Enable zoom with the mouse scroll
