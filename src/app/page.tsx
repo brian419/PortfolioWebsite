@@ -1,9 +1,9 @@
-//Home Page
+import GalaxyScene from '../components/GalaxyScene';
 
 export default function Home() {
     return (
         <div className="min-h-screen flex flex-col">
-            
+
             <main className="flex-grow">
                 {/* Hero Section */}
                 <section className="text-white py-28">
@@ -42,8 +42,13 @@ export default function Home() {
 
                 {/* Horizontal Line */}
                 <div className="w-full border-t-4 border-[#49A097]"></div>
+                
+                {/* Embed Three.js Galaxy Scene */}
+                <section className="h-screen">
+                    <GalaxyScene />
+                </section>
             </main>
+            
         </div>
     );
 }
-
