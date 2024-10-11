@@ -17,11 +17,11 @@ const GalaxyScene = () => {
         renderer.autoClear = false; // allows overlay
 
         const controls = new OrbitControls(camera as THREE.Camera, renderer.domElement);
-        controls.enableDamping = true; 
-        controls.dampingFactor = 0.05; 
-        controls.enableZoom = true; 
-        controls.autoRotate = false; 
-        controls.autoRotateSpeed = 0.5; 
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = true;
+        controls.autoRotate = false;
+        controls.autoRotateSpeed = 0.5;
 
         // Resize canvas on window resize
         window.addEventListener('resize', () => {
@@ -45,9 +45,9 @@ const GalaxyScene = () => {
             outsideColor: '#1b3984',
         };
 
-        let geometry = null;
-        let material = null;
-        let points = null;
+        let geometry: THREE.BufferGeometry | null = null;
+        let material: THREE.PointsMaterial | null = null;
+        let points: THREE.Points | null = null;
 
         const generateGalaxy = () => {
             geometry = new THREE.BufferGeometry();
@@ -97,7 +97,7 @@ const GalaxyScene = () => {
         generateGalaxy();
 
         // Set the camera position
-        camera.position.z = 30; 
+        camera.position.z = 30;
 
         // Animation loop
         const animate = () => {
