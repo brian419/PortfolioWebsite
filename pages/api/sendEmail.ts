@@ -5,8 +5,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
         const { name, email, message } = req.body;
 
-        console.log('ICLOUD_EMAIL:', process.env.ICLOUD_EMAIL);
-        console.log('ICLOUD_APP_PASSWORD:', process.env.ICLOUD_APP_PASSWORD);
+        // console.log('ICLOUD_EMAIL:', process.env.ICLOUD_EMAIL);
+        // console.log('ICLOUD_APP_PASSWORD:', process.env.ICLOUD_APP_PASSWORD);
 
         const transporter = nodemailer.createTransport({
             host: 'smtp.mail.me.com',
