@@ -45,8 +45,8 @@ const GalaxyScene = () => {
             outsideColor: '#00bfff',
         };
 
-        let geometry = new THREE.BufferGeometry();
-        let material = new THREE.PointsMaterial({
+        const geometry = new THREE.BufferGeometry();
+        const material = new THREE.PointsMaterial({
             size: parameters.size,
             sizeAttenuation: true,
             depthWrite: false,
