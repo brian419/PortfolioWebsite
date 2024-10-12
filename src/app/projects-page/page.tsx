@@ -47,7 +47,7 @@ const ProjectPage = () => {
     // Calculate initial offset to center the first card
     useEffect(() => {
         const containerWidth = cardWidth * visibleCards;
-        const calculatedOffset = (window.innerWidth - containerWidth) / 2 - (cardWidth / 2);
+        const calculatedOffset = (window.innerWidth - containerWidth) / 2 - (cardWidth / 2) + 120; // 50px shift to the right
         setOffset(calculatedOffset);
     }, []);
 
@@ -84,7 +84,7 @@ const ProjectPage = () => {
                     <motion.div
                         className="flex"
                         animate={{ x: offset - currentIndex * cardWidth }} // Centering logic
-                        transition={{ type: "spring", stiffness: 100 }}
+                        transition={{ type: "spring", stiffness: 50 }}
                     >
                         {projects.map((project, index) => (
                             <motion.div

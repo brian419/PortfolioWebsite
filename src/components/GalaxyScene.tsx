@@ -14,7 +14,7 @@ const GalaxyScene = () => {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = false;
-        renderer.autoClear = false; // allows overlay
+        renderer.setClearColor(0x000000, 0); // transparent background
 
         const controls = new OrbitControls(camera as THREE.Camera, renderer.domElement);
         controls.enableDamping = true;
@@ -39,62 +39,70 @@ const GalaxyScene = () => {
             radius: 20,
             branches: 2,
             spin: 2,
-            randomness: 0.12,
+            randomness: 0.2, //0.12
             randomnessPower: 6,
-            insideColor: '#ff6030',
-            outsideColor: '#1b3984',
+            insideColor: '#ffffff',
+            outsideColor: '#00bfff',
         };
 
-        let geometry: THREE.BufferGeometry | null = null;
-        let material: THREE.PointsMaterial | null = null;
-        let points: THREE.Points | null = null;
+        let geometry = new THREE.BufferGeometry();
+        let material = new THREE.PointsMaterial({
+            size: parameters.size,
+            sizeAttenuation: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+            vertexColors: true,
+        });
 
-        const generateGalaxy = () => {
-            geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(parameters.count * 3);
-            const colors = new Float32Array(parameters.count * 3);
-            const colorInside = new THREE.Color(parameters.insideColor);
-            const colorOutside = new THREE.Color(parameters.outsideColor);
+        const positions = new Float32Array(parameters.count * 3);
+        const colors = new Float32Array(parameters.count * 3);
+        const velocities = new Float32Array(parameters.count); // Speeds for each star
+        const activeShootingStars = new Set<number>(); // To track flying stars
 
-            for (let i = 0; i < parameters.count; i++) {
-                const i3 = i * 3;
-                const radius = Math.random() * parameters.radius;
-                const spinAngle = radius * parameters.spin;
-                const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+        const colorInside = new THREE.Color(parameters.insideColor);
+        const colorOutside = new THREE.Color(parameters.outsideColor);
 
-                const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
-                const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
-                const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+        for (let i = 0; i < parameters.count; i++) {
+            const i3 = i * 3;
+            const radius = Math.random() * parameters.radius;
+            const spinAngle = radius * parameters.spin;
+            const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
 
-                positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-                positions[i3 + 1] = randomY;
-                positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+            const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+            const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+            const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
 
-                const mixedColor = colorInside.clone();
-                mixedColor.lerp(colorOutside, radius / parameters.radius);
+            positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+            positions[i3 + 1] = randomY;
+            positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
-                colors[i3] = mixedColor.r;
-                colors[i3 + 1] = mixedColor.g;
-                colors[i3 + 2] = mixedColor.b;
+            velocities[i] = 0; // Default speed is zero (stationary)
+
+            const mixedColor = colorInside.clone();
+            mixedColor.lerp(colorOutside, radius / parameters.radius);
+
+            colors[i3] = mixedColor.r;
+            colors[i3 + 1] = mixedColor.g;
+            colors[i3 + 2] = mixedColor.b;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const points = new THREE.Points(geometry, material);
+        points.rotation.x = Math.PI / 2;
+        scene.add(points);
+
+        // launching shooting stars to user
+        const launchShootingStar = () => {
+            const randomIndex = Math.floor(Math.random() * parameters.count);
+            if (!activeShootingStars.has(randomIndex)) {
+                activeShootingStars.add(randomIndex);
+                velocities[randomIndex] = Math.random() * 0.2 + 0.05; // random speed for star coming to user
             }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-            material = new THREE.PointsMaterial({
-                size: parameters.size,
-                sizeAttenuation: true,
-                depthWrite: false,
-                blending: THREE.AdditiveBlending,
-                vertexColors: true,
-            });
-
-            points = new THREE.Points(geometry, material);
-            points.rotation.x = Math.PI / 2;
-            scene.add(points);
         };
 
-        generateGalaxy();
+        setInterval(launchShootingStar, 2000);
 
         // Set the camera position
         camera.position.z = 30;
@@ -102,10 +110,28 @@ const GalaxyScene = () => {
         // Animation loop
         const animate = () => {
             requestAnimationFrame(animate);
-            if (points) {
-                points.rotation.y += 0.001; // Slow rotation
+
+            points.rotation.y += 0.001;
+
+            for (let i = 0; i < parameters.count; i++) {
+                if (velocities[i] > 0) {
+                    const i3 = i * 3;
+                    positions[i3 + 1] += velocities[i]; // moving star towards the camera
+
+                    // star reaches camera
+                    if (positions[i3 + 2] > camera.position.z) {
+                        velocities[i] = 0; // stop the star
+                        activeShootingStars.delete(i); // remove from active shooting stars
+                        // reset to original position
+                        positions[i3 + 2] = Math.sin((i % parameters.branches) / parameters.branches * Math.PI * 2 + parameters.spin * Math.random() * parameters.radius) * parameters.radius;
+                    }
+                }
             }
-            controls.update(); //user interaction
+
+            // Update positions in geometry
+            geometry.attributes.position.needsUpdate = true;
+
+            controls.update(); // user interaction
             renderer.render(scene, camera);
         };
 

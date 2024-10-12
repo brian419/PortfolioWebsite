@@ -1,9 +1,30 @@
+"use client";
 import GalaxyScene from '../components/GalaxyScene';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    const handleScroll = () => {
+        const galaxySection = document.getElementById('galaxy');
+        if (galaxySection) {
+            setShowScrollTop(true);
+        } else {
+            setShowScrollTop(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className="min-h-screen flex flex-col">
-
             <main className="flex-grow">
                 {/* Hero Section */}
                 <section className="text-white py-28">
@@ -42,13 +63,21 @@ export default function Home() {
 
                 {/* Horizontal Line */}
                 <div className="w-full border-t-4 border-[#49A097]"></div>
-                
+
+                {showScrollTop && (
+                    <button
+                        onClick={scrollToTop}
+                        className="fixed bottom-5 right-5 bg-[#49A097] text-white p-3 rounded-full shadow-lg hover:bg-[#3d857c] transition duration-300">
+                        ↑
+                    </button>
+                )}
                 {/* Embed Three.js Galaxy Scene */}
-                <section className="h-screen">
+                <section id="galaxy" className="h-screen">
                     <GalaxyScene />
                 </section>
+
+
             </main>
-            
         </div>
     );
 }
