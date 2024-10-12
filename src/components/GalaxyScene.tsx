@@ -139,7 +139,7 @@ const GalaxyScene = () => {
 
         return () => {
             window.removeEventListener('resize', () => { });
-            controls.dispose(); // Clean up controls on component unmount
+            controls.dispose();
         };
     }, []);
 
