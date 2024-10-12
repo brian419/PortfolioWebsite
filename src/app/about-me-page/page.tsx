@@ -30,7 +30,7 @@ export default function AboutMe() {
         let lastMoveTime = 0;
         const delay = 6000; // Move every 6 seconds
     
-        const moveRabbit = (time) => {
+        const moveRabbit = (time: number) => {
             if (time - lastMoveTime >= delay) {
                 const rabbitWidth = 60;
                 const rabbitHeight = 60;
