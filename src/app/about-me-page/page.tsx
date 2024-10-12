@@ -26,7 +26,7 @@ export default function AboutMe() {
     // }, []);
 
     useEffect(() => {
-        let animationFrame;
+        let animationFrame: number;
         let lastMoveTime = 0;
         const delay = 6000; // Move every 6 seconds
     
