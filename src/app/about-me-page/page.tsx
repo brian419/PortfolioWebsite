@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -7,23 +7,50 @@ import headshot from '../../components/Photo.png';
 export default function AboutMe() {
     const [position, setPosition] = useState({ top: 50, left: 50 });
 
+    // useEffect(() => {
+    //     const moveRabbit = () => {
+    //         const rabbitWidth = 60; 
+    //         const rabbitHeight = 60; 
+
+    //         const viewportWidth = window.innerWidth;
+    //         const viewportHeight = window.innerHeight;
+
+    //         const newTop = Math.random() * (viewportHeight - rabbitHeight); 
+    //         const newLeft = Math.random() * (viewportWidth - rabbitWidth);  
+
+    //         setPosition({ top: newTop, left: newLeft });
+    //     };
+
+    //     const interval = setInterval(moveRabbit, 6000);
+    //     return () => clearInterval(interval);
+    // }, []);
+
     useEffect(() => {
-        const moveRabbit = () => {
-            const rabbitWidth = 60; 
-            const rabbitHeight = 60; 
-
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-
-            const newTop = Math.random() * (viewportHeight - rabbitHeight); 
-            const newLeft = Math.random() * (viewportWidth - rabbitWidth);  
-
-            setPosition({ top: newTop, left: newLeft });
+        let animationFrame;
+        let lastMoveTime = 0;
+        const delay = 6000; // Move every 6 seconds
+    
+        const moveRabbit = (time) => {
+            if (time - lastMoveTime >= delay) {
+                const rabbitWidth = 60;
+                const rabbitHeight = 60;
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+    
+                const newTop = Math.random() * (viewportHeight - rabbitHeight);
+                const newLeft = Math.random() * (viewportWidth - rabbitWidth);
+    
+                setPosition({ top: newTop, left: newLeft });
+                lastMoveTime = time; // Update the last move time
+            }
+    
+            animationFrame = requestAnimationFrame(moveRabbit); // Continue the animation loop
         };
-
-        const interval = setInterval(moveRabbit, 6000);
-        return () => clearInterval(interval);
+    
+        animationFrame = requestAnimationFrame(moveRabbit); // Start the animation loop
+        return () => cancelAnimationFrame(animationFrame);  // Cleanup
     }, []);
+    
 
     return (
         <div className="min-h-screen flex flex-col text-gray-800 overflow-hidden">
@@ -95,6 +122,7 @@ export default function AboutMe() {
                     left: `${position.left}px`,
                     position: 'fixed',
                     transform: 'translate(-50%, -50%)',
+                    willChange: 'transform',
                     zIndex: 0,
                 }}
             >
