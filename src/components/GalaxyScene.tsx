@@ -41,7 +41,7 @@ const GalaxyScene = () => {
             spin: 2,
             randomness: 0.2, //0.12
             randomnessPower: 6,
-            insideColor: '#ffffff',
+            insideColor: '#ff6030',
             outsideColor: '#00bfff',
         };
 

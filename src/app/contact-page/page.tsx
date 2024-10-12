@@ -29,14 +29,33 @@ export default function Contact() {
                 setEmail('');
                 setMessage('');
             } else {
-                setFormStatus('Failed to send message. Please try again later.');
+                const errorData = await res.json();
+                setFormStatus('Failed to send message - ' + errorData.error || 'An error occurred. Please try again.');
             }
-        } catch (error) {
-            console.error('Error sending message:', error);
-            setFormStatus('An error occurred. Please try again.');
+        } catch (error: any) {
+            if (error.message === 'Failed to fetch') {
+                setFormStatus('Network error. Please check your connection.');
+            } else {
+                setFormStatus('An unexpected error occurred. Please try again.');
+            }
         }
     };
 
+    // clearing status message when typing
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+        setFormStatus(''); 
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+        setFormStatus(''); 
+    };
+
+    const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setMessage(e.target.value);
+        setFormStatus(''); 
+    };
 
     return (
         <div className="min-h-screen flex flex-col text-gray-800">
@@ -59,8 +78,8 @@ export default function Contact() {
                                 type="text"
                                 id="name"
                                 name="name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={name} 
+                                onChange={handleNameChange} // uses the handleNameChange function to update the name state
                                 className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-[#49A097] focus:border-[#49A097]"
                                 required
                             />
@@ -74,7 +93,7 @@ export default function Contact() {
                                 id="email"
                                 name="email"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={handleEmailChange} 
                                 className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-[#49A097] focus:border-[#49A097]"
                                 required
                             />
@@ -87,7 +106,7 @@ export default function Contact() {
                                 id="message"
                                 name="message"
                                 value={message}
-                                onChange={(e) => setMessage(e.target.value)}
+                                onChange={handleMessageChange} 
                                 rows={4}
                                 className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-[#49A097] focus:border-[#49A097]"
                                 required
@@ -102,7 +121,10 @@ export default function Contact() {
                             </button>
                         </div>
                     </form>
-                    <p className="text-center mt-4 text-white">{formStatus}</p>
+                    {/* <p className="text-center mt-4 text-white">{formStatus}</p> */}
+                    <p className={`text-center mt-4 text-white ${formStatus.includes('success') ? 'text-green-500' : 'text-red-500'}`}>
+                        {formStatus}
+                    </p>
                 </div>
 
                 {/* Contact Information */}
