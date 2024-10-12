@@ -7,6 +7,43 @@ export default function Contact() {
     const [message, setMessage] = useState('');
     const [formStatus, setFormStatus] = useState('');
 
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+
+    //     const apiUrl = process.env.NODE_ENV === 'production'
+    //         ? 'https://jeongbinson.com/api/sendEmail'
+    //         : '/api/sendEmail';
+
+    //     try {
+    //         const res = await fetch(apiUrl, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ name, email, message }),
+    //         });
+
+    //         if (res.status === 200) {
+    //             setFormStatus('Message sent successfully!');
+    //             setName('');
+    //             setEmail('');
+    //             setMessage('');
+    //         } else {
+    //             const errorData = await res.json();
+    //             setFormStatus('Failed to send message - ' + errorData.error || 'An error occurred. Please try again.');
+    //         }
+    //     } 
+    //     catch (error: any) {
+    //         if (error.message === 'Failed to fetch') {
+    //             setFormStatus('Network error. Please check your connection.');
+    //         } else if (error.response && error.response.status !== 200) {
+    //             setFormStatus('Failed to send message - ' + error.response.data.error || 'An error occurred. Please try again.');
+    //         } else {
+    //             setFormStatus('An unexpected error occurred. Please try again.');
+    //         }
+    //     }
+
+    // };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -30,20 +67,21 @@ export default function Contact() {
                 setMessage('');
             } else {
                 const errorData = await res.json();
-                setFormStatus('Failed to send message - ' + errorData.error || 'An error occurred. Please try again.');
+                setFormStatus('Failed to send message - ' + (errorData.error || 'An error occurred. Please try again.'));
             }
-        } 
-        catch (error: any) {
-            if (error.message === 'Failed to fetch') {
+        }
+        catch (error: unknown) {
+            if (error instanceof Error && error.message === 'Failed to fetch') {
                 setFormStatus('Network error. Please check your connection.');
-            } else if (error.response && error.response.status !== 200) {
-                setFormStatus('Failed to send message - ' + error.response.data.error || 'An error occurred. Please try again.');
+            } else if (error instanceof Response && error.status !== 200) {
+                const errorText = await error.text();
+                setFormStatus('Failed to send message - ' + errorText);
             } else {
                 setFormStatus('An unexpected error occurred. Please try again.');
             }
         }
-        
     };
+
 
     // clearing status message when typing
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
