@@ -10,8 +10,12 @@ export default function Contact() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        const apiUrl = process.env.NODE_ENV === 'production'
+            ? 'https://jeongbinson.com/api/sendEmail'
+            : '/api/sendEmail';
+
         try {
-            const res = await fetch('/api/sendEmail', {
+            const res = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,6 +36,7 @@ export default function Contact() {
             setFormStatus('An error occurred. Please try again.');
         }
     };
+
 
     return (
         <div className="min-h-screen flex flex-col text-gray-800">
