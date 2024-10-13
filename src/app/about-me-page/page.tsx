@@ -7,28 +7,10 @@ import headshot from '../../components/Photo.png';
 export default function AboutMe() {
     const [position, setPosition] = useState({ top: 50, left: 50 });
 
-    // useEffect(() => {
-    //     const moveRabbit = () => {
-    //         const rabbitWidth = 60; 
-    //         const rabbitHeight = 60; 
-
-    //         const viewportWidth = window.innerWidth;
-    //         const viewportHeight = window.innerHeight;
-
-    //         const newTop = Math.random() * (viewportHeight - rabbitHeight); 
-    //         const newLeft = Math.random() * (viewportWidth - rabbitWidth);  
-
-    //         setPosition({ top: newTop, left: newLeft });
-    //     };
-
-    //     const interval = setInterval(moveRabbit, 6000);
-    //     return () => clearInterval(interval);
-    // }, []);
-
     useEffect(() => {
         let animationFrame: number;
         let lastMoveTime = 0;
-        const delay = 6000; // Move every 6 seconds
+        const delay = 6000; // move every 6 seconds
     
         const moveRabbit = (time: number) => {
             if (time - lastMoveTime >= delay) {
