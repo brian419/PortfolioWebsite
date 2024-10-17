@@ -16,10 +16,10 @@ const projects = [
     },
     {
         id: 2,
-        title: 'Placeholder Project 2',
-        description: 'Placeholder description 2.',
+        title: 'Gomoku',
+        description: '"Five in a row" [In Progress]',
         image: PlaceholderImage,
-        link: '',
+        link: '/gomoku-page',
     },
     {
         id: 3,
@@ -139,10 +139,29 @@ const ProjectPage = () => {
                         </div>
                     </div>
                 ) : (
-                    <button className="bg-gray-500 text-white font-bold py-2 px-4 rounded cursor-not-allowed" disabled>
-                        Not Implemented Yet
-                    </button>
+
+                    selectedProject.id === 2 ? ( //clicked on the second project
+                        <div className="mx-auto flex w-full max-w-lg items-center justify-center mt-8">
+                            <div className="relative z-10 flex w-full cursor-pointer items-center overflow-hidden rounded-xl border border-slate-800 p-[1.5px]">
+                                <div className="animate-rotate absolute inset-0 h-full w-full rounded-full bg-[conic-gradient(#0ea5e9_20deg,transparent_120deg)]"></div>
+                                <div className="relative z-20 flex w-full rounded-[0.60rem] bg-blue-600 p-2">
+                                    <a
+                                        href={selectedProject.link}
+                                        className="bg-blue-600 hover:text-black text-white text-xs font-bold py-2 px-4 rounded w-full text-center"
+                                    >
+                                        Gomoku
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <button className="bg-gray-500 text-white font-bold py-2 px-4 rounded cursor-not-allowed" disabled>
+                            Not Implemented Yet
+                        </button>
+                    )
+                    
                 )}
+                
             </div>
 
         </div>
