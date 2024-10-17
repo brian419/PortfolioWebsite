@@ -3,11 +3,14 @@ import React, { useState } from 'react';
 
 const COLS = 15;
 const ROWS = 15;
-
+const COLS_PIECES = 2;
+const ROWS_PIECES = 8;
 const createGrid = () => Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+const createGridForPieces = () => Array.from({ length: ROWS_PIECES }, () => Array(COLS_PIECES).fill(0));
 
 export default function GomokuPage() {
     const [grid, setGrid] = useState(createGrid());
+    const [gridPieces, setGridPieces] = useState(createGridForPieces());
 
     return (
         <div className="flex items-center justify-center min-h-screen">
@@ -18,6 +21,17 @@ export default function GomokuPage() {
                             <div
                                 key={cellIndex}
                                 className="w-10 h-10 border border-black bg-[#C9A35F]" 
+                            >
+                            </div>
+                        ))}
+                    </div>
+                ))}
+                {gridPieces.map((row, rowIndex) => ( 
+                    <div key={rowIndex} className="flex"> 
+                        {row.map((cell, cellIndex) => (
+                            <div
+                                key={cellIndex} // this grid pieces is for the left side, so choose which stone color starts here
+                                className="w-5 h-5 border border-black bg-white"  // make sure this moves to the left bruh
                             >
                             </div>
                         ))}
@@ -48,3 +62,9 @@ export default function GomokuPage() {
 // Implement the game history
 // Implement the game restart button
 // Implement the game global leaderboard (?)
+
+
+
+// Currently: 
+// Implemented a 15x15 board
+// Want to implemenet two smaller boards on the left and right of the board for holding the black and white stones. 
