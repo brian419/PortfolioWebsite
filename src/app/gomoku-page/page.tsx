@@ -4,8 +4,7 @@ import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 // grid creation helper function for either 15x15 or 19x19 board
-const createGrid = (cols, rows) => Array.from({ length: rows }, () => Array(cols).fill(null));
-
+const createGrid = (cols: number, rows: number): (string | null)[][] => Array.from({ length: rows }, () => Array(cols).fill(null));
 // stone component
 const Stone = ({ color }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
