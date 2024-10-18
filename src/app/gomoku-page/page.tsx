@@ -5,8 +5,14 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 // grid creation helper function for either 15x15 or 19x19 board
 const createGrid = (cols: number, rows: number): (string | null)[][] => Array.from({ length: rows }, () => Array(cols).fill(null));
+
+// defining the type for the props of the stone component
+interface StoneProps {
+    color: "black" | "white";
+}
+
 // stone component
-const Stone = ({ color }) => {
+const Stone = ({ color }: StoneProps) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "STONE",
         item: { color },
@@ -25,10 +31,18 @@ const Stone = ({ color }) => {
 };
 
 // boardcell component, where stones are dropped
-const BoardCell = ({ row, col, cellValue, onDrop, canDrop }) => {
+interface BoardCellProps {
+    row: number;
+    col: number;
+    cellValue: string | null;
+    onDrop: (row: number, col: number, color: "black" | "white") => void;
+    canDrop: boolean;
+}
+
+const BoardCell = ({ row, col, cellValue, onDrop, canDrop }: BoardCellProps) => {
     const [{ isOver }, drop] = useDrop({
         accept: "STONE",
-        drop: (item) => onDrop(row, col, item.color),
+        drop: (item: { color: "black" | "white" }) => onDrop(row, col, item.color),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         }),
@@ -48,6 +62,7 @@ const BoardCell = ({ row, col, cellValue, onDrop, canDrop }) => {
         </div>
     );
 };
+
 
 // gomokupage component (main game component)
 export default function GomokuPage() {
@@ -102,13 +117,13 @@ export default function GomokuPage() {
             { r: 1, c: 1 }, // diagonal right-down
             { r: 1, c: -1 }, // diagonal left-down
         ];
-    
+
         const getScore = (row, col, direction) => {
             let count = 0;
-            const emptySpots = []; 
+            const emptySpots = [];
             let blocks = 0; // track if either side is blocked
             let gapFound = false; // track if there's a gap in between stones
-    
+
             // check in the positive direction
             for (let i = 1; i < 5; i++) {
                 const newRow = row + direction.r * i;
@@ -130,7 +145,7 @@ export default function GomokuPage() {
                     }
                 }
             }
-    
+
             // check in the negative direction
             gapFound = false;
             for (let i = 1; i < 5; i++) {
@@ -152,30 +167,30 @@ export default function GomokuPage() {
                     }
                 }
             }
-    
+
             return { count, emptySpots, blocks };
         };
-    
+
         let bestMove = null;
         let maxCount = 0; // tracks the highest number of consecutive stones the AI can extend
-    
+
         for (let row = 0; row < gridSize.rows; row++) {
             for (let col = 0; col < gridSize.cols; col++) {
                 if (grid[row][col] === color) {
                     for (const dir of directions) {
                         const { count, emptySpots, blocks } = getScore(row, col, dir);
-    
+
                         // if we find a better offensive move
                         if (count > maxCount && emptySpots.length > 0 && blocks < 2) {
                             maxCount = count; // update the maxCount
                             bestMove = emptySpots[0]; // save the best move
                         }
-    
+
                         // if the player has 2 or more in a row with a gap that could form 3+ in the future
                         if (count >= 2 && emptySpots.length > 0 && blocks < 2) {
                             return emptySpots[0]; // block Player 1 at this location
                         }
-    
+
                         // detect a gap within a sequence (dot, empty, dot)
                         if (count === 2 && emptySpots.length > 1 && blocks === 0) {
                             return emptySpots[0]; // fill the gap to prevent Player 1 from forming a sequence
@@ -184,7 +199,7 @@ export default function GomokuPage() {
                 }
             }
         }
-    
+
         return bestMove; // return the best offensive move found
     };
 
