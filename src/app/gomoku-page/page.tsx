@@ -103,13 +103,13 @@ export default function GomokuPage() {
             { r: 1, c: 1 }, // diagonal right-down
             { r: 1, c: -1 }, // diagonal left-down
         ];
-
+    
         const getScore = (row, col, direction) => {
             let count = 0;
-            let emptySpots = [];
+            const emptySpots = []; 
             let blocks = 0; // track if either side is blocked
             let gapFound = false; // track if there's a gap in between stones
-
+    
             // check in the positive direction
             for (let i = 1; i < 5; i++) {
                 const newRow = row + direction.r * i;
@@ -131,7 +131,7 @@ export default function GomokuPage() {
                     }
                 }
             }
-
+    
             // check in the negative direction
             gapFound = false;
             for (let i = 1; i < 5; i++) {
@@ -153,30 +153,30 @@ export default function GomokuPage() {
                     }
                 }
             }
-
+    
             return { count, emptySpots, blocks };
         };
-
+    
         let bestMove = null;
         let maxCount = 0; // tracks the highest number of consecutive stones the AI can extend
-
+    
         for (let row = 0; row < gridSize.rows; row++) {
             for (let col = 0; col < gridSize.cols; col++) {
                 if (grid[row][col] === color) {
                     for (const dir of directions) {
                         const { count, emptySpots, blocks } = getScore(row, col, dir);
-
+    
                         // if we find a better offensive move
                         if (count > maxCount && emptySpots.length > 0 && blocks < 2) {
                             maxCount = count; // update the maxCount
                             bestMove = emptySpots[0]; // save the best move
                         }
-
+    
                         // if the player has 2 or more in a row with a gap that could form 3+ in the future
                         if (count >= 2 && emptySpots.length > 0 && blocks < 2) {
                             return emptySpots[0]; // block Player 1 at this location
                         }
-
+    
                         // detect a gap within a sequence (dot, empty, dot)
                         if (count === 2 && emptySpots.length > 1 && blocks === 0) {
                             return emptySpots[0]; // fill the gap to prevent Player 1 from forming a sequence
@@ -185,7 +185,7 @@ export default function GomokuPage() {
                 }
             }
         }
-
+    
         return bestMove; // return the best offensive move found
     };
 
@@ -214,7 +214,7 @@ export default function GomokuPage() {
     const makeComputerMove = () => {
         if (winner || currentTurn !== "white") return; // only move if it's the computer's turn and no winner
 
-        // check for threats or opportunities from both players
+        // Check for threats or opportunities from both players
         const move = evaluateBoard(grid, gridSize, "white") || evaluateBoard(grid, gridSize, "black");
         if (move) {
             handleDrop(move.row, move.col, "white");
