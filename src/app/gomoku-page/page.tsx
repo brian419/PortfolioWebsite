@@ -1,70 +1,385 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-const COLS = 15;
-const ROWS = 15;
-const COLS_PIECES = 2;
-const ROWS_PIECES = 8;
-const createGrid = () => Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-const createGridForPieces = () => Array.from({ length: ROWS_PIECES }, () => Array(COLS_PIECES).fill(0));
+// grid creation helper function for either 15x15 or 19x19 board
+const createGrid = (cols, rows) => Array.from({ length: rows }, () => Array(cols).fill(null));
 
-export default function GomokuPage() {
-    const [grid, setGrid] = useState(createGrid());
-    const [gridPieces, setGridPieces] = useState(createGridForPieces());
+// stone component
+const Stone = ({ color }) => {
+    const [{ isDragging }, drag] = useDrag(() => ({
+        type: "STONE",
+        item: { color },
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    }));
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div>
-                {grid.map((row, rowIndex) => ( // displays the 15x15 board
-                    <div key={rowIndex} className="flex"> 
-                        {row.map((cell, cellIndex) => (
-                            <div
-                                key={cellIndex}
-                                className="w-10 h-10 border border-black bg-[#C9A35F]" 
-                            >
-                            </div>
-                        ))}
-                    </div>
-                ))}
-                {gridPieces.map((row, rowIndex) => ( 
-                    <div key={rowIndex} className="flex"> 
-                        {row.map((cell, cellIndex) => (
-                            <div
-                                key={cellIndex} // this grid pieces is for the left side, so choose which stone color starts here
-                                className="w-5 h-5 border border-black bg-white"  // make sure this moves to the left bruh
-                            >
-                            </div>
-                        ))}
-                    </div>
-                ))}
-            </div>
+        <div
+            ref={drag}
+            className={`w-8 h-8 ${color === "black" ? "bg-black" : "bg-white"} rounded-full`}
+            style={{ opacity: isDragging ? 0.5 : 1 }}
+        />
+    );
+};
+
+// boardcell component, where stones are dropped
+const BoardCell = ({ row, col, cellValue, onDrop, canDrop }) => {
+    const [{ isOver }, drop] = useDrop({
+        accept: "STONE",
+        drop: (item) => onDrop(row, col, item.color),
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
+        canDrop: () => !cellValue && canDrop, // prevent dropping on occupied cells and if it's not the player's turn
+    });
+
+    return (
+        <div
+            ref={drop}
+            className={`w-10 h-10 border border-black ${isOver && !cellValue ? "bg-green-200" : "bg-[#C9A35F]"}`}
+        >
+            {cellValue && (
+                <div
+                    className={`w-8 h-8 ${cellValue === "black" ? "bg-black" : "bg-white"} rounded-full mx-auto mt-1`}
+                />
+            )}
         </div>
     );
+};
+
+// gomokupage component (main game component)
+export default function GomokuPage() {
+    const [gridSize, setGridSize] = useState({ cols: 15, rows: 15 }); // state for grid size (default 15x15)
+    const [gameStarted, setGameStarted] = useState(false); // state to track if the game has started
+    const [grid, setGrid] = useState(createGrid(gridSize.cols, gridSize.rows)); // grid to store stone positions
+    const [winner, setWinner] = useState(null); // track the winner
+    const [gameMode, setGameMode] = useState("computer"); // track game mode: computer or AI mode
+    const [currentTurn, setCurrentTurn] = useState("black"); // track whose turn it is (black: Player 1, white: Player 2)
+    const [finalMove, setFinalMove] = useState(false); // track if it's the final move to trigger a delay
+    const [alertMessage, setAlertMessage] = useState(null); // for handling alerts when multiplayer is selected
+
+    // function to check for five in a row
+    const checkForWin = (row, col, color) => {
+        const directions = [
+            { r: 0, c: 1 }, // horizontal
+            { r: 1, c: 0 }, // vertical
+            { r: 1, c: 1 }, // diagonal right-down
+            { r: 1, c: -1 }, // diagonal left-down
+        ];
+
+        for (const { r, c } of directions) {
+            let count = 1; // start by counting the current stone
+            // check in both positive and negative directions for matching stones
+
+            for (let i = 1; i < 5; i++) {
+                const newRow = row + r * i;
+                const newCol = col + c * i;
+                if (newRow >= 0 && newRow < gridSize.rows && newCol >= 0 && newCol < gridSize.cols && grid[newRow][newCol] === color) {
+                    count++;
+                } else break;
+            }
+
+            for (let i = 1; i < 5; i++) {
+                const newRow = row - r * i;
+                const newCol = col - c * i;
+                if (newRow >= 0 && newRow < gridSize.rows && newCol >= 0 && newCol < gridSize.cols && grid[newRow][newCol] === color) {
+                    count++;
+                } else break;
+            }
+
+            if (count >= 5) return true; // if there are five or more stones in a row, return true
+        }
+        return false;
+    };
+
+    // function to evaluate threats or opportunities from both players
+    const evaluateBoard = (grid, gridSize, color) => {
+        const directions = [
+            { r: 0, c: 1 }, // horizontal
+            { r: 1, c: 0 }, // vertical
+            { r: 1, c: 1 }, // diagonal right-down
+            { r: 1, c: -1 }, // diagonal left-down
+        ];
+
+        const getScore = (row, col, direction) => {
+            let count = 0;
+            let emptySpots = [];
+            let blocks = 0; // track if either side is blocked
+            let gapFound = false; // track if there's a gap in between stones
+
+            // check in the positive direction
+            for (let i = 1; i < 5; i++) {
+                const newRow = row + direction.r * i;
+                const newCol = col + direction.c * i;
+                if (newRow >= 0 && newRow < gridSize.rows && newCol >= 0 && newCol < gridSize.cols) {
+                    if (grid[newRow][newCol] === color) {
+                        count++;
+                    } else if (!grid[newRow][newCol]) {
+                        // check if this is a gap
+                        if (!gapFound) {
+                            emptySpots.push({ row: newRow, col: newCol });
+                            gapFound = true;
+                        } else {
+                            break; // stop once we find a second gap or empty spot
+                        }
+                    } else {
+                        blocks++;
+                        break; // stop if we hit the opponent's piece
+                    }
+                }
+            }
+
+            // check in the negative direction
+            gapFound = false;
+            for (let i = 1; i < 5; i++) {
+                const newRow = row - direction.r * i;
+                const newCol = col - direction.c * i;
+                if (newRow >= 0 && newRow < gridSize.rows && newCol >= 0 && newCol < gridSize.cols) {
+                    if (grid[newRow][newCol] === color) {
+                        count++;
+                    } else if (!grid[newRow][newCol]) {
+                        if (!gapFound) {
+                            emptySpots.push({ row: newRow, col: newCol });
+                            gapFound = true;
+                        } else {
+                            break; // stop once we find a second gap or empty spot
+                        }
+                    } else {
+                        blocks++;
+                        break; // stop if we hit the opponent's piece
+                    }
+                }
+            }
+
+            return { count, emptySpots, blocks };
+        };
+
+        let bestMove = null;
+        let maxCount = 0; // tracks the highest number of consecutive stones the AI can extend
+
+        for (let row = 0; row < gridSize.rows; row++) {
+            for (let col = 0; col < gridSize.cols; col++) {
+                if (grid[row][col] === color) {
+                    for (const dir of directions) {
+                        const { count, emptySpots, blocks } = getScore(row, col, dir);
+
+                        // if we find a better offensive move
+                        if (count > maxCount && emptySpots.length > 0 && blocks < 2) {
+                            maxCount = count; // update the maxCount
+                            bestMove = emptySpots[0]; // save the best move
+                        }
+
+                        // if the player has 2 or more in a row with a gap that could form 3+ in the future
+                        if (count >= 2 && emptySpots.length > 0 && blocks < 2) {
+                            return emptySpots[0]; // block Player 1 at this location
+                        }
+
+                        // detect a gap within a sequence (dot, empty, dot)
+                        if (count === 2 && emptySpots.length > 1 && blocks === 0) {
+                            return emptySpots[0]; // fill the gap to prevent Player 1 from forming a sequence
+                        }
+                    }
+                }
+            }
+        }
+
+        return bestMove; // return the best offensive move found
+    };
+
+    // function to handle dropping stones on the board
+    const handleDrop = (row, col, color) => {
+        if (!grid[row][col] && !winner) {
+            const newGrid = [...grid];
+            newGrid[row][col] = color;
+            setGrid(newGrid);
+
+            // check for win condition
+            if (checkForWin(row, col, color)) {
+                // if it's a final winning move, setFinalMove to delay the game over screen
+                setFinalMove(true);
+                setTimeout(() => setWinner(color), 1250); // about 1-second delay before showing game over
+                return;
+            }
+
+            // switch turns
+            setCurrentTurn(color === "black" ? "white" : "black");
+        }
+    };
+
+    // computer move logic (strategic AI) 
+    // needs to be worked on extensively. it sometimes fails to block the player's winning move and tries to win when it's not close as compared to player 1
+    const makeComputerMove = () => {
+        if (winner || currentTurn !== "white") return; // only move if it's the computer's turn and no winner
+
+        // check for threats or opportunities from both players
+        const move = evaluateBoard(grid, gridSize, "white") || evaluateBoard(grid, gridSize, "black");
+        if (move) {
+            handleDrop(move.row, move.col, "white");
+            return;
+        }
+
+        // otherwise, make a random move (as fallback)
+        const availableMoves = [];
+        for (let row = 0; row < gridSize.rows; row++) {
+            for (let col = 0; col < gridSize.cols; col++) {
+                if (!grid[row][col]) {
+                    availableMoves.push({ row, col });
+                }
+            }
+        }
+
+        if (availableMoves.length > 0) {
+            const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+            handleDrop(randomMove.row, randomMove.col, "white");
+        }
+    };
+
+    // trigger computer move after player 1 (black) plays
+    useEffect(() => {
+        if (currentTurn === "white" && gameMode === "computer" && !winner && !finalMove) {
+            const timeoutId = setTimeout(() => makeComputerMove(), 1000); // delay for computer move
+            return () => clearTimeout(timeoutId); // clear timeout if necessary
+        }
+    }, [currentTurn, gameMode, winner, finalMove]);
+
+    // function to handle multiplayer or AI mode click
+    const handleModeNotImplementedClick = () => {
+        setAlertMessage("This game mode is not implemented yet.");
+        setTimeout(() => setAlertMessage(null), 2000); // clear the message after 2 seconds
+    };
+
+    // function to restart game and return to the start screen
+    const restartGame = () => {
+        setGameStarted(false); // reset to the start screen
+        setWinner(null); // reset winner
+        setFinalMove(false); // reset final move state
+        setGrid(createGrid(gridSize.cols, gridSize.rows)); // reset grid
+    };
+
+    return (
+        <DndProvider backend={HTML5Backend}>
+            <div className="flex items-center justify-center min-h-screen">
+                {/* if game hasn't started or there's a winner, show start/game-over screen */}
+                {!gameStarted || winner ? (
+                    <div className="flex flex-col items-center space-y-8">
+                        <h1 className="text-4xl font-bold mb-8 text-center">
+                            {winner ? (
+                                <>
+                                    <span className="animate-rainbow">Game Over!</span> <br /> <br />
+                                    <span className="block animate-bounce text-[#3658B7]">{winner === "black" ? "Player 1" : "Computer"} wins!</span>
+                                </>
+                            ) : "Welcome to Gomoku!"}
+                        </h1>
+
+                        {/* game mode selection (computer vs multiplayer) */}
+                        {!gameStarted && !winner && (
+                            <div className="flex space-x-4">
+                                <button
+                                    className={`px-4 py-2 border rounded-lg ${gameMode === "computer" ? "bg-blue-500 text-white" : ""}`}
+                                    onClick={() => setGameMode("computer")}
+                                >
+                                    Play Against Computer
+                                </button>
+                                <button
+                                    className="px-4 py-2 border rounded-lg bg-gray-300 text-gray-600"
+                                    onClick={handleModeNotImplementedClick}
+                                >
+                                    AI Mode
+                                </button>
+                                <button
+                                    className="px-4 py-2 border rounded-lg bg-gray-300 text-gray-600"
+                                    onClick={handleModeNotImplementedClick}
+                                >
+                                    Multiplayer Mode
+                                </button>
+                            </div>
+                        )}
+
+                        {/* display alert message */}
+                        {alertMessage && <p className="text-red-500">{alertMessage}</p>}
+
+                        {/* grid size selection */}
+                        {!winner && (
+                            <div className="flex space-x-4">
+                                <button
+                                    className={`px-4 py-2 border rounded-lg ${gridSize.cols === 15 ? "bg-blue-500 text-white" : ""}`}
+                                    onClick={() => setGridSize({ cols: 15, rows: 15 })}
+                                >
+                                    15x15 Mode
+                                </button>
+                                <button
+                                    className={`px-4 py-2 border rounded-lg ${gridSize.cols === 19 ? "bg-blue-500 text-white" : ""}`}
+                                    onClick={() => setGridSize({ cols: 19, rows: 19 })}
+                                >
+                                    19x19 Mode
+                                </button>
+                            </div>
+                        )}
+
+                        {/* start game button */}
+                        <button
+                            className="mt-6 px-6 py-3 bg-green-500 text-white rounded-lg"
+                            onClick={gameStarted ? restartGame : () => setGameStarted(true)}
+                            disabled={!gameMode} // disable button until a game mode is selected
+                        >
+                            {winner ? "Restart Game" : "Start Game"}
+                        </button>
+                    </div>
+                ) : (
+                    /* flex container for smaller boards and main board */
+                    <div className="flex items-center space-x-10">
+                        {/* smaller board for black pieces (player 1) */}
+                        <div className="flex flex-col items-center">
+                            <h2 className="text-xl font-semibold mb-2 text-black">Player 1</h2>
+                            <div className="flex flex-col justify-center border border-black p-2 bg-gray-900 relative">
+                                <div className="absolute inset-0 bg-gray-400 opacity-50"></div>
+                                <div className="relative z-10 flex flex-col space-y-2">
+                                    {Array.from({ length: 7 }).map((_, i) => (
+                                        <Stone key={i} color="black" />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* main board (15x15 or 19x19 based on mode) */}
+                        <div className="flex flex-col items-center">
+                            <h2 className="text-2xl font-bold mb-4">
+                                {currentTurn === "black" ? "Player 1's turn" : "Computer's turn"}
+                            </h2>
+                            {grid.map((row, rowIndex) => (
+                                <div key={rowIndex} className="flex">
+                                    {row.map((cell, cellIndex) => (
+                                        <BoardCell
+                                            key={cellIndex}
+                                            row={rowIndex}
+                                            col={cellIndex}
+                                            cellValue={cell}
+                                            onDrop={handleDrop}
+                                            canDrop={currentTurn === "black"} // only allow drop if it's Player 1's turn
+                                        />
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* smaller board for white pieces (player 2) */}
+                        <div className="flex flex-col items-center">
+                            <h2 className="text-xl font-semibold mb-2 text-white text-center">Player 2: <br></br> Computer</h2>
+                            <div className="flex flex-col justify-center border border-black p-2 bg-gray-900 relative">
+                                <div className="absolute inset-0 bg-gray-400 opacity-50"></div>
+                                <div className="relative z-10 flex flex-col space-y-2">
+                                    {Array.from({ length: 7 }).map((_, i) => (
+                                        <Stone key={i} color="white" />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </DndProvider>
+    );
 }
-
-
-// 15x15 board (current) but used to be 19x19 board (can be offered as a feature)
-// Players take turn placing a stone of their color on an empty intersection
-// Black stone always plays first
-// The winner is the first player to form an unbroken chain of five stones horizontally, vertically, or diagonally
-// In some rules, this line must be exactly five stones long; six or more stones in a row does not count as a win and is called an overline.
-// if the board is completely filled and no one has made a line of 5 stones, then the game ends in a draw.
-
-// TODO: Create a 15x15 board
-// Create Player 1 which is the user that always starts with Black stone
-// Create a computer based Player 2 for the white stone. 
-// Implement the rules of the game
-// Implement the win conditions
-// Implement the draw conditions
-// Implement the turn taking
-// Implement the game end conditions
-// Implement the game restart conditions
-// Implement the game history
-// Implement the game restart button
-// Implement the game global leaderboard (?)
-
-
-
-// Currently: 
-// Implemented a 15x15 board
-// Want to implemenet two smaller boards on the left and right of the board for holding the black and white stones. 
