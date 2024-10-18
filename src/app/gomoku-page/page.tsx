@@ -8,7 +8,7 @@ const createGrid = (cols: number, rows: number): (string | null)[][] =>
     Array.from({ length: rows }, () => Array(cols).fill(null));
 
 
-// Define the type for the props of the Stone component
+// defining the type for the props of the Stone component
 interface StoneProps {
     color: "black" | "white";
 }
@@ -23,13 +23,13 @@ const Stone = ({ color }: StoneProps) => {
         }),
     }));
 
-    // Create a ref for the div element and pass it to both `drag` and the div element itself
+    // creating a ref for the div element and pass it to both `drag` and the div element itself
     const ref = useRef<HTMLDivElement>(null);
-    drag(ref); // Apply the drag ref to the div
+    drag(ref); // applies the drag ref to the div
 
     return (
         <div
-            ref={ref} // Pass the ref to the div element
+            ref={ref} // passes the ref to the div element
             className={`w-8 h-8 ${color === "black" ? "bg-black" : "bg-white"} rounded-full`}
             style={{ opacity: isDragging ? 0.5 : 1 }}
         />
@@ -47,6 +47,8 @@ interface BoardCellProps {
 }
 
 const BoardCell = ({ row, col, cellValue, onDrop, canDrop }: BoardCellProps) => {
+    const ref = useRef<HTMLDivElement>(null); // creates ref for the cell
+
     const [{ isOver }, drop] = useDrop({
         accept: "STONE",
         drop: (item: { color: "black" | "white" }) => onDrop(row, col, item.color),
@@ -56,9 +58,11 @@ const BoardCell = ({ row, col, cellValue, onDrop, canDrop }: BoardCellProps) => 
         canDrop: () => !cellValue && canDrop, // prevent dropping on occupied cells and if it's not the player's turn
     });
 
+    drop(ref); // applies the drop ref to the div
+
     return (
         <div
-            ref={drop}
+            ref={ref} // passes the ref to the div element
             className={`w-10 h-10 border border-black ${isOver && !cellValue ? "bg-green-200" : "bg-[#C9A35F]"}`}
         >
             {cellValue && (
