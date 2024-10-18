@@ -1,19 +1,21 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 // grid creation helper function for either 15x15 or 19x19 board
-const createGrid = (cols: number, rows: number): (string | null)[][] => Array.from({ length: rows }, () => Array(cols).fill(null));
+const createGrid = (cols: number, rows: number): (string | null)[][] => 
+    Array.from({ length: rows }, () => Array(cols).fill(null));
 
-// defining the type for the props of the stone component
+
+// Define the type for the props of the Stone component
 interface StoneProps {
     color: "black" | "white";
 }
 
 // stone component
 const Stone = ({ color }: StoneProps) => {
-    const [{ isDragging }, drag] = useDrag(() => ({
+    const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
         type: "STONE",
         item: { color },
         collect: (monitor) => ({
@@ -21,14 +23,19 @@ const Stone = ({ color }: StoneProps) => {
         }),
     }));
 
+    // Create a ref for the div element and pass it to both `drag` and the div element itself
+    const ref = useRef<HTMLDivElement>(null);
+    drag(ref); // Apply the drag ref to the div
+
     return (
         <div
-            ref={drag}
+            ref={ref} // Pass the ref to the div element
             className={`w-8 h-8 ${color === "black" ? "bg-black" : "bg-white"} rounded-full`}
             style={{ opacity: isDragging ? 0.5 : 1 }}
         />
     );
 };
+
 
 // boardcell component, where stones are dropped
 interface BoardCellProps {
