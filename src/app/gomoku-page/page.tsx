@@ -87,7 +87,7 @@ export default function GomokuPage() {
     const [alertMessage, setAlertMessage] = useState(null); // for handling alerts when multiplayer is selected
 
     // function to check for five in a row
-    const checkForWin = (row, col, color) => {
+    const checkForWin = (row: number, col: number, color: "black" | "white"): boolean => {
         const directions = [
             { r: 0, c: 1 }, // horizontal
             { r: 1, c: 0 }, // vertical
