@@ -80,7 +80,7 @@ export default function GomokuPage() {
     const [gridSize, setGridSize] = useState({ cols: 15, rows: 15 }); // state for grid size (default 15x15)
     const [gameStarted, setGameStarted] = useState(false); // state to track if the game has started
     const [grid, setGrid] = useState(createGrid(gridSize.cols, gridSize.rows)); // grid to store stone positions
-    const [winner, setWinner] = useState(null); // track the winner
+    const [winner, setWinner] = useState<"black" | "white" | null>(null); // allow black, white, or null as valid values
     const [gameMode, setGameMode] = useState("computer"); // track game mode: computer or AI mode
     const [currentTurn, setCurrentTurn] = useState("black"); // track whose turn it is (black: Player 1, white: Player 2)
     const [finalMove, setFinalMove] = useState(false); // track if it's the final move to trigger a delay
@@ -216,6 +216,7 @@ export default function GomokuPage() {
 
         return bestMove; // return the best offensive move found
     };
+    
 
     // function to handle dropping stones on the board
     const handleDrop = (row: number, col: number, color: "black" | "white") => {
