@@ -4,7 +4,7 @@ import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 // grid creation helper function for either 15x15 or 19x19 board
-const createGrid = (cols: number, rows: number): (string | null)[][] => 
+const createGrid = (cols: number, rows: number): (string | null)[][] =>
     Array.from({ length: rows }, () => Array(cols).fill(null));
 
 
@@ -121,7 +121,11 @@ export default function GomokuPage() {
     };
 
     // function to evaluate threats or opportunities from both players
-    const evaluateBoard = (grid, gridSize, color) => {
+    const evaluateBoard = (
+        grid: (string | null)[][],
+        gridSize: { cols: number; rows: number },
+        color: "black" | "white"
+    ): { row: number; col: number } | null => {
         const directions = [
             { r: 0, c: 1 }, // horizontal
             { r: 1, c: 0 }, // vertical
@@ -129,9 +133,9 @@ export default function GomokuPage() {
             { r: 1, c: -1 }, // diagonal left-down
         ];
 
-        const getScore = (row, col, direction) => {
+        const getScore = (row: number, col: number, direction: { r: number; c: number }) => {
             let count = 0;
-            const emptySpots = [];
+            const emptySpots: { row: number; col: number }[] = [];
             let blocks = 0; // track if either side is blocked
             let gapFound = false; // track if there's a gap in between stones
 
@@ -143,7 +147,6 @@ export default function GomokuPage() {
                     if (grid[newRow][newCol] === color) {
                         count++;
                     } else if (!grid[newRow][newCol]) {
-                        // check if this is a gap
                         if (!gapFound) {
                             emptySpots.push({ row: newRow, col: newCol });
                             gapFound = true;
