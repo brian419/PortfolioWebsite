@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import TetrisImage from '../../components/images/tetris.svg';
 import PlaceholderImage from '../../components/images/placeholderproject.svg';
+import GomokuImage from '../../components/images/gomoku.svg';
 
 const projects = [
     {
@@ -18,7 +19,7 @@ const projects = [
         id: 2,
         title: 'Gomoku',
         description: '"Five in a row" [In Progress]',
-        image: PlaceholderImage,
+        image: GomokuImage,
         link: '/gomoku-page',
     },
     {
