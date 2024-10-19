@@ -94,6 +94,12 @@ export default function GomokuPage() {
     const [finalMove, setFinalMove] = useState(false); // track if it's the final move to trigger a delay
     const [alertMessage, setAlertMessage] = useState<string | null>(null); // for handling alerts when multiplayer is selected
 
+    // Update grid size and reinitialize the board when the user selects a different grid size
+    const handleGridSizeChange = (cols: number, rows: number) => {
+        setGridSize({ cols, rows });
+        setGrid(createGrid(cols, rows)); // Reinitialize the grid with new dimensions
+    };
+
     // function to check for five in a row
     const checkForWin = (row: number, col: number, color: "black" | "white"): boolean => {
         const directions = [
@@ -126,6 +132,12 @@ export default function GomokuPage() {
             if (count >= 5) return true; // if there are five or more stones in a row, return true
         }
         return false;
+    };
+
+    // function to handle multiplayer or AI mode click
+    const handleModeNotImplementedClick = () => {
+        setAlertMessage("This game mode is not implemented yet.");
+        setTimeout(() => setAlertMessage(null), 2000); // clear the message after 2 seconds
     };
 
     // function to evaluate threats or opportunities from both players
@@ -280,12 +292,6 @@ export default function GomokuPage() {
         }
     }, [currentTurn, gameMode, winner, finalMove]);
 
-    // function to handle multiplayer or AI mode click
-    const handleModeNotImplementedClick = () => {
-        setAlertMessage("This game mode is not implemented yet.");
-        setTimeout(() => setAlertMessage(null), 2000); // clear the message after 2 seconds
-    };
-
     // function to restart game and return to the start screen
     const restartGame = () => {
         setGameStarted(false); // reset to the start screen
@@ -349,7 +355,7 @@ export default function GomokuPage() {
                                     className={`px-4 py-2 border rounded-lg ${
                                         gridSize.cols === 15 ? "bg-blue-500 text-white" : ""
                                     }`}
-                                    onClick={() => setGridSize({ cols: 15, rows: 15 })}
+                                    onClick={() => handleGridSizeChange(15, 15)}
                                 >
                                     15x15 Mode
                                 </button>
@@ -357,7 +363,7 @@ export default function GomokuPage() {
                                     className={`px-4 py-2 border rounded-lg ${
                                         gridSize.cols === 19 ? "bg-blue-500 text-white" : ""
                                     }`}
-                                    onClick={() => setGridSize({ cols: 19, rows: 19 })}
+                                    onClick={() => handleGridSizeChange(19, 19)} // Call the updated grid size change function
                                 >
                                     19x19 Mode
                                 </button>
