@@ -7,35 +7,42 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 const createGrid = (cols: number, rows: number): (string | null)[][] =>
     Array.from({ length: rows }, () => Array(cols).fill(null));
 
-
 // defining the type for the props of the Stone component
 interface StoneProps {
     color: "black" | "white";
+    isPlayer: boolean; // new prop to determine if it's a player-controlled stone
 }
 
 // stone component
-const Stone = ({ color }: StoneProps) => {
-    const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
-        type: "STONE",
-        item: { color },
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
+const Stone = ({ color, isPlayer }: StoneProps) => {
+    const [{ isDragging }, drag] = useDrag(
+        () => ({
+            type: "STONE",
+            item: { color },
+            canDrag: isPlayer, // disables dragging if not player-controlled
+            collect: (monitor) => ({
+                isDragging: !!monitor.isDragging(),
+            }),
         }),
-    }));
+        [isPlayer] // recomputes when `isPlayer` changes
+    );
 
     // creating a ref for the div element and pass it to both `drag` and the div element itself
     const ref = useRef<HTMLDivElement>(null);
-    drag(ref); // applies the drag ref to the div
+    if (isPlayer) {
+        drag(ref); // apply drag only if it's player stones
+    }
 
     return (
         <div
             ref={ref} // passes the ref to the div element
-            className={`w-8 h-8 ${color === "black" ? "bg-black" : "bg-white"} rounded-full`}
+            className={`w-8 h-8 ${color === "black" ? "bg-black" : "bg-white"} rounded-full ${
+                !isPlayer ? "cursor-not-allowed" : ""
+            }`} // applies not-allowed cursor for non-player stones
             style={{ opacity: isDragging ? 0.5 : 1 }}
         />
     );
 };
-
 
 // boardcell component, where stones are dropped
 interface BoardCellProps {
@@ -55,7 +62,7 @@ const BoardCell = ({ row, col, cellValue, onDrop, canDrop }: BoardCellProps) => 
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         }),
-        canDrop: () => !cellValue && canDrop, // prevent dropping on occupied cells and if it's not the player's turn
+        canDrop: () => !cellValue && canDrop, // prevent dropping on occupied cells
     });
 
     drop(ref); // applies the drop ref to the div
@@ -63,7 +70,9 @@ const BoardCell = ({ row, col, cellValue, onDrop, canDrop }: BoardCellProps) => 
     return (
         <div
             ref={ref} // passes the ref to the div element
-            className={`w-10 h-10 border border-black ${isOver && !cellValue ? "bg-green-200" : "bg-[#C9A35F]"}`}
+            className={`w-10 h-10 border border-black ${
+                isOver && !cellValue ? "bg-green-200" : "bg-[#C9A35F]"
+            }`}
         >
             {cellValue && (
                 <div
@@ -73,7 +82,6 @@ const BoardCell = ({ row, col, cellValue, onDrop, canDrop }: BoardCellProps) => 
         </div>
     );
 };
-
 
 // gomokupage component (main game component)
 export default function GomokuPage() {
@@ -216,7 +224,6 @@ export default function GomokuPage() {
 
         return bestMove; // return the best offensive move found
     };
-    
 
     // function to handle dropping stones on the board
     const handleDrop = (row: number, col: number, color: "black" | "white") => {
@@ -238,8 +245,7 @@ export default function GomokuPage() {
         }
     };
 
-    // computer move logic (strategic AI) 
-    // needs to be worked on extensively. it sometimes fails to block the player's winning move and tries to win when it's not close as compared to player 1
+    // computer move logic (strategic AI)
     const makeComputerMove = () => {
         if (winner || currentTurn !== "white") return; // only move if it's the computer's turn and no winner
 
@@ -298,16 +304,22 @@ export default function GomokuPage() {
                             {winner ? (
                                 <>
                                     <span className="animate-rainbow">Game Over!</span> <br /> <br />
-                                    <span className="block animate-bounce text-[#3658B7]">{winner === "black" ? "Player 1" : "Computer"} wins!</span>
+                                    <span className="block animate-bounce text-[#3658B7]">
+                                        {winner === "black" ? "Player 1" : "Computer"} wins!
+                                    </span>
                                 </>
-                            ) : "Welcome to Gomoku!"}
+                            ) : (
+                                "Welcome to Gomoku!"
+                            )}
                         </h1>
 
                         {/* game mode selection (computer vs multiplayer) */}
                         {!gameStarted && !winner && (
                             <div className="flex space-x-4">
                                 <button
-                                    className={`px-4 py-2 border rounded-lg ${gameMode === "computer" ? "bg-blue-500 text-white" : ""}`}
+                                    className={`px-4 py-2 border rounded-lg ${
+                                        gameMode === "computer" ? "bg-blue-500 text-white" : ""
+                                    }`}
                                     onClick={() => setGameMode("computer")}
                                 >
                                     Play Against Computer
@@ -334,13 +346,17 @@ export default function GomokuPage() {
                         {!winner && (
                             <div className="flex space-x-4">
                                 <button
-                                    className={`px-4 py-2 border rounded-lg ${gridSize.cols === 15 ? "bg-blue-500 text-white" : ""}`}
+                                    className={`px-4 py-2 border rounded-lg ${
+                                        gridSize.cols === 15 ? "bg-blue-500 text-white" : ""
+                                    }`}
                                     onClick={() => setGridSize({ cols: 15, rows: 15 })}
                                 >
                                     15x15 Mode
                                 </button>
                                 <button
-                                    className={`px-4 py-2 border rounded-lg ${gridSize.cols === 19 ? "bg-blue-500 text-white" : ""}`}
+                                    className={`px-4 py-2 border rounded-lg ${
+                                        gridSize.cols === 19 ? "bg-blue-500 text-white" : ""
+                                    }`}
                                     onClick={() => setGridSize({ cols: 19, rows: 19 })}
                                 >
                                     19x19 Mode
@@ -367,7 +383,7 @@ export default function GomokuPage() {
                                 <div className="absolute inset-0 bg-gray-400 opacity-50"></div>
                                 <div className="relative z-10 flex flex-col space-y-2">
                                     {Array.from({ length: 7 }).map((_, i) => (
-                                        <Stone key={i} color="black" />
+                                        <Stone key={i} color="black" isPlayer={true} />
                                     ))}
                                 </div>
                             </div>
@@ -396,12 +412,14 @@ export default function GomokuPage() {
 
                         {/* smaller board for white pieces (player 2) */}
                         <div className="flex flex-col items-center">
-                            <h2 className="text-xl font-semibold mb-2 text-white text-center">Player 2: <br></br> Computer</h2>
+                            <h2 className="text-xl font-semibold mb-2 text-white text-center">
+                                Player 2: <br /> Computer
+                            </h2>
                             <div className="flex flex-col justify-center border border-black p-2 bg-gray-900 relative">
                                 <div className="absolute inset-0 bg-gray-400 opacity-50"></div>
                                 <div className="relative z-10 flex flex-col space-y-2">
                                     {Array.from({ length: 7 }).map((_, i) => (
-                                        <Stone key={i} color="white" />
+                                        <Stone key={i} color="white" isPlayer={false} />
                                     ))}
                                 </div>
                             </div>
