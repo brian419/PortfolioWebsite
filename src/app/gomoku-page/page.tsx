@@ -218,7 +218,7 @@ export default function GomokuPage() {
     };
 
     // function to handle dropping stones on the board
-    const handleDrop = (row, col, color) => {
+    const handleDrop = (row: number, col: number, color: "black" | "white") => {
         if (!grid[row][col] && !winner) {
             const newGrid = [...grid];
             newGrid[row][col] = color;
