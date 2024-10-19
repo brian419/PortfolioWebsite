@@ -84,7 +84,7 @@ export default function GomokuPage() {
     const [gameMode, setGameMode] = useState("computer"); // track game mode: computer or AI mode
     const [currentTurn, setCurrentTurn] = useState("black"); // track whose turn it is (black: Player 1, white: Player 2)
     const [finalMove, setFinalMove] = useState(false); // track if it's the final move to trigger a delay
-    const [alertMessage, setAlertMessage] = useState(null); // for handling alerts when multiplayer is selected
+    const [alertMessage, setAlertMessage] = useState<string | null>(null); // for handling alerts when multiplayer is selected
 
     // function to check for five in a row
     const checkForWin = (row: number, col: number, color: "black" | "white"): boolean => {
