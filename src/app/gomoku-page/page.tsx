@@ -159,7 +159,7 @@ export default function GomokuPage() {
         // Get the score function for a direction and a position
         const getScore = (row: number, col: number, direction: { r: number; c: number }, targetColor: string) => {
             let count = 0;
-            let openSpots: { row: number; col: number }[] = []; // Initialize openSpots as an empty array
+            const openSpots: { row: number; col: number }[] = []; // Use const instead of let here
             let blocks = 0;
 
             // Check in the positive direction
@@ -200,15 +200,12 @@ export default function GomokuPage() {
             return { count, openSpots, blocks };
         };
 
-
-
         let bestMove = null;
         let maxScore = 0; // tracks the highest scoring move (offensive or defensive)
 
         for (let row = 0; row < gridSize.rows; row++) {
             for (let col = 0; col < gridSize.cols; col++) {
                 if (!grid[row][col]) {
-                    // Check defensive moves (block Player 1)
                     // Check defensive moves (block Player 1)
                     for (const dir of directions) {
                         const { count: playerCount, openSpots: playerOpenSpots, blocks: playerBlocks } = getScore(row, col, dir, opponentColor);
@@ -219,7 +216,6 @@ export default function GomokuPage() {
                             return playerOpenSpots[0]; // Block Player 1 from winning
                         }
                     }
-
 
                     // Check offensive moves after ensuring no block is needed
                     for (const dir of directions) {
@@ -256,6 +252,7 @@ export default function GomokuPage() {
 
         return bestMove; // return the best move found
     };
+
 
 
 
