@@ -1,0 +1,1 @@
+Model white_ai_model_game_662 trained and saved.

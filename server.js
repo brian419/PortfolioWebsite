@@ -4,6 +4,10 @@ const { join } = require('path');
 const bodyParser = require('body-parser'); // Add body-parser middleware
 const tetrisSubmitScore = require('./pages/api/tetrisSubmitScore');
 const getScores = require('./pages/api/getScores');
+const cors = require('cors'); // Cross-Origin requests
+
+
+app.use(cors()); // Use CORS middleware
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
