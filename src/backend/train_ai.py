@@ -3,13 +3,13 @@ import random
 import time
 import os
 import pickle
-from flask import Flask, jsonify
-from flask_cors import CORS
+from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 from datetime import datetime
 
 app = Flask(__name__)
-# CORS(app)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Allows all origins
+# CORS(app, resources={r"/*": {"origins": "*"}})  
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 
 # simulate training with progress
@@ -23,7 +23,7 @@ best_model = None  # Variable to store the best model info
 class GomokuAI:
     def __init__(self, color, q_table=None, learning_rate=0.1, discount_factor=0.95, exploration_rate=0.1):
         self.color = color  # 'black' or 'white'
-        self.q_table = q_table if q_table else {}  # Load Q-table if provided
+        self.q_table = q_table if q_table else {}  
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.exploration_rate = exploration_rate
@@ -37,17 +37,16 @@ class GomokuAI:
         state_key = self.get_state_key(board)
         available_moves = [(r, c) for r in range(len(board)) for c in range(len(board[0])) if board[r][c] is None]
 
-        if random.random() < self.exploration_rate:
-            # Exploration: choose a random move
+        if random.random() < self.exploration_rate: # exploration: choose a random move
             return random.choice(available_moves)
         else:
-            # Exploitation: choose the best move based on Q-table
+            # exploitation: choose the best move based on Q-table
             if state_key in self.q_table:
                 move_values = self.q_table[state_key]
                 best_move = max(move_values, key=move_values.get)
                 return best_move
             else:
-                # If no knowledge of this state, choose randomly
+                # if no knowledge of this state, choose randomly
                 return random.choice(available_moves)
 
     def update_q_value(self, old_board, new_board, move, reward):
@@ -58,15 +57,15 @@ class GomokuAI:
         if old_state_key not in self.q_table:
             self.q_table[old_state_key] = {}
 
-        # Initialize move if not already in Q-table
+        # initialize move if not already in Q-table
         if move not in self.q_table[old_state_key]:
             self.q_table[old_state_key][move] = 0
 
-        # Get max future reward for the new state
+        # get max future reward for the new state
         future_rewards = self.q_table.get(new_state_key, {})
         max_future_reward = max(future_rewards.values(), default=0)
 
-        # Update Q-value for the old state-action pair
+        # update Q-value for the old state-action pair
         current_q_value = self.q_table[old_state_key][move]
         new_q_value = current_q_value + self.learning_rate * (reward + self.discount_factor * max_future_reward - current_q_value)
         self.q_table[old_state_key][move] = new_q_value
@@ -129,7 +128,8 @@ def check_winner(board, color):
                         return True
     return False
 
-
+# @app.route('/ai-move-2', methods=['POST'])
+# @cross_origin(origin="http://localhost:3000", supports_credentials=True)
 @app.route('/train', methods=['GET'])
 def train():
     global training_progress, games_played, total_score, best_model
@@ -257,6 +257,31 @@ def ai_move():
         return jsonify({"error": "training not complete"}), 400
 
 
+@app.route('/ai-move-2', methods=['POST'])
+@cross_origin(origin="http://localhost:3000", supports_credentials=True)
+def ai_move_2():
+    print("Connected to ai-move-2")
+
+    model_path = os.path.join(os.path.dirname(__file__), "models", "white_ai_model.pkl") 
+    if not os.path.exists(model_path):
+        return jsonify({"error": "AI model not found"}), 400
+
+    with open(model_path, 'rb') as f:
+        q_table = pickle.load(f)
+    white_ai = GomokuAI('white', q_table)
+
+    board = request.json.get("board")
+    print("Received board:", board)  
+
+    if board:
+        move = white_ai.make_move(board)
+        return jsonify({"row": move[0], "col": move[1]})
+    else:
+        return jsonify({"error": "Board state is missing"}), 400
+
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host="0.0.0.0", port=5001)
+
+
+
 
