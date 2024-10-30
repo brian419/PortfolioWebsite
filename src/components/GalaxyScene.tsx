@@ -32,9 +32,9 @@ const GalaxyScene = () => {
             camera.updateProjectionMatrix();
         });
 
-        // Create the galaxy
+        // creating the galaxies
         const parameters = {
-            count: 8000,
+            count: 8000, 
             size: 0.1,
             radius: 20,
             branches: 2,
@@ -56,8 +56,8 @@ const GalaxyScene = () => {
 
         const positions = new Float32Array(parameters.count * 3);
         const colors = new Float32Array(parameters.count * 3);
-        const velocities = new Float32Array(parameters.count); // Speeds for each star
-        const activeShootingStars = new Set<number>(); // To track flying stars
+        const velocities = new Float32Array(parameters.count); // the speed for each star
+        const activeShootingStars = new Set<number>(); // tracks flying stars
 
         const colorInside = new THREE.Color(parameters.insideColor);
         const colorOutside = new THREE.Color(parameters.outsideColor);
@@ -76,7 +76,7 @@ const GalaxyScene = () => {
             positions[i3 + 1] = randomY;
             positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
-            velocities[i] = 0; // Default speed is zero (stationary)
+            velocities[i] = 0; // default speed is zero (stationary)
 
             const mixedColor = colorInside.clone();
             mixedColor.lerp(colorOutside, radius / parameters.radius);
@@ -91,6 +91,7 @@ const GalaxyScene = () => {
 
         const points = new THREE.Points(geometry, material);
         points.rotation.x = Math.PI / 2;
+        material.needsUpdate = true; 
         scene.add(points);
 
         // launching shooting stars to user
@@ -102,16 +103,19 @@ const GalaxyScene = () => {
             }
         };
 
-        setInterval(launchShootingStar, 2000);
-
-        // Set the camera position
+        // sets the camera position
         camera.position.z = 30;
 
-        // Animation loop
+        // animation loop
         const animate = () => {
             requestAnimationFrame(animate);
 
             points.rotation.y += 0.001;
+
+        // launches shooting star logic
+                if (Math.random() < 0.01) { 
+                    launchShootingStar();
+                }
 
             for (let i = 0; i < parameters.count; i++) {
                 if (velocities[i] > 0) {
@@ -128,19 +132,24 @@ const GalaxyScene = () => {
                 }
             }
 
-            // Update positions in geometry
+            // updates positions in geometry
             geometry.attributes.position.needsUpdate = true;
+
 
             controls.update(); // user interaction
             renderer.render(scene, camera);
         };
+        
 
         animate();
 
-        return () => {
+        return () => { // this worked! to not have webGL errors
             window.removeEventListener('resize', () => { });
             controls.dispose();
+            renderer.dispose(); 
+            scene.clear(); 
         };
+        
     }, []);
 
     return (
