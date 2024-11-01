@@ -15,11 +15,11 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_cred
 # simulate training with progress
 training_progress = 0
 games_played = 0
-total_score = 0  # To track the cumulative score across games
-best_model = None  # Variable to store the best model info
+total_score = 0  
+best_model = None  
 
 
-# AI using Q-learning
+# Q-learning
 class GomokuAI:
     def __init__(self, color, q_table=None, learning_rate=0.1, discount_factor=0.95, exploration_rate=0.1):
         self.color = color  # 'black' or 'white'
@@ -72,14 +72,17 @@ class GomokuAI:
 
     def get_reward(self, board, color):
         """Assign a reward based on the current board state."""
-        # Reward system: winning = +1, losing = -1, other = 0.1 for getting closer
+        # current reward system: winning = +1, losing = -1, other = 0.1 for getting closer
         if check_winner(board, color):
-            return 1  # Win
+            return 1  
         elif check_winner(board, 'white' if color == 'black' else 'black'):
-            return -1  # Lose
+            return -1  
         else:
-            # Small reward for each step
             return 0.1
+        
+
+        # new idea for reward system:
+        # winning = +1, losing = -1, other = 0.1, win in smaller number of moves = higher reward, win in larger number of moves = lower reward
 
 
 def initialize_board(size=15):
@@ -97,15 +100,15 @@ def check_winner(board, color):
     ]
     grid_size = len(board)
 
-    # Iterate over each cell in the board
+    # iterates over each cell in the board
     for row in range(grid_size):
         for col in range(grid_size):
             if board[row][col] == color:
-                # Check all four directions
+                # checks all four directions
                 for r_dir, c_dir in directions:
                     count = 1
 
-                    # Check in the positive direction
+                    # checks in the positive direction
                     for i in range(1, 5):
                         new_row = row + r_dir * i
                         new_col = col + c_dir * i
@@ -114,7 +117,7 @@ def check_winner(board, color):
                         else:
                             break
 
-                    # Check in the negative direction
+                    # checks in the negative direction
                     for i in range(1, 5):
                         new_row = row - r_dir * i
                         new_col = col - c_dir * i
@@ -123,7 +126,7 @@ def check_winner(board, color):
                         else:
                             break
 
-                    # Check if we found five in a row
+                    # checks if we found five in a row
                     if count >= 5:
                         return True
     return False
@@ -135,8 +138,8 @@ def train():
     global training_progress, games_played, total_score, best_model
     training_progress = 0
     games_played = 0
-    total_score = 0  # Reset score at the start of training
-    max_total_games = 2  # Max number of games for training
+    total_score = 0  # resets score at the start of training
+    max_total_games = 2  # max number of games for training
 
     
     # if have previous model, load it, otherwise start from scratch
@@ -153,14 +156,14 @@ def train():
 
 
 
-    # Simulate training indefinitely or until a condition is met
+    # training loop
     while games_played < max_total_games:
         board = initialize_board()
         current_turn = 'black'
         winner = None
         game_moves = []
 
-        for turn in range(225):  # Max turns in a 15x15 board
+        for turn in range(225):  # max turns in a 15x15 board
             if current_turn == 'black':
                 move = black_ai.make_move(board)
                 board[move[0]][move[1]] = 'black'
@@ -178,15 +181,15 @@ def train():
                     break
                 current_turn = 'black'
 
-        # Log the result
+        # logs the result
         if winner:
             print(f"Game {games_played + 1}: {winner} wins")
         else:
             print(f"Game {games_played + 1}: Draw")
 
-        # Reward the moves based on the result of the game
+        # rewards the moves based on the result of the game
         reward = 1 if winner == 'black' else -1 if winner == 'white' else 0
-        total_score += reward  # Update total score
+        total_score += reward  # updates total score
         for color, old_board, move in reversed(game_moves):
             if color == 'black':
                 black_ai.update_q_value(old_board, board, move, reward)
@@ -196,11 +199,11 @@ def train():
         games_played += 1
         training_progress = (games_played / max_total_games) * 100  # Update progress as a percentage
 
-    # Save the models (Q-tables) for both AIs
+    # saves the models (Q-tables) for both AIs
     save_model(black_ai.q_table, "black_ai_model")
     save_model(white_ai.q_table, "white_ai_model")
 
-    # Save the board and result of the last game to a file with the descriptive name
+    # saves the board and result of the last game to a file with the descriptive name
     save_training_output(board, winner, games_played, total_score)
 
     return jsonify({"progress": training_progress, "games_played": games_played, "best_model": best_model})

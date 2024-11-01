@@ -136,10 +136,14 @@ export default function GomokuPage() {
         return false;
     };
 
-    // function to handle multiplayer or AI mode click
-    const handleModeNotImplementedClick = () => {
-        setAlertMessage("This game mode is not implemented yet.");
-        setTimeout(() => setAlertMessage(null), 2000); // clear the message after 2 seconds
+    const alertMessageForAiModeDebug = () => {
+        return new Promise<void>((resolve) => {
+            setAlertMessage("This is a temporary page to debug the Player vs AI mode training (deep learning). Visitors don't need to check this page unless they wanted to visualize the training for now.");
+            setTimeout(() => {
+                setAlertMessage(null);
+                resolve(); 
+            }, 20000); 
+        });
     };
 
     // ---------------------------------------
@@ -357,22 +361,22 @@ export default function GomokuPage() {
 
         setCurrentTurn("black");
         setFirstPlayerMove(null);
-    
+
         const handleDrop2 = (row: number, col: number, color: "black" | "white") => {
             console.log("Handling drop...");
-    
+
             if (!grid[row][col] && !winner) {
                 const newGrid = [...grid];
                 newGrid[row][col] = color;
                 setGrid(newGrid);
-    
+
                 console.log(`${color === "black" ? "Player 1" : "Computer"} placed stone at (${row}, ${col})`);
-    
+
                 if (color === "black" && !firstPlayerMove) {
                     setFirstPlayerMove({ row, col });
                     console.log("Player 1's first move detected at:", row, col);
                 }
-    
+
                 if (checkForWin(row, col, color)) {
                     setFinalMove(true);
                     setTimeout(() => setWinner(color), 1250);
@@ -381,23 +385,23 @@ export default function GomokuPage() {
 
                 setCurrentTurn(color === "black" ? "white" : "black");
                 if (color === "black") {
-                    console.log ("setCurrentTurn set color to black turn")
+                    console.log("setCurrentTurn set color to black turn")
                 } else {
-                    console.log ("setCurrentTurn set color to white turn")
+                    console.log("setCurrentTurn set color to white turn")
                 }
             }
         };
-    
+
         const makeAIMove = async () => {
             console.log("Checking if it's AI's turn to move...");
 
             if (currentTurn === "black") {
                 console.log("Waiting for Player 1 to make a move")
             }
-    
+
             if (currentTurn === "white") {
                 console.log("AI's turn to move");
-    
+
                 const response = await fetch("http://localhost:5001/ai-move-2", {
                     method: "POST",
                     headers: {
@@ -410,13 +414,13 @@ export default function GomokuPage() {
                     }),
                     mode: 'cors'
                 });
-    
+
                 console.log("Payload being sent:", {
                     board: grid,
                     gridSize,
                     color: "white"
                 });
-    
+
                 if (response.ok) {
                     const { row, col } = await response.json();
                     handleDrop2(row, col, "white"); // AI places "white" stone
@@ -425,14 +429,14 @@ export default function GomokuPage() {
                 }
             }
         };
-    
+
         // Call makeAIMove only if it's AI's turn (currentTurn should be "white" for AI)
         // if (currentTurn === "white") {
         //     makeAIMove();
         // }
         makeAIMove();
     };
-    
+
 
 
     // ---------------------------------------
@@ -489,9 +493,15 @@ export default function GomokuPage() {
                                 >
                                     AI Mode
                                 </button>
-                                <a href="/gomoku-page/ai-gomoku-page" className={`px-4 py-2 border rounded-lg`}>
-                                    AI Mode Debug
-                                </a>
+                                {gameMode === "ai" && (
+                                    <a
+                                        href="/gomoku-page/ai-gomoku-page"
+                                        className={`px-4 py-2 border rounded-lg`}
+                                        onMouseEnter={alertMessageForAiModeDebug} 
+                                    >
+                                        AI Mode Debug
+                                    </a>
+                                )}
                                 <button
                                     className="px-4 py-2 border rounded-lg bg-gray-300 text-gray-600"
                                     onClick={handleMultiplayerPlay}

@@ -35,8 +35,8 @@ export default function AIGomokuPage() {
     const [trainingProgress, setTrainingProgress] = useState<number>(0); // AI training progress
     const [isTraining, setIsTraining] = useState(false); // track if training is ongoing
     const [aiMove, setAiMove] = useState<{ row: number; col: number } | null>(null); // AI move from backend
-    const [currentTurn, setCurrentTurn] = useState<string>("black"); // Track whose turn it is
-    const [gamesPlayed, setGamesPlayed] = useState<number>(0); // Track number of games played
+    const [currentTurn, setCurrentTurn] = useState<string>("black"); // trakcs whose turn it is
+    const [gamesPlayed, setGamesPlayed] = useState<number>(0); // tracks number of games played
 
     // function to start AI training and fetch progress from backend
     const startTraining = async () => {
@@ -58,7 +58,7 @@ export default function AIGomokuPage() {
             if (response.ok) {
                 setAiMove(data); // set AI move from backend
                 updateBoard(data.row, data.col, currentTurn); // update board with AI's move
-                setCurrentTurn(currentTurn === "black" ? "white" : "black"); // Switch turns
+                setCurrentTurn(currentTurn === "black" ? "white" : "black"); // switch turns
             } else {
                 console.error('Error getting AI move:', data.error);
             }
@@ -76,14 +76,14 @@ export default function AIGomokuPage() {
 
     // reset the board when a new game starts
     const resetBoard = () => {
-        setGrid(createGrid(15, 15));  // Reset the board
-        setCurrentTurn("black");  // Reset the turn to black
+        setGrid(createGrid(15, 15));  
+        setCurrentTurn("black");  
     };
 
     // trigger getAIMove once training reaches 100%
     useEffect(() => {
         if (trainingProgress === 100) {
-            if (gamesPlayed < 2) {  // Stop after 2 games
+            if (gamesPlayed < 2) {  
                 getAIMove();
             }
         }
@@ -92,33 +92,33 @@ export default function AIGomokuPage() {
     useEffect(() => {
         if (aiMove) {
             if (gamesPlayed < 2) {
-                getAIMove();  // Automatically fetch the next move after each move
+                getAIMove();  
             }
         }
     }, [aiMove]);
 
     useEffect(() => {
         if (gamesPlayed < 2) {
-            resetBoard();  // Reset the board after each game
+            resetBoard();  
         }
     }, [gamesPlayed]);
 
     return (
         <DndProvider backend={HTML5Backend}>
             <div className="flex flex-col items-center justify-center min-h-screen">
-                <h1 className="text-4xl font-bold mb-6">AI Training and Board</h1>
+                <h1 className="text-4xl text-gray-300 font-bold mb-6">Training AI Agent (white piece model is saved)</h1>
 
                 {/* display ai training progress */}
-                <div className="w-full max-w-lg">
+                {/* <div className="w-full max-w-lg">
                     <div className="bg-gray-200 rounded-full h-6 mb-4">
                         <div className="bg-blue-500 h-6 rounded-full" style={{ width: `${trainingProgress}%` }}></div>
                     </div>
                     <p className="text-lg font-semibold">{trainingProgress}% Complete</p>
-                </div>
+                </div> */}
 
                 {/* start training button */}
                 {!isTraining && trainingProgress < 100 && (
-                    <button className="px-6 py-3 mt-6 bg-green-500 text-white rounded-lg" onClick={startTraining}>
+                    <button className="px-6 py-3 mt-6 bg-[#377F3F] hover:text-black text-white rounded-lg" onClick={startTraining}>
                         Start AI Training
                     </button>
                 )}
@@ -147,8 +147,8 @@ export default function AIGomokuPage() {
                 )} */}
 
                 {/* placeholder text */}
-                <p className="text-gray-600 mt-8">
-                    this page shows ai training progress and updates the board with ai moves
+                <p className="text-gray-600 mt-8 flex-wrap p-20">
+                    This page will not show in future deployments. It is only here for demonstration purposes as well as helping to debug. The overall goal is for the deep learning to have a better reward system than now and to train an excellent agent that can play against the user in gamemode Player vs AI. 
                 </p>
             </div>
         </DndProvider>
