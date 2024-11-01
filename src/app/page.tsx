@@ -29,8 +29,11 @@ export default function Home() {
                 {/* Hero Section */}
                 <section className="text-white py-28">
                     <div className="container mx-auto text-center flex flex-col justify-center items-center min-h-[70vh]">
+                        <h2 className="text-6xl font-extrabold mb-6 text-[#49A097]">
+                            Development Branch
+                        </h2>
                         <h1 className="text-6xl font-extrabold mb-6 text-[#49A097]">
-                            Welcome to My Portfolio TESTING SUBDOMAIN FOR DEVELOPMENT BRANCH TEST 4
+                            Welcome to My Portfolio
                         </h1>
                         <p className="text-2xl mb-12 text-gray-300 max-w-3xl mx-auto">
                             I am a web developer specializing in React.js, Next.js, and Three.js. I create interactive and performant web applications.
