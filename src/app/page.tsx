@@ -30,7 +30,7 @@ export default function Home() {
                 <section className="text-white py-28">
                     <div className="container mx-auto text-center flex flex-col justify-center items-center min-h-[70vh]">
                         <h1 className="text-6xl font-extrabold mb-6 text-[#49A097]">
-                            Welcome to My Portfolio
+                            Welcome to My Portfolio TEST
                         </h1>
                         <p className="text-2xl mb-12 text-gray-300 max-w-3xl mx-auto">
                             I am a web developer specializing in React.js, Next.js, and Three.js. I create interactive and performant web applications.
