@@ -1,5 +1,5 @@
 
-// v2 for different sections / also added debug section for ai training
+// v2 for different sections / also added debug section for ai training //
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
