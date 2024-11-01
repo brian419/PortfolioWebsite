@@ -35,7 +35,8 @@ export default function AIGomokuPage() {
     const [trainingProgress, setTrainingProgress] = useState<number>(0); // AI training progress
     const [isTraining, setIsTraining] = useState(false); // track if training is ongoing
     const [aiMove, setAiMove] = useState<{ row: number; col: number } | null>(null); // AI move from backend
-    const [currentTurn, setCurrentTurn] = useState<string>("black"); // trakcs whose turn it is
+    // const [currentTurn, setCurrentTurn] = useState<string>("black"); // trakcs whose turn it is
+    const [currentTurn, setCurrentTurn] = useState<"black" | "white">("black"); 
     const [gamesPlayed, setGamesPlayed] = useState<number>(0); // tracks number of games played
 
     // function to start AI training and fetch progress from backend

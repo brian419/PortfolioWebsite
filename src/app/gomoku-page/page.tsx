@@ -138,13 +138,16 @@ export default function GomokuPage() {
 
     const alertMessageForAiModeDebug = () => {
         return new Promise<void>((resolve) => {
-            setAlertMessage("This is a temporary page to debug the Player vs AI mode training (deep learning). Visitors don't need to check this page unless they wanted to visualize the training for now.");
+            setAlertMessage(
+                "This is a temporary page to debug the Player vs AI mode training (deep learning). Visitors don't need to check the 'AI Mode Debug' page unless they wanted to visualize the training for now.");
             setTimeout(() => {
                 setAlertMessage(null);
                 resolve(); 
             }, 20000); 
+            
         });
     };
+    
 
     // ---------------------------------------
     // SECTION 1: Player vs Computer Mode
