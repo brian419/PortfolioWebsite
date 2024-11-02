@@ -52,7 +52,7 @@ export default function AIGomokuPage() {
     //     }
     // };
 
-    // for development only
+    // for development only //
     const startTraining = async () => {
         setIsTraining(true);
         try {   
