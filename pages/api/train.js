@@ -23,13 +23,22 @@ class GomokuAI {
     makeMove(board) {
         const availableMoves = [];
         for (let r = 0; r < board.length; r++) {
-            for (let c = 0; c < board[0].length; c++) {
-                if (board[r] && board[r][c] === null) {  // check if board[r] exists and is not null
+            if (!Array.isArray(board[r])) {
+                console.error(`Row ${r} is not an array:`, board[r]);
+                continue;
+            }
+            for (let c = 0; c < board[r].length; c++) {
+                if (board[r] && board[r][c] === null) {
                     availableMoves.push([r, c]);
                 }
             }
         }
-        // exploration and exploitation logic remains the same
+        if (availableMoves.length === 0) {
+            console.error("No available moves found on the board:", board);
+            throw new Error("No available moves");
+        }
+
+        // exploration and exploitation logic
         if (Math.random() < this.explorationRate) {
             return availableMoves[Math.floor(Math.random() * availableMoves.length)];
         } else {
@@ -42,7 +51,6 @@ class GomokuAI {
             return availableMoves[Math.floor(Math.random() * availableMoves.length)];
         }
     }
-
 
     updateQValue(oldBoard, newBoard, move, reward) {
         const oldStateKey = this.getStateKey(oldBoard);
@@ -67,7 +75,9 @@ class GomokuAI {
 }
 
 function initializeBoard(size = 15) {
-    return Array.from({ length: size }, () => Array(size).fill(null));
+    const board = Array.from({ length: size }, () => Array(size).fill(null));
+    console.log("Initialized board:", board);
+    return board;
 }
 
 function checkWinner(board, color) {
@@ -151,6 +161,11 @@ export default async function handler(req, res) {
             for (let turn = 0; turn < 225; turn++) {
                 const currentAI = currentTurn === 'black' ? blackAI : whiteAI;
                 const move = currentAI.makeMove(board);
+                if (!move) {
+                    console.error("No valid move returned.");
+                    res.status(500).json({ error: "Failed to retrieve a valid move." });
+                    return;
+                }
                 board[move[0]][move[1]] = currentTurn;
                 gameMoves.push([currentTurn, JSON.parse(JSON.stringify(board)), move]);
                 if (checkWinner(board, currentTurn)) {
