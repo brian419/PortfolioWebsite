@@ -8,9 +8,7 @@ from flask_cors import CORS, cross_origin
 from datetime import datetime
 
 app = Flask(__name__)
-# CORS(app, resources={r"/*": {"origins": "*"}})  
 frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
-# CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 CORS(app, resources={r"/*": {"origins": frontend_origin}}, supports_credentials=True)
 
 
@@ -134,10 +132,10 @@ def check_winner(board, color):
                         return True
     return False
 
-# @app.route('/ai-move-2', methods=['POST'])
-# @cross_origin(origin="http://localhost:3000", supports_credentials=True)
+
 @app.route('/train', methods=['GET'])
 def train():
+    print("Connected to train_ai.py for /train")
     global training_progress, games_played, total_score, best_model
     training_progress = 0
     games_played = 0
