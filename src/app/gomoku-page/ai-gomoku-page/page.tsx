@@ -52,21 +52,37 @@ export default function AIGomokuPage() {
     //     }
     // };
 
-    // for development only 
+    // for development only // uses Flask, but we don't have Flask server running
+    // const startTraining = async () => {
+    //     setIsTraining(true);
+    //     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001"; 
+    
+    //     try {   
+    //         const response = await fetch(`${backendUrl}/train`);
+    //         console.log(response);
+            
+    //         if (!response.ok) {
+    //             throw new Error(`Server error: ${response.status} ${response.statusText}`);
+    //         }
+    
+    //         const data = await response.json(); 
+    //         setTrainingProgress(data.progress); 
+    //     } catch (error) {
+    //         console.error('Error during training:', error);
+    //     }
+    // };
+
     const startTraining = async () => {
         setIsTraining(true);
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001"; 
     
-        try {   
-            const response = await fetch(`${backendUrl}/train`);
-            console.log(response);
-            
+        try {
+            const response = await fetch(`/api/train`); 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status} ${response.statusText}`);
             }
     
-            const data = await response.json(); 
-            setTrainingProgress(data.progress); 
+            const data = await response.json();
+            setTrainingProgress(data.progress);
         } catch (error) {
             console.error('Error during training:', error);
         }
