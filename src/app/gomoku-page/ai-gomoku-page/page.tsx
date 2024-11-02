@@ -54,6 +54,8 @@ export default function AIGomokuPage() {
 
     // for development only 
     const startTraining = async () => {
+        console.log("Backend URL:", process.env.NEXT_PUBLIC_BACKEND_URL);
+
         setIsTraining(true);
         try {   
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/train`); 
