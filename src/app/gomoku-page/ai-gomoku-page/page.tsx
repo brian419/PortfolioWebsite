@@ -36,7 +36,7 @@ export default function AIGomokuPage() {
     const [isTraining, setIsTraining] = useState(false); // track if training is ongoing
     const [aiMove, setAiMove] = useState<{ row: number; col: number } | null>(null); // AI move from backend
     // const [currentTurn, setCurrentTurn] = useState<string>("black"); // trakcs whose turn it is
-    const [currentTurn, setCurrentTurn] = useState<"black" | "white">("black"); 
+    const [currentTurn, setCurrentTurn] = useState<"black" | "white">("black");
     const [gamesPlayed, setGamesPlayed] = useState<number>(0); // tracks number of games played
 
     // function to start AI training and fetch progress from backend
@@ -56,15 +56,15 @@ export default function AIGomokuPage() {
     // const startTraining = async () => {
     //     setIsTraining(true);
     //     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001"; 
-    
+
     //     try {   
     //         const response = await fetch(`${backendUrl}/train`);
     //         console.log(response);
-            
+
     //         if (!response.ok) {
     //             throw new Error(`Server error: ${response.status} ${response.statusText}`);
     //         }
-    
+
     //         const data = await response.json(); 
     //         setTrainingProgress(data.progress); 
     //     } catch (error) {
@@ -74,37 +74,45 @@ export default function AIGomokuPage() {
 
     const startTraining = async () => {
         setIsTraining(true);
-    
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || ''; 
         try {
-            const response = await fetch(`/api/train`); 
+            const response = await fetch(`${backendUrl}/api/train`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
             if (!response.ok) {
-                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                throw new Error('Failed to start training');
             }
     
             const data = await response.json();
             setTrainingProgress(data.progress);
+            console.log('Training progress:', data);
         } catch (error) {
-            console.error('Error during training:', error);
+            console.error('Error starting training:', error);
         }
     };
-    
-    
+
+
+
 
     // function to get AI move from backend after each turn
     const getAIMove = async () => {
-        try {
-            const response = await fetch('http://localhost:5001/ai-move');
-            const data = await response.json();
-            if (response.ok) {
-                setAiMove(data); // set AI move from backend
-                updateBoard(data.row, data.col, currentTurn); // update board with AI's move
-                setCurrentTurn(currentTurn === "black" ? "white" : "black"); // switch turns
-            } else {
-                console.error('Error getting AI move:', data.error);
-            }
-        } catch (error) {
-            console.error('Error fetching AI move:', error);
-        }
+        // try {
+        //     const response = await fetch('http://localhost:5001/ai-move');
+        //     const data = await response.json();
+        //     if (response.ok) {
+        //         setAiMove(data); // set AI move from backend
+        //         updateBoard(data.row, data.col, currentTurn); // update board with AI's move
+        //         setCurrentTurn(currentTurn === "black" ? "white" : "black"); // switch turns
+        //     } else {
+        //         console.error('Error getting AI move:', data.error);
+        //     }
+        // } catch (error) {
+        //     console.error('Error fetching AI move:', error);
+        // }
     };
 
     // update board with AI's move
@@ -116,14 +124,14 @@ export default function AIGomokuPage() {
 
     // reset the board when a new game starts
     const resetBoard = () => {
-        setGrid(createGrid(15, 15));  
-        setCurrentTurn("black");  
+        setGrid(createGrid(15, 15));
+        setCurrentTurn("black");
     };
 
     // trigger getAIMove once training reaches 100%
     useEffect(() => {
         if (trainingProgress === 100) {
-            if (gamesPlayed < 2) {  
+            if (gamesPlayed < 2) {
                 getAIMove();
             }
         }
@@ -132,14 +140,14 @@ export default function AIGomokuPage() {
     useEffect(() => {
         if (aiMove) {
             if (gamesPlayed < 2) {
-                getAIMove();  
+                getAIMove();
             }
         }
     }, [aiMove]);
 
     useEffect(() => {
         if (gamesPlayed < 2) {
-            resetBoard();  
+            resetBoard();
         }
     }, [gamesPlayed]);
 
@@ -188,7 +196,7 @@ export default function AIGomokuPage() {
 
                 {/* placeholder text */}
                 <p className="text-gray-600 mt-8 flex-wrap p-20">
-                    This page will not show in future deployments. It is only here for demonstration purposes as well as helping to debug. The overall goal is for the deep learning to have a better reward system than now and to train an excellent agent that can play against the user in gamemode Player vs AI. 
+                    This page will not show in future deployments. It is only here for demonstration purposes as well as helping to debug. The overall goal is for the deep learning to have a better reward system than now and to train an excellent agent that can play against the user in gamemode Player vs AI.
                 </p>
             </div>
         </DndProvider>

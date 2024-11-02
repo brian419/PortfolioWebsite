@@ -1,10 +1,17 @@
 import fs from 'fs';
 import path from 'path';
+import express from 'express';
+import cors from 'cors';
+
+const app = express();
+
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
 
 let trainingProgress = 0;
 let gamesPlayed = 0;
 let totalScore = 0;
-let bestModel = null;
 
 class GomokuAI {
     constructor(color, qTable = {}, learningRate = 0.1, discountFactor = 0.95, explorationRate = 0.1) {
@@ -22,23 +29,30 @@ class GomokuAI {
     makeMove(board) {
         const stateKey = this.getStateKey(board);
         const availableMoves = [];
-        
+
         for (let r = 0; r < board.length; r++) {
             for (let c = 0; c < board[0].length; c++) {
                 if (board[r][c] === null) availableMoves.push([r, c]);
             }
         }
+        console.log('State key:', stateKey);
+        console.log('Available moves:', availableMoves);
+        console.log('Q-table for state:', this.qTable[stateKey]);
 
-        if (Math.random() < this.explorationRate) {
+        if (Math.random() < this.explorationRate || !this.qTable[stateKey]) {
             return availableMoves[Math.floor(Math.random() * availableMoves.length)];
-        } else if (this.qTable[stateKey]) {
+        } else {
             const moveValues = this.qTable[stateKey];
+            if (!moveValues || Object.keys(moveValues).length === 0) {
+                return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+            }
             const bestMove = Object.keys(moveValues).reduce((a, b) => (moveValues[a] > moveValues[b] ? a : b));
             return bestMove.split(',').map(Number);
         }
         
-        return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+
     }
+
 
     updateQValue(oldBoard, newBoard, move, reward) {
         const oldStateKey = this.getStateKey(oldBoard);
@@ -52,12 +66,6 @@ class GomokuAI {
         const newQValue = currentQValue + this.learningRate * (reward + this.discountFactor * maxFutureReward - currentQValue);
 
         this.qTable[oldStateKey][move] = newQValue;
-    }
-
-    getReward(board, color) {
-        if (checkWinner(board, color)) return 1;
-        if (checkWinner(board, color === 'black' ? 'white' : 'black')) return -1;
-        return 0.1;
     }
 }
 
@@ -112,62 +120,50 @@ function loadModel(modelName) {
     return null;
 }
 
-function saveTrainingOutput(board, winner, gamesPlayed, totalScore) {
-    const outputDir = path.join(process.cwd(), 'training_output');
-    fs.mkdirSync(outputDir, { recursive: true });
-    const dateStr = new Date().toISOString().replace(/:/g, '-');
-    const fileName = `boardIteration_${gamesPlayed}_totalScore_${totalScore}_time_${dateStr}.txt`;
-    const filePath = path.join(outputDir, fileName);
+app.get('/api/train', (req, res) => {
+    trainingProgress = 0;
+    gamesPlayed = 0;
+    totalScore = 0;
+    const maxTotalGames = 2;
 
-    const data = `Winner: ${winner}\nTotal Score: ${totalScore}\n` + board.map(row => row.map(cell => cell || '.').join(' ')).join('\n');
-    fs.writeFileSync(filePath, data);
-}
+    let blackAI = new GomokuAI('black', loadModel("black_ai_model"));
+    let whiteAI = new GomokuAI('white', loadModel("white_ai_model"));
 
-export default async function handler(req, res) {
-    if (req.method === 'GET') {
-        trainingProgress = 0;
-        gamesPlayed = 0;
-        totalScore = 0;
-        const maxTotalGames = 2;
+    while (gamesPlayed < maxTotalGames) {
+        const board = initializeBoard();
+        let currentTurn = 'black';
+        let winner = null;
+        const gameMoves = [];
 
-        let blackAI = new GomokuAI('black', loadModel("black_ai_model"));
-        let whiteAI = new GomokuAI('white', loadModel("white_ai_model"));
-
-        while (gamesPlayed < maxTotalGames) {
-            const board = initializeBoard();
-            let currentTurn = 'black';
-            let winner = null;
-            const gameMoves = [];
-
-            for (let turn = 0; turn < 225; turn++) {
-                const currentAI = currentTurn === 'black' ? blackAI : whiteAI;
-                const move = currentAI.makeMove(board);
-                board[move[0]][move[1]] = currentTurn;
-                gameMoves.push([currentTurn, JSON.parse(JSON.stringify(board)), move]);
-                if (checkWinner(board, currentTurn)) {
-                    winner = currentTurn;
-                    break;
-                }
-                currentTurn = currentTurn === 'black' ? 'white' : 'black';
+        for (let turn = 0; turn < 225; turn++) {
+            const currentAI = currentTurn === 'black' ? blackAI : whiteAI;
+            const move = currentAI.makeMove(board);
+            board[move[0]][move[1]] = currentTurn;
+            gameMoves.push([currentTurn, JSON.parse(JSON.stringify(board)), move]);
+            if (checkWinner(board, currentTurn)) {
+                winner = currentTurn;
+                break;
             }
-
-            const reward = winner === 'black' ? 1 : winner === 'white' ? -1 : 0;
-            totalScore += reward;
-            for (const [color, oldBoard, move] of gameMoves.reverse()) {
-                if (color === 'black') blackAI.updateQValue(oldBoard, board, move, reward);
-                else whiteAI.updateQValue(oldBoard, board, move, -reward);
-            }
-
-            gamesPlayed += 1;
-            trainingProgress = (gamesPlayed / maxTotalGames) * 100;
+            currentTurn = currentTurn === 'black' ? 'white' : 'black';
         }
 
-        saveModel(blackAI.qTable, "black_ai_model");
-        saveModel(whiteAI.qTable, "white_ai_model");
-        saveTrainingOutput(initializeBoard(), null, gamesPlayed, totalScore);
+        const reward = winner === 'black' ? 1 : winner === 'white' ? -1 : 0;
+        totalScore += reward;
+        for (const [color, oldBoard, move] of gameMoves.reverse()) {
+            if (color === 'black') blackAI.updateQValue(oldBoard, board, move, reward);
+            else whiteAI.updateQValue(oldBoard, board, move, -reward);
+        }
 
-        res.status(200).json({ progress: trainingProgress, gamesPlayed, bestModel });
-    } else {
-        res.status(405).json({ error: 'Method not allowed' });
+        gamesPlayed += 1;
+        trainingProgress = (gamesPlayed / maxTotalGames) * 100;
     }
-}
+
+    saveModel(blackAI.qTable, "black_ai_model");
+    saveModel(whiteAI.qTable, "white_ai_model");
+
+    res.status(200).json({ progress: trainingProgress, gamesPlayed });
+});
+
+app.listen(5001, () => {
+    console.log('Server is running on http://localhost:5001');
+});

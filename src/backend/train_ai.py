@@ -5,13 +5,13 @@ import os
 import pickle
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-from datetime import datetimeh
+from datetime import datetime
 
-app = Flask(__name__)
-frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+# app = Flask(__name__)
+# frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
 
-print("Frontend origin:", frontend_origin)
-CORS(app, resources={r"/*": {"origins": frontend_origin}}, supports_credentials=True)
+# print("Frontend origin:", frontend_origin)
+# CORS(app, resources={r"/*": {"origins": frontend_origin}}, supports_credentials=True)
 
 
 
@@ -135,7 +135,7 @@ def check_winner(board, color):
     return False
 
 
-@app.route('/train', methods=['GET'])
+# @app.route('/train', methods=['GET'])
 def train():
     print("Connected to train_ai.py for /train")
     global training_progress, games_played, total_score, best_model
@@ -255,7 +255,7 @@ def load_model(model_name):
         return None
 
 
-@app.route('/ai-move', methods=['GET'])
+# @app.route('/ai-move', methods=['GET'])
 def ai_move():
     if training_progress >= 100:
         return jsonify({"row": random.randint(0, 14), "col": random.randint(0, 14)})
@@ -263,7 +263,7 @@ def ai_move():
         return jsonify({"error": "training not complete"}), 400
 
 
-@app.route('/ai-move-2', methods=['POST'])
+# @app.route('/ai-move-2', methods=['POST'])
 @cross_origin(origin="http://localhost:3000", supports_credentials=True)
 def ai_move_2():
     print("Connected to ai-move-2")
@@ -286,7 +286,8 @@ def ai_move_2():
         return jsonify({"error": "Board state is missing"}), 400
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5001)
+    # app.run(host="0.0.0.0", port=5001)
+    pass
 
 
 
