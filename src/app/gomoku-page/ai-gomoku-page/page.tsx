@@ -52,11 +52,11 @@ export default function AIGomokuPage() {
     //     }
     // };
 
-    // for development only //
+    // for development only 
     const startTraining = async () => {
         setIsTraining(true);
         try {   
-            const response = await fetch(`${process.env.FRONTEND_ORIGIN}/train`); 
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/train`); 
             const data = await response.json();
             setTrainingProgress(data.progress); 
         } catch (error) {
