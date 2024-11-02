@@ -9,6 +9,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+
+print("Frontend origin:", frontend_origin)
 CORS(app, resources={r"/*": {"origins": frontend_origin}}, supports_credentials=True)
 
 
