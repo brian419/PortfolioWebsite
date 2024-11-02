@@ -9,7 +9,10 @@ from datetime import datetime
 
 app = Flask(__name__)
 # CORS(app, resources={r"/*": {"origins": "*"}})  
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+# CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": frontend_origin}}, supports_credentials=True)
+
 
 
 # simulate training with progress

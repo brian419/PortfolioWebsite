@@ -40,16 +40,30 @@ export default function AIGomokuPage() {
     const [gamesPlayed, setGamesPlayed] = useState<number>(0); // tracks number of games played
 
     // function to start AI training and fetch progress from backend
+    // for localhost only
+    // const startTraining = async () => {
+    //     setIsTraining(true);
+    //     try {   
+    //         const response = await fetch('http://localhost:5001/train'); // call to Python backend
+    //         const data = await response.json();
+    //         setTrainingProgress(data.progress); // set progress from backend response
+    //     } catch (error) {
+    //         console.error('Error during training:', error);
+    //     }
+    // };
+
+    // for development only
     const startTraining = async () => {
         setIsTraining(true);
         try {   
-            const response = await fetch('http://localhost:5001/train'); // call to Python backend
+            const response = await fetch(`${process.env.FRONTEND_ORIGIN}/train`); 
             const data = await response.json();
-            setTrainingProgress(data.progress); // set progress from backend response
+            setTrainingProgress(data.progress); 
         } catch (error) {
             console.error('Error during training:', error);
         }
     };
+    
 
     // function to get AI move from backend after each turn
     const getAIMove = async () => {
