@@ -54,17 +54,23 @@ export default function AIGomokuPage() {
 
     // for development only 
     const startTraining = async () => {
-        console.log("Backend URL:", process.env.NEXT_PUBLIC_BACKEND_URL);
-
         setIsTraining(true);
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001"; 
+    
         try {   
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/train`); 
-            const data = await response.json();
+            const response = await fetch(`${backendUrl}/train`);
+            
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            }
+    
+            const data = await response.json(); 
             setTrainingProgress(data.progress); 
         } catch (error) {
             console.error('Error during training:', error);
         }
     };
+    
     
 
     // function to get AI move from backend after each turn
