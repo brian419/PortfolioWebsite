@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-// simulate training with progress
 let trainingProgress = 0;
 let gamesPlayed = 0;
 let totalScore = 0;
@@ -21,49 +20,37 @@ class GomokuAI {
     }
 
     makeMove(board) {
+        const stateKey = this.getStateKey(board);
         const availableMoves = [];
+        
         for (let r = 0; r < board.length; r++) {
-            if (!Array.isArray(board[r])) {
-                console.error(`Row ${r} is not an array:`, board[r]);
-                continue;
+            for (let c = 0; c < board[0].length; c++) {
+                if (board[r][c] === null) availableMoves.push([r, c]);
             }
-            for (let c = 0; c < board[r].length; c++) {
-                if (board[r] && board[r][c] === null) {
-                    availableMoves.push([r, c]);
-                }
-            }
-        }
-        if (availableMoves.length === 0) {
-            console.error("No available moves found on the board:", board);
-            throw new Error("No available moves");
         }
 
-        // exploration and exploitation logic
         if (Math.random() < this.explorationRate) {
             return availableMoves[Math.floor(Math.random() * availableMoves.length)];
-        } else {
-            const stateKey = this.getStateKey(board);
-            if (this.qTable[stateKey]) {
-                const moveValues = this.qTable[stateKey];
-                const bestMove = Object.keys(moveValues).reduce((a, b) => (moveValues[a] > moveValues[b] ? a : b));
-                return bestMove.split(',').map(Number);
-            }
-            return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        } else if (this.qTable[stateKey]) {
+            const moveValues = this.qTable[stateKey];
+            const bestMove = Object.keys(moveValues).reduce((a, b) => (moveValues[a] > moveValues[b] ? a : b));
+            return bestMove.split(',').map(Number);
         }
+        
+        return availableMoves[Math.floor(Math.random() * availableMoves.length)];
     }
 
     updateQValue(oldBoard, newBoard, move, reward) {
         const oldStateKey = this.getStateKey(oldBoard);
         const newStateKey = this.getStateKey(newBoard);
 
-        if (!this.qTable[oldStateKey]) {
-            this.qTable[oldStateKey] = {};
-        }
-        const maxFutureReward = Math.max(...Object.values(this.qTable[newStateKey] || {}), 0);
+        if (!this.qTable[oldStateKey]) this.qTable[oldStateKey] = {};
+        if (!this.qTable[oldStateKey][move]) this.qTable[oldStateKey][move] = 0;
 
-        const currentQValue = this.qTable[oldStateKey][move] || 0;
-        const newQValue =
-            currentQValue + this.learningRate * (reward + this.discountFactor * maxFutureReward - currentQValue);
+        const maxFutureReward = Math.max(...Object.values(this.qTable[newStateKey] || {}), 0);
+        const currentQValue = this.qTable[oldStateKey][move];
+        const newQValue = currentQValue + this.learningRate * (reward + this.discountFactor * maxFutureReward - currentQValue);
+
         this.qTable[oldStateKey][move] = newQValue;
     }
 
@@ -75,17 +62,12 @@ class GomokuAI {
 }
 
 function initializeBoard(size = 15) {
-    const board = Array.from({ length: size }, () => Array(size).fill(null));
-    console.log("Initialized board:", board);
-    return board;
+    return Array.from({ length: size }, () => Array(size).fill(null));
 }
 
 function checkWinner(board, color) {
     const directions = [
-        [0, 1],
-        [1, 0],
-        [1, 1],
-        [1, -1],
+        [0, 1], [1, 0], [1, 1], [1, -1]
     ];
     const gridSize = board.length;
 
@@ -143,7 +125,6 @@ function saveTrainingOutput(board, winner, gamesPlayed, totalScore) {
 
 export default async function handler(req, res) {
     if (req.method === 'GET') {
-        console.log("Connected to train_ai.js for /train");
         trainingProgress = 0;
         gamesPlayed = 0;
         totalScore = 0;
@@ -161,11 +142,6 @@ export default async function handler(req, res) {
             for (let turn = 0; turn < 225; turn++) {
                 const currentAI = currentTurn === 'black' ? blackAI : whiteAI;
                 const move = currentAI.makeMove(board);
-                if (!move) {
-                    console.error("No valid move returned.");
-                    res.status(500).json({ error: "Failed to retrieve a valid move." });
-                    return;
-                }
                 board[move[0]][move[1]] = currentTurn;
                 gameMoves.push([currentTurn, JSON.parse(JSON.stringify(board)), move]);
                 if (checkWinner(board, currentTurn)) {
