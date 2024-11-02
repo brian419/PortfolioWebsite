@@ -24,9 +24,12 @@ class GomokuAI {
         const availableMoves = [];
         for (let r = 0; r < board.length; r++) {
             for (let c = 0; c < board[0].length; c++) {
-                if (board[r][c] === null) availableMoves.push([r, c]);
+                if (board[r] && board[r][c] === null) {  // check if board[r] exists and is not null
+                    availableMoves.push([r, c]);
+                }
             }
         }
+        // exploration and exploitation logic remains the same
         if (Math.random() < this.explorationRate) {
             return availableMoves[Math.floor(Math.random() * availableMoves.length)];
         } else {
@@ -39,6 +42,7 @@ class GomokuAI {
             return availableMoves[Math.floor(Math.random() * availableMoves.length)];
         }
     }
+
 
     updateQValue(oldBoard, newBoard, move, reward) {
         const oldStateKey = this.getStateKey(oldBoard);
