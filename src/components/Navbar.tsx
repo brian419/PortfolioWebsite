@@ -53,6 +53,9 @@ export default function Navbar() {
                     <Link href="/projects-page" className="text-white text-lg hover:text-gray-400 transition duration-300">
                         Projects
                     </Link>
+                    <Link href="/websites-page" className="block text-white text-lg hover:text-gray-400 transition duration-300">
+                        Websites
+                    </Link>
                     <Link href="/contact-page" className="text-white text-lg hover:text-gray-400 transition duration-300">
                         Contact
                     </Link>
@@ -73,6 +76,9 @@ export default function Navbar() {
                 </Link>
                 <Link href="/projects-page" className="block text-white text-lg hover:text-gray-400 transition duration-300">
                     Projects
+                </Link>
+                <Link href="/websites-page" className="block text-white text-lg hover:text-gray-400 transition duration-300">
+                    Websites
                 </Link>
                 <Link href="/contact-page" className="block text-white text-lg hover:text-gray-400 transition duration-300">
                     Contact
