@@ -59,6 +59,7 @@ export default function AIGomokuPage() {
     
         try {   
             const response = await fetch(`${backendUrl}/train`);
+            console.log(response);
             
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status} ${response.statusText}`);
