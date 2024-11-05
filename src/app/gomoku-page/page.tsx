@@ -147,6 +147,13 @@ export default function GomokuPage() {
             
         });
     };
+
+
+    const handlePlayerVsAIMode = () => {
+        setAlertMessage("Player vs AI mode is currently locked until development is completed.");
+        console.log("Player vs AI modeis not yet implemented.");
+        setTimeout(() => setAlertMessage(null), 2000);
+    };
     
 
     // ---------------------------------------
@@ -345,7 +352,7 @@ export default function GomokuPage() {
     // ---------------------------------------
     useEffect(() => {
         if (gameMode === "ai" && gameStarted && !winner && currentTurn === "white") {
-            handleAIPlay();
+            // handleAIPlay();
         }
     }, [gameMode, gameStarted, winner, currentTurn]);
 
@@ -491,8 +498,10 @@ export default function GomokuPage() {
                                     Play Against Computer
                                 </button>
                                 <button
-                                    className={`px-4 py-2 border rounded-lg ${gameMode === "ai" ? "bg-blue-500 text-white" : ""}`}
-                                    onClick={() => setGameMode("ai")}
+                                    className={`px-4 py-2 border rounded-lg bg-gray-300 text-gray-600 ${gameMode === "ai" ? "bg-blue-500 text-white" : ""}`}
+                                    // onMouseEnter={handlePlayerVsAIMode} 
+                                    onClick={handlePlayerVsAIMode} 
+                                    // onClick={() => setGameMode("ai")}
                                 >
                                     AI Mode
                                 </button>
