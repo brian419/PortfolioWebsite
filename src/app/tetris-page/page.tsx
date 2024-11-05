@@ -430,16 +430,16 @@
 //                 </div>
 
 //                 {/* Scoreboard */}
-//                 <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-full md:w-80 text-center">
-//                     <h2 className="text-lg md:text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
-//                     <ul>
-//                         {topScores.map((score, index) => (
-//                             <li key={index} className="text-sm md:text-lg text-blue-600">
-//                                 {score.playerName}: {score.score}
-//                             </li>
-//                         ))}
-//                     </ul>
-//                 </div>
+// <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-full md:w-80 text-center">
+//     <h2 className="text-lg md:text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
+//     <ul>
+//         {topScores.map((score, index) => (
+//             <li key={index} className="text-sm md:text-lg text-blue-600">
+//                 {score.playerName}: {score.score}
+//             </li>
+//         ))}
+//     </ul>
+// </div>
 //             </div>
 //         </div>
 
@@ -866,16 +866,20 @@ const TetrisPage = () => {
                 )}
 
                 {/* Scoreboard */}
-                <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-full md:w-80 text-center">
+                <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-full max-w-xs md:max-w-sm lg:max-w-md text-center">
                     <h2 className="text-lg md:text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
-                    <ul>
+                    <ul className="overflow-y-auto max-h-64 md:max-h-80 lg:max-h-96 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
                         {topScores.map((score, index) => (
-                            <li key={index} className="text-sm md:text-lg text-blue-600">
+                            <li key={index} className="text-base md:text-lg text-blue-600">
                                 {score.playerName}: {score.score}
                             </li>
                         ))}
                     </ul>
                 </div>
+
+
+
+
             </div>
 
         </div>
