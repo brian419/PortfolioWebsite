@@ -67,7 +67,7 @@ const ProjectPage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-start md:mt-[-40px] mt-4 h-screen text-white relative overflow-hidden">
-            <h1 className="text-4xl font-bold mb-8">Projects</h1>
+            <h1 className="text-4xl font-bold mb-8 mt-10">Projects</h1>
 
             <div className="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
                 {/* Previous Button */}
