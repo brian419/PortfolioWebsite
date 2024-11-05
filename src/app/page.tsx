@@ -29,9 +29,6 @@ export default function Home() {
                 {/* Hero Section */}
                 <section className="text-white py-28">
                     <div className="container mx-auto text-center flex flex-col justify-center items-center min-h-[70vh]">
-                        <h2 className="text-6xl font-extrabold mb-6 text-[#49A097]">
-                            Development Branch
-                        </h2>
                         <h1 className="text-6xl font-extrabold mb-6 text-[#49A097]">
                             Welcome to My Portfolio
                         </h1>
