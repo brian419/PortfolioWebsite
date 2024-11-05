@@ -299,22 +299,91 @@ const TetrisPage = () => {
     }, []);
 
     return (
+        // <div
+        //     ref={containerRef}
+        //     className="h-screen overflow-hidden flex justify-center mt-[-60px] items-center p-4 select-none focus:outline-none"
+        //     tabIndex={0}
+        //     onKeyDown={handleKeyDown}
+        // >
+        //     {/* Game Over message with Restart button */}
+        //     {gameOver && (
+        //         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-75">
+        //             <h2 className="text-4xl font-bold text-white mb-4">Game Over!</h2>
+        //             <input
+        //                 type="text"
+        //                 placeholder="Enter your name"
+        //                 value={playerName}
+        //                 onChange={(e) => setPlayerName(e.target.value)}
+        //                 className="mb-4 p-2 rounded-lg text-black"
+        //             />
+        //             <button
+        //                 onClick={handleSubmit}
+        //                 className="bg-white text-black px-4 py-2 rounded-lg shadow-lg hover:bg-gray-300 transition duration-200 mb-4"
+        //                 disabled={!playerName}
+        //             >
+        //                 Submit Score
+        //             </button>
+        //             <button
+        //                 onClick={restartGame}
+        //                 className="bg-white text-black px-4 py-2 rounded-lg shadow-lg hover:bg-gray-300 transition duration-200"
+        //             >
+        //                 Restart Game
+        //             </button>
+        //         </div>
+        //     )}
+
+        //     <div className="flex flex-row items-start justify-center space-x-8">
+        //         <div className="score-and-title flex flex-col items-center text-center">
+        //             <h1 className="text-4xl font-bold mt-60 mb-4">Black and White Tetris</h1>
+        //             <div id="tetrisScore" className="score-box bg-black text-white p-4 rounded-lg shadow-lg mb-1">
+        //                 <h2 className="text-xl font-bold">Score</h2>
+        //                 <p className="text-2xl">{score}</p>
+        //             </div>
+        //         </div>
+        //         <div className="w-full flex items-center justify-center">
+        //             <div className="game-container bg-black text-white p-4 rounded-lg shadow-lg">
+        //                 <div className="grid grid-cols-10 gap-1">
+        //                     {renderGrid().map((row, rowIndex) =>
+        //                         row.map((cell, colIndex) => (
+        //                             <div
+        //                                 key={`${rowIndex}-${colIndex}`}
+        //                                 className={`w-6 h-6 ${cell === 1 ? 'bg-white' : 'bg-gray-700'}`}
+        //                             />
+        //                         ))
+        //                     )}
+        //                 </div>
+        //             </div>
+        //         </div>
+
+        //         <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-80 text-center">
+        //             <h2 className="text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
+        //             <ul>
+        //                 {topScores.map((score, index) => (
+        //                     <li key={index} className="text-lg text-blue-600">
+        //                         {score.playerName}: {score.score}
+        //                     </li>
+        //                 ))}
+        //             </ul>
+        //         </div>
+        //     </div>
+        // </div>
+
         <div
             ref={containerRef}
-            className="h-screen overflow-hidden flex justify-center mt-[-60px] items-center p-4 select-none focus:outline-none"
+            className="h-screen overflow-hidden flex flex-col justify-center items-center p-4 select-none focus:outline-none"
             tabIndex={0}
             onKeyDown={handleKeyDown}
         >
             {/* Game Over message with Restart button */}
             {gameOver && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-75">
-                    <h2 className="text-4xl font-bold text-white mb-4">Game Over!</h2>
+                    <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">Game Over!</h2>
                     <input
                         type="text"
                         placeholder="Enter your name"
                         value={playerName}
                         onChange={(e) => setPlayerName(e.target.value)}
-                        className="mb-4 p-2 rounded-lg text-black"
+                        className="mb-4 p-2 rounded-lg text-black w-3/4 md:w-auto"
                     />
                     <button
                         onClick={handleSubmit}
@@ -332,22 +401,27 @@ const TetrisPage = () => {
                 </div>
             )}
 
-            <div className="flex flex-row items-start justify-center space-x-8">
+            {/* Main content layout */}
+            <div className="flex flex-col md:flex-row items-center md:items-start justify-center space-y-4 md:space-y-0 md:space-x-8 w-full max-w-screen-md">
+
+                {/* Score and Title */}
                 <div className="score-and-title flex flex-col items-center text-center">
-                    <h1 className="text-4xl font-bold mt-60 mb-4">Black and White Tetris</h1>
+                    <h1 className="text-2xl md:text-4xl font-bold mt-4 md:mt-60 mb-4">Black and White Tetris</h1>
                     <div id="tetrisScore" className="score-box bg-black text-white p-4 rounded-lg shadow-lg mb-1">
-                        <h2 className="text-xl font-bold">Score</h2>
-                        <p className="text-2xl">{score}</p>
+                        <h2 className="text-lg md:text-xl font-bold">Score</h2>
+                        <p className="text-xl md:text-2xl">{score}</p>
                     </div>
                 </div>
+
+                {/* Game board */}
                 <div className="w-full flex items-center justify-center">
-                    <div className="game-container bg-black text-white p-4 rounded-lg shadow-lg">
-                        <div className="grid grid-cols-10 gap-1">
+                    <div className="game-container bg-black text-white p-2 md:p-4 rounded-lg shadow-lg">
+                        <div className="grid grid-cols-10 gap-0.5 md:gap-1">
                             {renderGrid().map((row, rowIndex) =>
                                 row.map((cell, colIndex) => (
                                     <div
                                         key={`${rowIndex}-${colIndex}`}
-                                        className={`w-6 h-6 ${cell === 1 ? 'bg-white' : 'bg-gray-700'}`}
+                                        className={`w-4 h-4 md:w-6 md:h-6 ${cell === 1 ? 'bg-white' : 'bg-gray-700'}`}
                                     />
                                 ))
                             )}
@@ -355,11 +429,12 @@ const TetrisPage = () => {
                     </div>
                 </div>
 
-                <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-80 text-center">
-                    <h2 className="text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
+                {/* Scoreboard */}
+                <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-full md:w-80 text-center">
+                    <h2 className="text-lg md:text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
                     <ul>
                         {topScores.map((score, index) => (
-                            <li key={index} className="text-lg text-blue-600">
+                            <li key={index} className="text-sm md:text-lg text-blue-600">
                                 {score.playerName}: {score.score}
                             </li>
                         ))}
@@ -367,6 +442,7 @@ const TetrisPage = () => {
                 </div>
             </div>
         </div>
+
     );
 };
 
