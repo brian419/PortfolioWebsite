@@ -98,7 +98,6 @@ const WebsitePage: React.FC = () => {
                     </svg>
                 </button>
             </div>
-            <br />
 
             {/* Link Button */}
             <div className="mt-8">
