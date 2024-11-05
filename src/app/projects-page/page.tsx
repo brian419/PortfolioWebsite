@@ -164,8 +164,6 @@ const LinkButton: React.FC<LinkButtonProps> = ({ label, href }) => (
             <div className="relative z-20 flex w-full rounded-[0.60rem] bg-blue-600 p-2">
                 <a
                     href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="bg-blue-600 hover:text-black text-white text-xs font-bold py-2 px-4 rounded w-full text-center"
                 >
                     {label}
