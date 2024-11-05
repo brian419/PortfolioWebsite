@@ -40,13 +40,12 @@ const projects = [
 ];
 
 const cardWidth = 340;
-const visibleCards = 1; // Only the centered card should be fully visible
+const visibleCards = 1; 
 
 const ProjectPage = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [offset, setOffset] = useState(0); // Offset for centering the first card
+    const [offset, setOffset] = useState(0); 
 
-    // Calculate initial offset to center the first card
     useEffect(() => {
         const containerWidth = cardWidth * visibleCards;
         const calculatedOffset = (window.innerWidth - containerWidth) / 2 - (cardWidth / 2) + 120; // 50px shift to the right
@@ -76,7 +75,7 @@ const ProjectPage = () => {
                 <button
                     onClick={handlePrev}
                     className="absolute left-0 z-10 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition"
-                    style={{ marginLeft: '-50px' }} // Move the button further to the left to avoid overlap
+                    style={{ marginLeft: '-50px' }} 
                 >
                     ◀
                 </button>
@@ -85,7 +84,7 @@ const ProjectPage = () => {
                 <div className="overflow-hidden w-full flex justify-center relative z-0">
                     <motion.div
                         className="flex"
-                        animate={{ x: offset - currentIndex * cardWidth }} // Centering logic
+                        animate={{ x: offset - currentIndex * cardWidth }} 
                         transition={{ type: "spring", stiffness: 50 }}
                     >
                         {projects.map((project, index) => (
@@ -96,7 +95,7 @@ const ProjectPage = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                style={{ cursor: 'pointer' }} // Make cards clickable
+                                style={{ cursor: 'pointer' }} 
                             >
                                 <div className="bg-blue text-white rounded-lg p-6 shadow-lg">
                                     <Image

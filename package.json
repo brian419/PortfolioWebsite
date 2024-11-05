@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "backend": "node pages/api/train.js",
+    "backend": "",
     "start": "concurrently \"npm run dev\" \"npm run backend\"",
     "lint": "next lint"
   },

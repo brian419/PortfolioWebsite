@@ -499,7 +499,8 @@ export default function GomokuPage() {
                                 </button>
                                 <button
                                     className={`px-4 py-2 border rounded-lg bg-gray-300 text-gray-600 ${gameMode === "ai" ? "bg-blue-500 text-white" : ""}`}
-                                    onMouseEnter={handlePlayerVsAIMode} 
+                                    // onMouseEnter={handlePlayerVsAIMode} 
+                                    onClick={handlePlayerVsAIMode} 
                                     // onClick={() => setGameMode("ai")}
                                 >
                                     AI Mode

@@ -1,5 +1,16 @@
 TEST MESSAGE
 
+### Personal Note for Development
+"scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "backend": "node pages/api/train.js",
+    "start": "concurrently \"npm run dev\" \"npm run backend\"",
+    "lint": "next lint"
+  },
+
+currently removed backend for development as I work on other things besides player vs ai (deep learning). 
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -37,3 +48,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # PortfolioWebsite
+
+
+
+
