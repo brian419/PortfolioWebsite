@@ -2,6 +2,40 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
+
+// const drawCenterAxes = () => {
+//     return (
+//         <div>
+//             {/* Vertical Axis */}
+//             <div
+//                 style={{
+//                     position: 'absolute',
+//                     top: 0,
+//                     left: '50%',
+//                     height: '100%',
+//                     width: '2px',
+//                     backgroundColor: 'rgba(255, 0, 0, 0.5)',
+//                     transform: 'translateX(-50%)',
+//                     pointerEvents: 'none',
+//                 }}
+//             />
+//             {/* Horizontal Axis */}
+//             <div
+//                 style={{
+//                     position: 'absolute',
+//                     top: '50%',
+//                     left: 0,
+//                     width: '100%',
+//                     height: '2px',
+//                     backgroundColor: 'rgba(255, 0, 0, 0.5)',
+//                     transform: 'translateY(-50%)',
+//                     pointerEvents: 'none',
+//                 }}
+//             />
+//         </div>
+//     );
+// };
+
 interface Score {
     playerName: string;
     score: number;
@@ -53,16 +87,28 @@ const randomTetromino = () => {
 
 const TetrisPage = () => {
     const [grid, setGrid] = useState(createGrid()); // game board
-    const [currentTetromino, setCurrentTetromino] = useState(randomTetromino); // Active Tetromino
-    const [position, setPosition] = useState({ x: COLS / 2 - 2, y: 0 }); // Tetromino position
-    const [gameOver, setGameOver] = useState(false); // Game over state
-    const [score, setScore] = useState(0); // Player score
-    const [lockDelay, setLockDelay] = useState(false); // Lock delay to prevent immediate new block spawn
-    const [nextTetromino, setNextTetromino] = useState(randomTetromino); // Queue the next Tetromino
-    const [topScores, setTopScores] = useState<Score[]>([]); // Store top scores
-    const [playerName, setPlayerName] = useState(''); // Store player's name
+    const [currentTetromino, setCurrentTetromino] = useState(randomTetromino);
+    const [position, setPosition] = useState({ x: COLS / 2 - 2, y: 0 });
+    const [gameOver, setGameOver] = useState(false);
+    const [score, setScore] = useState(0);
+    const [lockDelay, setLockDelay] = useState(false);
+    const [nextTetromino, setNextTetromino] = useState(randomTetromino);
+    const [topScores, setTopScores] = useState<Score[]>([]);
+    const [playerName, setPlayerName] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
 
-    const containerRef = useRef<HTMLDivElement>(null); // Reference to the container div
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Initialize on mount
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const containerRef = useRef<HTMLDivElement>(null);
 
     // Function to restart the game
     const restartGame = () => {
@@ -298,23 +344,33 @@ const TetrisPage = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (isMobile) {
+            window.scrollTo(0, 0);
+        }
+        else {
+            window.scrollBy(0, 25);
+        }
+    }, [isMobile]);
+
     return (
         <div
             ref={containerRef}
-            className="h-screen overflow-hidden flex justify-center mt-[-60px] items-center p-4 select-none focus:outline-none"
+            className="h-screen overflow-hidden flex flex-col justify-center items-center p-4 select-none focus:outline-none"
             tabIndex={0}
             onKeyDown={handleKeyDown}
         >
-            {/* Game Over message with Restart button */}
+
+            {/* Game Over Overlay */}
             {gameOver && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black bg-opacity-75">
-                    <h2 className="text-4xl font-bold text-white mb-4">Game Over!</h2>
+                    <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">Game Over!</h2>
                     <input
                         type="text"
                         placeholder="Enter your name"
                         value={playerName}
                         onChange={(e) => setPlayerName(e.target.value)}
-                        className="mb-4 p-2 rounded-lg text-black"
+                        className="mb-4 p-2 rounded-lg text-black w-3/4 md:w-auto"
                     />
                     <button
                         onClick={handleSubmit}
@@ -329,25 +385,46 @@ const TetrisPage = () => {
                     >
                         Restart Game
                     </button>
+
+                    {/* Mobile-Specific Scoreboard within Game Over Overlay */}
+                    <div className="md:hidden mt-6 w-full max-w-xs bg-[#1f2937] text-black p-3 rounded-lg shadow-lg text-center">
+                        <h2 className="text-lg font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
+                        <ul className="overflow-y-auto h-40 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
+                            {topScores
+                                .concat(Array(10 - topScores.length).fill({ playerName: '', score: '' }))
+                                .map((score, index) => (
+                                    <li key={index} className="text-base text-blue-600">
+                                        {score.playerName ? `${score.playerName}: ${score.score}` : '-'}
+                                    </li>
+                                ))}
+                        </ul>
+                    </div>
                 </div>
             )}
 
-            <div className="flex flex-row items-start justify-center space-x-8">
-                <div className="score-and-title flex flex-col items-center text-center">
-                    <h1 className="text-4xl font-bold mt-60 mb-4">Black and White Tetris</h1>
-                    <div id="tetrisScore" className="score-box bg-black text-white p-4 rounded-lg shadow-lg mb-1">
-                        <h2 className="text-xl font-bold">Score</h2>
-                        <p className="text-2xl">{score}</p>
+            {/* Desktop View */}
+            <div className="hidden md:flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-16 w-full max-w-screen-lg md:-mt-10 md:-mr-48">
+                {/* Score and Title */}
+                <div className="score-and-title flex flex-col items-center text-center md:-mt-60 w-full md:w-3/4 lg:w-1/2">
+                    <h1 className="text-2xl md:text-4xl font-bold mt-4 md:mt-60 mb-4">
+                        Black and White Tetris
+                    </h1>
+                    <div id="tetrisScore" className="score-box bg-black text-white p-4 rounded-lg shadow-lg mb-1 w-full">
+                        <h2 className="text-lg md:text-xl font-bold">Score</h2>
+                        <p className="text-xl md:text-2xl">{score}</p>
                     </div>
                 </div>
+
+
+                {/* Game board */}
                 <div className="w-full flex items-center justify-center">
-                    <div className="game-container bg-black text-white p-4 rounded-lg shadow-lg">
-                        <div className="grid grid-cols-10 gap-1">
+                    <div className="game-container bg-black text-white p-1 md:p-2 rounded-lg border border-gray-700 shadow-md w-full max-w-lg mx-auto">
+                        <div className="grid grid-cols-10 gap-0.5 md:gap-0.5 w-full">
                             {renderGrid().map((row, rowIndex) =>
                                 row.map((cell, colIndex) => (
                                     <div
                                         key={`${rowIndex}-${colIndex}`}
-                                        className={`w-6 h-6 ${cell === 1 ? 'bg-white' : 'bg-gray-700'}`}
+                                        className={`aspect-square border border-gray-500 ${cell === 1 ? 'bg-white' : 'bg-gray-700'}`}
                                     />
                                 ))
                             )}
@@ -355,19 +432,95 @@ const TetrisPage = () => {
                     </div>
                 </div>
 
-                <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-80 text-center">
-                    <h2 className="text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
-                    <ul>
+                {/* Scoreboard */}
+                <div className="scoreboard bg-[#1f2937] text-black p-4 rounded-lg shadow-lg w-full max-w-xs md:max-w-sm lg:max-w-md text-center md:block hidden">
+                    <h2 className="text-lg md:text-xl font-bold mb-2 text-[#49A097]">Top 10 Scores</h2>
+                    <ul className="overflow-y-auto max-h-64 md:max-h-80 lg:max-h-96 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
                         {topScores.map((score, index) => (
-                            <li key={index} className="text-lg text-blue-600">
+                            <li key={index} className="text-base md:text-lg text-blue-600">
                                 {score.playerName}: {score.score}
                             </li>
                         ))}
                     </ul>
                 </div>
             </div>
+
+            {/* Mobile View */}
+            <div className="flex md:hidden flex-col items-center justify-between h-screen w-full max-w-screen-sm p-4">
+                {/* Score and Title */}
+                <div className="score-and-title flex flex-col items-center text-center mb-2">
+                    <h1 className="text-xl font-bold mb-2">Black and White Tetris</h1>
+                    <div id="tetrisScore" className="score-box bg-black text-white p-2 rounded-lg shadow-lg w-1/2 text-center">
+                        <h2 className="text-lg font-bold">Score</h2>
+                        <p className="text-xl">{score}</p>
+                    </div>
+                </div>
+                <br></br>
+                <br></br>
+
+                {/* Game board */}
+                <div className="w-full flex items-center justify-center max-h-[60vh]">
+                    <div className="game-container bg-black text-white p-1 rounded-lg border border-gray-700 shadow-md w-full max-w-xs mx-auto">
+                        <div className="grid grid-cols-10 gap-0.5 w-full">
+                            {renderGrid().map((row, rowIndex) =>
+                                row.map((cell, colIndex) => (
+                                    <div
+                                        key={`${rowIndex}-${colIndex}`}
+                                        className={`aspect-square border border-gray-500 ${cell === 1 ? 'bg-white' : 'bg-gray-700'}`}
+                                    />
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <br></br>
+
+                {/* Mobile Controls */}
+                <div className="mobile-controls flex justify-center space-x-4 mt-4">
+                    <button // move left
+                        onClick={() => move(-1)}
+                        className="bg-gray-700 text-white w-12 h-12 rounded-lg flex items-center justify-center"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    <button // move right
+                        onClick={() => move(1)}
+                        className="bg-gray-700 text-white w-12 h-12 rounded-lg flex items-center justify-center"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    <button // rotate
+                        onClick={() => rotate()}
+                        className="bg-gray-700 w-12 h-12 rounded-lg flex items-center justify-center"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.95 8.05a7 7 0 1 0 0 9.9M17 3v6h-5" />
+                        </svg>
+                    </button>
+
+                    <button // move down
+                        onClick={moveDown}
+                        className="bg-gray-700 text-white w-12 h-12 rounded-lg flex items-center justify-center"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
+                    </button>
+                </div>
+
+
+            </div>
         </div>
+
     );
+
 };
 
 export default TetrisPage;
