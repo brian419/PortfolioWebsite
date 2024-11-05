@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Image, { StaticImageData } from 'next/image';
 import TetrisImage from '../../components/images/tetris.svg';
@@ -66,7 +66,7 @@ const ProjectPage: React.FC = () => {
     const selectedProject = projects[currentIndex];
 
     return (
-        <div className="flex flex-col items-center justify-start mt-[-40px] h-screen text-white relative overflow-hidden">
+        <div className="flex flex-col items-center justify-start md:mt-[-40px] mt-4 h-screen text-white relative overflow-hidden">
             <h1 className="text-4xl font-bold mb-8">Projects</h1>
 
             <div className="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
@@ -164,6 +164,8 @@ const LinkButton: React.FC<LinkButtonProps> = ({ label, href }) => (
             <div className="relative z-20 flex w-full rounded-[0.60rem] bg-blue-600 p-2">
                 <a
                     href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-blue-600 hover:text-black text-white text-xs font-bold py-2 px-4 rounded w-full text-center"
                 >
                     {label}

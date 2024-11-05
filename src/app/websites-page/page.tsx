@@ -57,7 +57,7 @@ const WebsitePage: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-start mt-[-40px] h-screen text-white relative overflow-hidden">
+        <div className="flex flex-col items-center justify-start md:mt-[-40px] mt-4 h-screen text-white relative overflow-hidden">
             <h1 className="text-4xl font-bold mb-8">Websites</h1>
 
             <div className="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
