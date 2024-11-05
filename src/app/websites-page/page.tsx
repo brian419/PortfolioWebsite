@@ -75,7 +75,7 @@ const WebsitePage: React.FC = () => {
                 {/* Project Cards */}
                 <motion.div
                     className="flex"
-                    animate={{ x: `calc(50% - ${currentIndex * cardWidth}px - ${cardWidth / 2}px)` }}
+                    animate={{ x: `calc(50% - ${currentIndex * (cardWidth + 32)}px - ${cardWidth / 2}px)` }}
                     transition={{ type: "spring", stiffness: 50, damping: 20 }}
                 >
                     {websites.map((project, index) => (
