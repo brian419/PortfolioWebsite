@@ -64,7 +64,7 @@ const WebsitePage: React.FC = () => {
                 {/* Previous Button */}
                 <button
                     onClick={handlePrev}
-                    className="absolute left-0 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg"
+                    className="absolute left-0 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg border-0 hover:border hover:border-white"
                 >
                     ◀
                 </button>
@@ -87,7 +87,7 @@ const WebsitePage: React.FC = () => {
                 {/* Next Button */}
                 <button
                     onClick={handleNext}
-                    className="absolute right-0 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg"
+                    className="absolute right-0 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg border-0 hover:border hover:border-white"
                 >
                     ▶
                 </button>

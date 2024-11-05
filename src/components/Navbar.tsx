@@ -68,19 +68,19 @@ export default function Navbar() {
 
             {/* Mobile Menu Links (visible only when open) */}
             <div className={`md:hidden ${isOpen ? "block" : "hidden"} mt-2 space-y-4`}>
-                <Link href="/" className="block text-white text-lg hover:text-gray-400 transition duration-300">
+                <Link href="/" onClick={toggleMenu} className="block text-white text-lg hover:text-gray-400 transition duration-300">
                     My Portfolio
                 </Link>
-                <Link href="/about-me-page" className="block text-white text-lg hover:text-gray-400 transition duration-300">
+                <Link href="/about-me-page" onClick={toggleMenu} className="block text-white text-lg hover:text-gray-400 transition duration-300">
                     About Me
                 </Link>
-                <Link href="/projects-page" className="block text-white text-lg hover:text-gray-400 transition duration-300">
+                <Link href="/projects-page" onClick={toggleMenu} className="block text-white text-lg hover:text-gray-400 transition duration-300">
                     Projects
                 </Link>
-                <Link href="/websites-page" className="block text-white text-lg hover:text-gray-400 transition duration-300">
+                <Link href="/websites-page" onClick={toggleMenu} className="block text-white text-lg hover:text-gray-400 transition duration-300">
                     Websites
                 </Link>
-                <Link href="/contact-page" className="block text-white text-lg hover:text-gray-400 transition duration-300">
+                <Link href="/contact-page" onClick={toggleMenu} className="block text-white text-lg hover:text-gray-400 transition duration-300">
                     Contact
                 </Link>
             </div>
