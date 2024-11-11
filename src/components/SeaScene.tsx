@@ -184,6 +184,7 @@ import { shaderMaterial } from '@react-three/drei';
 import waveVertexShader from '../components/shaders/seaSceneWaveVertex.glsl';
 import waveFragmentShader from '../components/shaders/seaSceneWaveFragment.glsl';
 
+// create WaveMaterial as a custom shader material with expected uniforms
 const WaveMaterial = shaderMaterial(
     { time: 0, waveHeight: 1.0, waveFrequency: 0.15, foamColor: new THREE.Color(0xDCEDFF) },
     waveVertexShader,
@@ -192,14 +193,14 @@ const WaveMaterial = shaderMaterial(
 
 extend({ WaveMaterial });
 
+// cast WaveMaterial to explicitly expect THREE.ShaderMaterial with uniforms
 type WaveMaterialType = THREE.ShaderMaterial & { uniforms: { time: { value: number } } };
 
 const SeaPlane = () => {
     const ref = useRef<THREE.Mesh>(null);
 
     useFrame((state) => {
-        if (ref.current && ref.current.material) {
-            // casts material to WaveMaterialType
+        if (ref.current && (ref.current.material as WaveMaterialType).uniforms) {
             const material = ref.current.material as WaveMaterialType;
             material.uniforms.time.value = state.clock.getElapsedTime();
         }
@@ -208,7 +209,8 @@ const SeaPlane = () => {
     return (
         <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
             <planeGeometry args={[100, 100, 256, 256]} />
-            <waveMaterial attach="material" />
+            {/* applies type assertion to waveMaterial */}
+            <waveMaterial attach="material" args={[{ time: 0, waveHeight: 1.0, waveFrequency: 0.15, foamColor: new THREE.Color(0xDCEDFF) }]} />
         </mesh>
     );
 };
