@@ -173,7 +173,6 @@
 // }
 
 
-
 import * as THREE from 'three';
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
@@ -190,29 +189,35 @@ const WaveMaterial = shaderMaterial(
 
 extend({ WaveMaterial });
 
-// cast WaveMaterial to explicitly expect THREE.ShaderMaterial with uniforms
-type WaveMaterialType = THREE.ShaderMaterial & { uniforms: { time: { value: number } } };
+type WaveMaterialType = THREE.ShaderMaterial & {
+    uniforms: {
+        time: { value: number };
+        waveHeight: { value: number };
+        waveFrequency: { value: number };
+        foamColor: { value: THREE.Color };
+    };
+};
 
 const SeaPlane = () => {
     const ref = useRef<THREE.Mesh>(null);
+    const materialRef = useRef<WaveMaterialType | null>(null);
 
     useFrame((state) => {
-        if (ref.current && (ref.current.material as WaveMaterialType).uniforms) {
-            const material = ref.current.material as WaveMaterialType;
-            material.uniforms.time.value = state.clock.getElapsedTime();
+        if (materialRef.current) {
+            materialRef.current.uniforms.time.value = state.clock.getElapsedTime();
         }
     });
 
     return (
         <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
             <planeGeometry args={[100, 100, 256, 256]} />
-            {/* apply wave material directly with custom uniforms */}
             <waveMaterial
+                ref={materialRef}
                 attach="material"
-                time={0}
-                waveHeight={1.0}
-                waveFrequency={0.15}
-                foamColor={new THREE.Color(0xDCEDFF)}
+                uniforms-time-value={0}
+                uniforms-waveHeight-value={1.0}
+                uniforms-waveFrequency-value={0.15}
+                uniforms-foamColor-value={new THREE.Color(0xDCEDFF)}
             />
         </mesh>
     );
