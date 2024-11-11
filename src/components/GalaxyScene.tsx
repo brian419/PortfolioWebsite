@@ -23,7 +23,7 @@ const GalaxyScene = () => {
         controls.autoRotate = false;
         controls.autoRotateSpeed = 0.5;
 
-        // Resize canvas on window resize
+        // resizes canvas on window resize
         window.addEventListener('resize', () => {
             const width = window.innerWidth;
             const height = window.innerHeight;
