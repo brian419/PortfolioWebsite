@@ -8,3 +8,4 @@ void main() {
     vec3 finalColor = mix(waterColor, foamColor, foam);
     gl_FragColor = vec4(finalColor, 1.0);
 }
+//
