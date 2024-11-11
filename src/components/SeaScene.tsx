@@ -1,5 +1,5 @@
-// // need to create a three.js procedural generation scene for a raging sea
-// // will have waves, foam, and a boat by using glsl files
+// // // need to create a three.js procedural generation scene for a raging sea
+// // // will have waves, foam, and a boat by using glsl files
 
 
 // import * as THREE from 'three';
@@ -18,9 +18,13 @@
 // extend({ WaveMaterial });
 
 // const SeaPlane = () => {
-//     const ref = useRef();
+//     const ref = useRef<THREE.Mesh>(null); 
+
 //     useFrame((state) => {
-//         ref.current.material.uniforms.time.value = state.clock.getElapsedTime();
+//         if (ref.current) {
+//             const material = ref.current.material as THREE.ShaderMaterial;
+//             material.uniforms.time.value = state.clock.getElapsedTime();
+//         }
 //     });
 
 //     return (
@@ -57,60 +61,103 @@
 //     );
 // };
 
+// // rain component with splash effect
 // const Rain = () => {
 //     const rainCount = 1000;
 //     const rainRef = useRef();
-
+//     const splashesRef = useRef();
+    
 //     const rainPositions = useMemo(() => {
 //         const positions = [];
 //         for (let i = 0; i < rainCount; i++) {
 //             positions.push(
-//                 (Math.random() - 0.5) * 50, // x position spread across a wide area
-//                 Math.random() * 10 + 10,    // y position high in the air to fall down
-//                 (Math.random() - 0.5) * 50  // z position spread across a wide area
+//                 (Math.random() - 0.5) * 50, // x position
+//                 Math.random() * 15 + 10,    // y position
+//                 (Math.random() - 0.5) * 50  // z position
 //             );
 //         }
 //         return new Float32Array(positions);
 //     }, []);
 
-//     useFrame(() => {
-//         const positions = rainRef.current.geometry.attributes.position.array;
-//         for (let i = 1; i < positions.length; i += 3) {
-//             positions[i] -= 0.2; 
+//     const splashPositions = useMemo(() => {
+//         const positions = [];
+//         for (let i = 0; i < rainCount; i++) {
+//             positions.push(0, -10, 0); // initially off-screen
+//         }
+//         return new Float32Array(positions);
+//     }, []);
 
-//             // resets raindrop to the top when it falls below the sea level
-//             if (positions[i] < 0) {
-//                 positions[i] = 10 + Math.random() * 10; 
+//     useFrame(() => {
+//         const rainArray = rainRef.current.geometry.attributes.position.array;
+//         const splashArray = splashesRef.current.geometry.attributes.position.array;
+
+//         for (let i = 1; i < rainArray.length; i += 3) {
+//             rainArray[i] -= 0.3; 
+
+//             // collision check and reset
+//             if (rainArray[i] < 0) {
+//                 // splash effect when rain reaches the sea level
+//                 splashArray[i - 1] = rainArray[i - 1]; // x position
+//                 splashArray[i] = 0; // y position for splash
+//                 splashArray[i + 1] = rainArray[i + 1]; // z position
+
+//                 // resets raindrop back to the top
+//                 rainArray[i] = 10 + Math.random() * 10;
+//             } else {
+//                 // make splash fade by lowering it gradually
+//                 splashArray[i] -= 0.1; 
 //             }
 //         }
 //         rainRef.current.geometry.attributes.position.needsUpdate = true;
+//         splashesRef.current.geometry.attributes.position.needsUpdate = true;
 //     });
 
 //     return (
-//         <points ref={rainRef}>
-//             <bufferGeometry>
-//                 <bufferAttribute
-//                     attach="attributes-position"
-//                     array={rainPositions}
-//                     count={rainCount}
-//                     itemSize={3}
+//         <>
+//             <points ref={rainRef}>
+//                 <bufferGeometry>
+//                     <bufferAttribute
+//                         attach="attributes-position"
+//                         array={rainPositions}
+//                         count={rainCount}
+//                         itemSize={3}
+//                     />
+//                 </bufferGeometry>
+//                 <pointsMaterial
+//                     color="#a0a0a0"
+//                     size={0.15}
+//                     sizeAttenuation={true}
+//                     transparent={true}
+//                     opacity={0.6}
+//                     depthWrite={false}
 //                 />
-//             </bufferGeometry>
-//             <pointsMaterial
-//                 color="#a0a0a0"
-//                 size={0.1}
-//                 sizeAttenuation={true}
-//                 transparent={true}
-//                 opacity={0.6}
-//                 depthWrite={false}
-//             />
-//         </points>
+//             </points>
+            
+//             {/* Splash effect particles */}
+//             <points ref={splashesRef}>
+//                 <bufferGeometry>
+//                     <bufferAttribute
+//                         attach="attributes-position"
+//                         array={splashPositions}
+//                         count={rainCount}
+//                         itemSize={3}
+//                     />
+//                 </bufferGeometry>
+//                 <pointsMaterial
+//                     color="#8ED6FF"
+//                     size={0.2}
+//                     sizeAttenuation={true}
+//                     transparent={true}
+//                     opacity={0.3}
+//                     depthWrite={false}
+//                 />
+//             </points>
+//         </>
 //     );
 // };
 
-
 // const Thunder = () => {
-//     //temp
+//     // placeholder for thunder effect
 // };
 
 // export default function SeaScene() {
@@ -125,6 +172,8 @@
 //         </Canvas>
 //     );
 // }
+
+
 
 
 
@@ -143,12 +192,15 @@ const WaveMaterial = shaderMaterial(
 
 extend({ WaveMaterial });
 
+type WaveMaterialType = THREE.ShaderMaterial & { uniforms: { time: { value: number } } };
+
 const SeaPlane = () => {
-    const ref = useRef<THREE.Mesh>(null); 
+    const ref = useRef<THREE.Mesh>(null);
 
     useFrame((state) => {
-        if (ref.current) {
-            const material = ref.current.material as THREE.ShaderMaterial;
+        if (ref.current && ref.current.material) {
+            // casts material to WaveMaterialType
+            const material = ref.current.material as WaveMaterialType;
             material.uniforms.time.value = state.clock.getElapsedTime();
         }
     });
@@ -162,11 +214,11 @@ const SeaPlane = () => {
 };
 
 const Boat = () => {
-    const boatRef = useRef();
+    const boatRef = useRef<THREE.Group>(null);
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
         const waveHeight = Math.sin(time) * 0.5;
-        boatRef.current.position.y = waveHeight;
+        if (boatRef.current) boatRef.current.position.y = waveHeight;
     });
 
     return (
@@ -190,16 +242,16 @@ const Boat = () => {
 // rain component with splash effect
 const Rain = () => {
     const rainCount = 1000;
-    const rainRef = useRef();
-    const splashesRef = useRef();
-    
+    const rainRef = useRef<THREE.Points>(null);
+    const splashesRef = useRef<THREE.Points>(null);
+
     const rainPositions = useMemo(() => {
         const positions = [];
         for (let i = 0; i < rainCount; i++) {
             positions.push(
-                (Math.random() - 0.5) * 50, // x position
-                Math.random() * 15 + 10,    // y position
-                (Math.random() - 0.5) * 50  // z position
+                (Math.random() - 0.5) * 50,
+                Math.random() * 15 + 10,
+                (Math.random() - 0.5) * 50
             );
         }
         return new Float32Array(positions);
@@ -214,28 +266,25 @@ const Rain = () => {
     }, []);
 
     useFrame(() => {
-        const rainArray = rainRef.current.geometry.attributes.position.array;
-        const splashArray = splashesRef.current.geometry.attributes.position.array;
+        const rainArray = rainRef.current?.geometry.attributes.position.array;
+        const splashArray = splashesRef.current?.geometry.attributes.position.array;
 
-        for (let i = 1; i < rainArray.length; i += 3) {
-            rainArray[i] -= 0.3; 
+        if (rainArray && splashArray) {
+            for (let i = 1; i < rainArray.length; i += 3) {
+                rainArray[i] -= 0.3;
 
-            // collision check and reset
-            if (rainArray[i] < 0) {
-                // splash effect when rain reaches the sea level
-                splashArray[i - 1] = rainArray[i - 1]; // x position
-                splashArray[i] = 0; // y position for splash
-                splashArray[i + 1] = rainArray[i + 1]; // z position
-
-                // resets raindrop back to the top
-                rainArray[i] = 10 + Math.random() * 10;
-            } else {
-                // make splash fade by lowering it gradually
-                splashArray[i] -= 0.1; 
+                if (rainArray[i] < 0) {
+                    splashArray[i - 1] = rainArray[i - 1];
+                    splashArray[i] = 0;
+                    splashArray[i + 1] = rainArray[i + 1];
+                    rainArray[i] = 10 + Math.random() * 10;
+                } else {
+                    splashArray[i] -= 0.1;
+                }
             }
+            rainRef.current.geometry.attributes.position.needsUpdate = true;
+            splashesRef.current.geometry.attributes.position.needsUpdate = true;
         }
-        rainRef.current.geometry.attributes.position.needsUpdate = true;
-        splashesRef.current.geometry.attributes.position.needsUpdate = true;
     });
 
     return (
@@ -258,8 +307,6 @@ const Rain = () => {
                     depthWrite={false}
                 />
             </points>
-            
-            {/* Splash effect particles */}
             <points ref={splashesRef}>
                 <bufferGeometry>
                     <bufferAttribute
