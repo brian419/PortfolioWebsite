@@ -144,9 +144,13 @@ const WaveMaterial = shaderMaterial(
 extend({ WaveMaterial });
 
 const SeaPlane = () => {
-    const ref = useRef();
+    const ref = useRef<THREE.Mesh>(null); 
+
     useFrame((state) => {
-        ref.current.material.uniforms.time.value = state.clock.getElapsedTime();
+        if (ref.current) {
+            const material = ref.current.material as THREE.ShaderMaterial;
+            material.uniforms.time.value = state.clock.getElapsedTime();
+        }
     });
 
     return (
