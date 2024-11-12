@@ -194,9 +194,20 @@ const WaveMaterial = shaderMaterial(
 extend({ WaveMaterial });
 
 // define props for waveMaterial through module augmentation
+// declare module '@react-three/fiber' {
+//     interface ThreeElements {
+//         waveMaterial: ReactThreeFiber.Node<WaveMaterialType, typeof WaveMaterial> & {
+//             time?: number;
+//             waveHeight?: number;
+//             waveFrequency?: number;
+//             foamColor?: THREE.Color;
+//         };
+//     }
+// }
+
 declare module '@react-three/fiber' {
     interface ThreeElements {
-        waveMaterial: ReactThreeFiber.Node<WaveMaterialType, typeof WaveMaterial> & {
+        waveMaterial: ReactThreeFiber.Object3DNode<WaveMaterialType, typeof WaveMaterial> & {
             time?: number;
             waveHeight?: number;
             waveFrequency?: number;
@@ -204,6 +215,7 @@ declare module '@react-three/fiber' {
         };
     }
 }
+
 
 
 // type definition for WaveMaterialType
