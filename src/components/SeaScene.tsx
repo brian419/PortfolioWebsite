@@ -173,14 +173,18 @@
 // }
 
 
+
+
+
+
 import * as THREE from 'three';
-import { useRef, useMemo } from 'react';
-import { Canvas, useFrame, extend } from '@react-three/fiber';
+import React, { useRef, useMemo } from 'react';
+import { Canvas, useFrame, extend, ReactThreeFiber } from '@react-three/fiber';
 import { shaderMaterial } from '@react-three/drei';
 import waveVertexShader from '../components/shaders/seaSceneWaveVertex.glsl';
 import waveFragmentShader from '../components/shaders/seaSceneWaveFragment.glsl';
 
-// create wave material as a custom shader material with expected uniforms
+// creates wave material as a custom shader material with expected uniforms
 const WaveMaterial = shaderMaterial(
     { time: 0, waveHeight: 1.0, waveFrequency: 0.15, foamColor: new THREE.Color(0xDCEDFF) },
     waveVertexShader,
@@ -189,6 +193,7 @@ const WaveMaterial = shaderMaterial(
 
 extend({ WaveMaterial });
 
+// type definition for WaveMaterialType
 type WaveMaterialType = THREE.ShaderMaterial & {
     uniforms: {
         time: { value: number };
@@ -198,9 +203,24 @@ type WaveMaterialType = THREE.ShaderMaterial & {
     };
 };
 
+// extends JSX IntrinsicElements to include waveMaterial
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            waveMaterial: ReactThreeFiber.Object3DNode<WaveMaterialType, typeof WaveMaterial> & {
+                time?: number;
+                waveHeight?: number;
+                waveFrequency?: number;
+                foamColor?: THREE.Color;
+                ref?: React.Ref<WaveMaterialType>;
+            };
+        }
+    }
+}
+
 const SeaPlane = () => {
     const ref = useRef<THREE.Mesh>(null);
-    const materialRef = useRef<WaveMaterialType | null>(null);
+    const materialRef = useRef<WaveMaterialType>(null);
 
     useFrame((state) => {
         if (materialRef.current) {
@@ -209,11 +229,15 @@ const SeaPlane = () => {
     });
 
     return (
-        <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+        <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[100, 100, 256, 256]} />
             <waveMaterial
-                ref={materialRef as React.MutableRefObject<WaveMaterialType | null>}
+                ref={materialRef}
                 attach="material"
+                time={0}
+                waveHeight={1.0}
+                waveFrequency={0.15}
+                foamColor={new THREE.Color(0xDCEDFF)}
             />
         </mesh>
     );
@@ -272,8 +296,8 @@ const Rain = () => {
     }, []);
 
     useFrame(() => {
-        const rainArray = rainRef.current?.geometry.attributes.position.array;
-        const splashArray = splashesRef.current?.geometry.attributes.position.array;
+        const rainArray = rainRef.current?.geometry.attributes.position.array as Float32Array;
+        const splashArray = splashesRef.current?.geometry.attributes.position.array as Float32Array;
 
         if (rainArray && splashArray) {
             for (let i = 1; i < rainArray.length; i += 3) {
