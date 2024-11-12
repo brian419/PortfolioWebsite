@@ -176,7 +176,6 @@
 
 
 
-
 import * as THREE from 'three';
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame, extend, ReactThreeFiber } from '@react-three/fiber';
@@ -184,42 +183,22 @@ import { shaderMaterial } from '@react-three/drei';
 import waveVertexShader from '../components/shaders/seaSceneWaveVertex.glsl';
 import waveFragmentShader from '../components/shaders/seaSceneWaveFragment.glsl';
 
-// create wave material as a custom shader material with expected uniforms
-const WaveMaterial = shaderMaterial(
-    { time: 0, waveHeight: 1.0, waveFrequency: 0.15, foamColor: new THREE.Color(0xDCEDFF) },
+// creates WaveShaderMaterial as a custom shader material with expected uniforms
+const WaveShaderMaterial = shaderMaterial(
+    {
+        time: 0,
+        waveHeight: 1.0,
+        waveFrequency: 0.15,
+        foamColor: new THREE.Color(0xDCEDFF),
+    },
     waveVertexShader,
     waveFragmentShader
 );
 
-extend({ WaveMaterial });
+extend({ WaveShaderMaterial });
 
-// define props for waveMaterial through module augmentation
-// declare module '@react-three/fiber' {
-//     interface ThreeElements {
-//         waveMaterial: ReactThreeFiber.Node<WaveMaterialType, typeof WaveMaterial> & {
-//             time?: number;
-//             waveHeight?: number;
-//             waveFrequency?: number;
-//             foamColor?: THREE.Color;
-//         };
-//     }
-// }
-
-declare module '@react-three/fiber' {
-    interface ThreeElements {
-        waveMaterial: ReactThreeFiber.Object3DNode<WaveMaterialType, typeof WaveMaterial> & {
-            time?: number;
-            waveHeight?: number;
-            waveFrequency?: number;
-            foamColor?: THREE.Color;
-        };
-    }
-}
-
-
-
-// type definition for WaveMaterialType
-type WaveMaterialType = THREE.ShaderMaterial & {
+// type definition for WaveShaderMaterialType
+type WaveShaderMaterialType = THREE.ShaderMaterial & {
     uniforms: {
         time: { value: number };
         waveHeight: { value: number };
@@ -228,9 +207,21 @@ type WaveMaterialType = THREE.ShaderMaterial & {
     };
 };
 
+// module augmentation for ThreeElements
+declare module '@react-three/fiber' {
+    interface ThreeElements {
+        waveShaderMaterial: ReactThreeFiber.Object3DNode<WaveShaderMaterialType, typeof WaveShaderMaterial> & {
+            time?: number;
+            waveHeight?: number;
+            waveFrequency?: number;
+            foamColor?: THREE.Color;
+        };
+    }
+}
+
 const SeaPlane = () => {
     const ref = useRef<THREE.Mesh>(null);
-    const materialRef = useRef<WaveMaterialType>(null);
+    const materialRef = useRef<WaveShaderMaterialType>(null);
 
     useFrame((state) => {
         if (materialRef.current) {
@@ -241,7 +232,7 @@ const SeaPlane = () => {
     return (
         <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[100, 100, 256, 256]} />
-            <waveMaterial
+            <waveShaderMaterial
                 ref={materialRef}
                 attach="material"
                 time={0}
@@ -255,6 +246,7 @@ const SeaPlane = () => {
 
 const Boat = () => {
     const boatRef = useRef<THREE.Group>(null);
+
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
         const waveHeight = Math.sin(time) * 0.5;
