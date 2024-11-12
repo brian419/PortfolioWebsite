@@ -184,7 +184,7 @@ import { shaderMaterial } from '@react-three/drei';
 import waveVertexShader from '../components/shaders/seaSceneWaveVertex.glsl';
 import waveFragmentShader from '../components/shaders/seaSceneWaveFragment.glsl';
 
-// creates wave material as a custom shader material with expected uniforms
+// create wave material as a custom shader material with expected uniforms
 const WaveMaterial = shaderMaterial(
     { time: 0, waveHeight: 1.0, waveFrequency: 0.15, foamColor: new THREE.Color(0xDCEDFF) },
     waveVertexShader,
@@ -192,6 +192,19 @@ const WaveMaterial = shaderMaterial(
 );
 
 extend({ WaveMaterial });
+
+// define props for waveMaterial through module augmentation
+declare module '@react-three/fiber' {
+    interface ThreeElements {
+        waveMaterial: ReactThreeFiber.Object3DNode<WaveMaterialType, typeof WaveMaterial> & {
+            time?: number;
+            waveHeight?: number;
+            waveFrequency?: number;
+            foamColor?: THREE.Color;
+            ref?: React.Ref<WaveMaterialType>;
+        };
+    }
+}
 
 // type definition for WaveMaterialType
 type WaveMaterialType = THREE.ShaderMaterial & {
@@ -202,21 +215,6 @@ type WaveMaterialType = THREE.ShaderMaterial & {
         foamColor: { value: THREE.Color };
     };
 };
-
-// extends JSX IntrinsicElements to include waveMaterial
-declare global {
-    namespace JSX {
-        interface IntrinsicElements {
-            waveMaterial: ReactThreeFiber.Object3DNode<WaveMaterialType, typeof WaveMaterial> & {
-                time?: number;
-                waveHeight?: number;
-                waveFrequency?: number;
-                foamColor?: THREE.Color;
-                ref?: React.Ref<WaveMaterialType>;
-            };
-        }
-    }
-}
 
 const SeaPlane = () => {
     const ref = useRef<THREE.Mesh>(null);
