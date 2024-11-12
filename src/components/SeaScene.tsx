@@ -200,7 +200,7 @@ type WaveMaterialType = THREE.ShaderMaterial & {
 
 const SeaPlane = () => {
     const ref = useRef<THREE.Mesh>(null);
-    const materialRef = useRef<WaveMaterialType>(null);
+    const materialRef = useRef<WaveMaterialType | null>(null);
 
     useFrame((state) => {
         if (materialRef.current) {
@@ -212,7 +212,7 @@ const SeaPlane = () => {
         <mesh ref={ref} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
             <planeGeometry args={[100, 100, 256, 256]} />
             <waveMaterial
-                ref={materialRef as any} // casting as 'any' to avoid type conflicts
+                ref={materialRef as React.MutableRefObject<WaveMaterialType | null>}
                 attach="material"
             />
         </mesh>
