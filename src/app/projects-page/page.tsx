@@ -37,10 +37,10 @@ const ProjectPage: React.FC = () => {
         },
         {
             id: 3,
-            title: 'Placeholder Project 3',
-            description: 'Placeholder description 3.',
+            title: 'The Sea',
+            description: 'This will be a test project for using Three.js and learning procedural generations.',
             image: PlaceholderImage,
-            link: '',
+            link: '/sea-page',
         },
         {
             id: 4,
@@ -115,6 +115,8 @@ const ProjectPage: React.FC = () => {
                     <LinkButton label="Black & White Tetris" href={selectedProject.link} />
                 ) : selectedProject.id === 2 ? (
                     <LinkButton label="Gomoku" href={selectedProject.link} />
+                ) : selectedProject.id === 3 ? (
+                    <LinkButton label="Raging Seas" href={selectedProject.link} />
                 ) : (
                     <DisabledButton label="Not Implemented Yet" />
                 )}
