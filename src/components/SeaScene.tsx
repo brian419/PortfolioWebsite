@@ -298,24 +298,26 @@ const Rain = () => {
     }, []);
 
     useFrame(() => {
-        const rainArray = rainRef.current?.geometry.attributes.position.array as Float32Array;
-        const splashArray = splashesRef.current?.geometry.attributes.position.array as Float32Array;
+        if (rainRef.current && splashesRef.current) {
+            const rainArray = rainRef.current.geometry.attributes.position.array as Float32Array;
+            const splashArray = splashesRef.current.geometry.attributes.position.array as Float32Array;
 
-        if (rainArray && splashArray) {
-            for (let i = 1; i < rainArray.length; i += 3) {
-                rainArray[i] -= 0.3;
+            if (rainArray && splashArray) {
+                for (let i = 1; i < rainArray.length; i += 3) {
+                    rainArray[i] -= 0.3;
 
-                if (rainArray[i] < 0) {
-                    splashArray[i - 1] = rainArray[i - 1];
-                    splashArray[i] = 0;
-                    splashArray[i + 1] = rainArray[i + 1];
-                    rainArray[i] = 10 + Math.random() * 10;
-                } else {
-                    splashArray[i] -= 0.1;
+                    if (rainArray[i] < 0) {
+                        splashArray[i - 1] = rainArray[i - 1];
+                        splashArray[i] = 0;
+                        splashArray[i + 1] = rainArray[i + 1];
+                        rainArray[i] = 10 + Math.random() * 10;
+                    } else {
+                        splashArray[i] -= 0.1;
+                    }
                 }
+                rainRef.current.geometry.attributes.position.needsUpdate = true;
+                splashesRef.current.geometry.attributes.position.needsUpdate = true;
             }
-            rainRef.current.geometry.attributes.position.needsUpdate = true;
-            splashesRef.current.geometry.attributes.position.needsUpdate = true;
         }
     });
 
