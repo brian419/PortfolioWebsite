@@ -44,10 +44,10 @@ const ProjectPage: React.FC = () => {
         },
         {
             id: 4,
-            title: 'Placeholder Project 4',
-            description: 'Placeholder description 4.',
+            title: 'Advanced Procedural Terrain',
+            description: 'This will be an ongoing test project for a more advanced project for procedural terrain generation with Three.js.',
             image: PlaceholderImage,
-            link: '',
+            link: '/procedural-terrain-page',
         }
     ], []);
 
@@ -117,6 +117,8 @@ const ProjectPage: React.FC = () => {
                     <LinkButton label="Gomoku" href={selectedProject.link} />
                 ) : selectedProject.id === 3 ? (
                     <LinkButton label="Raging Seas" href={selectedProject.link} />
+                ) : selectedProject.id === 4 ? (
+                    <LinkButton label="Advanced Procedural Terrain" href={selectedProject.link} />
                 ) : (
                     <DisabledButton label="Not Implemented Yet" />
                 )}
