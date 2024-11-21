@@ -185,67 +185,6 @@ interface ModalProps {
     onNext: () => void;
 }
 
-
-// const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
-//     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-//         <div className="bg-gray-900 text-white p-6 rounded-lg max-w-lg w-full relative border border-gray-400">
-//             {/* Close Button */}
-//             <button
-//                 onClick={onClose}
-//                 className="absolute top-2 right-2 text-gray-400 hover:text-gray-200"
-//                 aria-label="Close Modal"
-//             >
-//                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
-//                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-//                 </svg>
-//             </button>
-
-//             {/* Modal Content */}
-//             <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
-//             <div className="border-b border-gray-400 my-4"></div>
-//             <div className="mt-2 text-white max-h-64 overflow-y-auto pr-2 space-y-4">
-//                 {project.extraInfo.split('\n').map((paragraph, idx) => (
-//                     <p key={idx} className="leading-relaxed text-gray-300">
-//                         {paragraph}
-//                     </p>
-//                 ))}
-//             </div>
-
-//             {/* Visit Website */}
-//             <a
-//                 href={project.link}
-//                 target="_blank"
-//                 rel="noopener noreferrer"
-//                 className="mt-4 inline-block bg-transparent text-blue-500 py-2 px-4 rounded hover:underline text-center w-full"
-//             >
-//                 Visit the Website!
-//             </a>
-
-//             {/* Left Arrow */}
-//             <button
-//                 onClick={onPrev}
-//                 className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-20 text-white shadow-lg border-0 hover:border hover:border-white"
-//                 aria-label="Previous Website"
-//             >
-//                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-//                 </svg>
-//             </button>
-
-//             {/* Right Arrow */}
-//             <button
-//                 onClick={onNext}
-//                 className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-20 text-white shadow-lg border-0 hover:border hover:border-white"
-//                 aria-label="Next Website"
-//             >
-//                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-//                 </svg>
-//             </button>
-//         </div>
-//     </div>
-// );
-
 const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         {/* Wrapper for Modal and Arrows */}
