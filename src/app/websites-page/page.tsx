@@ -50,15 +50,19 @@ const WebsitePage: React.FC = () => {
     ], []);
 
     const handleNext = () => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === websites.length - 1 ? 0 : prevIndex + 1
-        );
+        const nextIndex = currentIndex === websites.length - 1 ? 0 : currentIndex + 1;
+        setCurrentIndex(nextIndex);
+        if (selectedProject) {
+            setSelectedProject(websites[nextIndex]);
+        }
     };
 
     const handlePrev = () => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? websites.length - 1 : prevIndex - 1
-        );
+        const prevIndex = currentIndex === 0 ? websites.length - 1 : currentIndex - 1;
+        setCurrentIndex(prevIndex);
+        if (selectedProject) {
+            setSelectedProject(websites[prevIndex]);
+        }
     };
 
     const handleModalOpen = (project: Project) => {
@@ -69,7 +73,6 @@ const WebsitePage: React.FC = () => {
         setSelectedProject(null);
     };
 
-    // no scrolling in the background when modal is open
     useEffect(() => {
         if (selectedProject) {
             document.body.style.overflow = "hidden";
@@ -135,11 +138,17 @@ const WebsitePage: React.FC = () => {
 
             {/* Modal */}
             {selectedProject && (
-                <Modal project={selectedProject} onClose={handleModalClose} />
+                <Modal
+                    project={selectedProject}
+                    onClose={handleModalClose}
+                    onPrev={handlePrev}
+                    onNext={handleNext}
+                />
             )}
         </div>
     );
 };
+
 
 export default WebsitePage;
 
@@ -172,40 +181,136 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive, onClick })
 interface ModalProps {
     project: Project;
     onClose: () => void;
+    onPrev: () => void;
+    onNext: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ project, onClose }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-        <div className="bg-gray-900 text-white p-6 rounded-lg max-w-lg w-full relative">
+
+// const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
+//     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+//         <div className="bg-gray-900 text-white p-6 rounded-lg max-w-lg w-full relative border border-gray-400">
+//             {/* Close Button */}
+//             <button
+//                 onClick={onClose}
+//                 className="absolute top-2 right-2 text-gray-400 hover:text-gray-200"
+//                 aria-label="Close Modal"
+//             >
+//                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+//                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+//                 </svg>
+//             </button>
+
+//             {/* Modal Content */}
+//             <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
+//             <div className="border-b border-gray-400 my-4"></div>
+//             <div className="mt-2 text-white max-h-64 overflow-y-auto pr-2 space-y-4">
+//                 {project.extraInfo.split('\n').map((paragraph, idx) => (
+//                     <p key={idx} className="leading-relaxed text-gray-300">
+//                         {paragraph}
+//                     </p>
+//                 ))}
+//             </div>
+
+//             {/* Visit Website */}
+//             <a
+//                 href={project.link}
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 className="mt-4 inline-block bg-transparent text-blue-500 py-2 px-4 rounded hover:underline text-center w-full"
+//             >
+//                 Visit the Website!
+//             </a>
+
+//             {/* Left Arrow */}
+//             <button
+//                 onClick={onPrev}
+//                 className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-20 text-white shadow-lg border-0 hover:border hover:border-white"
+//                 aria-label="Previous Website"
+//             >
+//                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+//                 </svg>
+//             </button>
+
+//             {/* Right Arrow */}
+//             <button
+//                 onClick={onNext}
+//                 className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-20 text-white shadow-lg border-0 hover:border hover:border-white"
+//                 aria-label="Next Website"
+//             >
+//                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+//                 </svg>
+//             </button>
+//         </div>
+//     </div>
+// );
+
+const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        {/* Wrapper for Modal and Arrows */}
+        <div className="relative flex justify-center items-center w-full h-full">
+            {/* Left Arrow */}
             <button
-                onClick={onClose}
-                className="absolute top-2 right-2 text-gray-400 hover:text-gray-200"
-                aria-label="Close Modal"
+                onClick={onPrev}
+                className="absolute left-72 mt-5 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-20 text-white shadow-lg border-0 hover:border hover:border-white"
+                aria-label="Previous Website"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
-            <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
-            <div className="border-b border-gray-400 my-4"></div>
-            <div className="mt-2 text-white max-h-64 overflow-y-auto pr-2 space-y-4">
-                {project.extraInfo.split('\n').map((paragraph, idx) => (
-                    <p key={idx} className="leading-relaxed text-gray-300">
-                        {paragraph}
-                    </p>
-                ))}
+
+            {/* Modal Content */}
+            <div className="bg-gray-900 text-white p-6 rounded-lg max-w-lg w-full relative border border-gray-400">
+                {/* Close Button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-200"
+                    aria-label="Close Modal"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                {/* Modal Content */}
+                <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
+                <div className="border-b border-gray-400 my-4"></div>
+                <div className="mt-2 text-white max-h-64 overflow-y-auto pr-2 space-y-4">
+                    {project.extraInfo.split('\n').map((paragraph, idx) => (
+                        <p key={idx} className="leading-relaxed text-gray-300">
+                            {paragraph}
+                        </p>
+                    ))}
+                </div>
+
+                {/* Visit Website */}
+                <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-block bg-transparent text-blue-500 py-2 px-4 rounded hover:underline text-center w-full"
+                >
+                    Visit the Website!
+                </a>
             </div>
-            <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-block bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 text-center w-full"
+
+            {/* Right Arrow */}
+            <button
+                onClick={onNext}
+                className="absolute right-72 mt-5 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-20 text-white shadow-lg border-0 hover:border hover:border-white"
+                aria-label="Next Website"
             >
-                Visit the Website!
-            </a>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
         </div>
     </div>
 );
+
+
 
 interface LinkButtonProps {
     label: string;
@@ -214,14 +319,17 @@ interface LinkButtonProps {
 
 const LinkButton: React.FC<LinkButtonProps> = ({ label, href }) => (
     <div className="mx-auto flex w-full max-w-lg items-center justify-center mt-8">
-        <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-blue-600 hover:text-black text-white text-xs font-bold py-2 px-4 rounded w-full text-center"
-        >
-            {label}
-        </a>
+        <div className="relative z-10 flex w-full cursor-pointer items-center overflow-hidden rounded-xl border border-slate-800 p-[1.5px]">
+            <div className="animate-rotate absolute inset-0 h-full w-full rounded-full bg-[conic-gradient(#0ea5e9_20deg,transparent_120deg)]"></div>
+            <div className="relative z-20 flex w-full rounded-[0.60rem] bg-blue-600 p-2">
+                <a
+                    href={href}
+                    className="bg-blue-600 hover:text-black text-white text-xs font-bold py-2 px-4 rounded w-full text-center"
+                >
+                    {label}
+                </a>
+            </div>
+        </div>
     </div>
 );
 
