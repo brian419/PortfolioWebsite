@@ -7,7 +7,7 @@ export default function Home() {
     const [isOutsideGalaxy, setIsOutsideGalaxy] = useState(true);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
-    const handleMouseOver = (e: any) => {
+    const handleMouseOver = (e: MouseEvent) => {
         const galaxySection = document.getElementById('galaxy');
         if (galaxySection) {
             const boundingRect = galaxySection.getBoundingClientRect();
