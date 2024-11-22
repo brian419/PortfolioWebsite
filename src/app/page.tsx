@@ -1,9 +1,32 @@
 "use client";
+import CursorEffect from '../components/CursorEffect';
 import GalaxyScene from '../components/GalaxyScene';
 import { useState, useEffect } from 'react';
 
 export default function Home() {
+    const [isOutsideGalaxy, setIsOutsideGalaxy] = useState(true);
     const [showScrollTop, setShowScrollTop] = useState(false);
+
+    const handleMouseOver = (e: MouseEvent) => {
+        const galaxySection = document.getElementById('galaxy');
+        if (galaxySection) {
+            const boundingRect = galaxySection.getBoundingClientRect();
+            const isInside =
+                e.clientX >= boundingRect.left &&
+                e.clientX <= boundingRect.right &&
+                e.clientY >= boundingRect.top &&
+                e.clientY <= boundingRect.bottom;
+
+            setIsOutsideGalaxy(!isInside);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('mousemove', handleMouseOver);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseOver);
+        };
+    }, []);
 
     const handleScroll = () => {
         const galaxySection = document.getElementById('galaxy');
@@ -57,7 +80,6 @@ export default function Home() {
                             Here, you’ll find a selection of my work that demonstrates my
                             skills in web development.
                         </p>
-                        {/* Placeholder for my projects */}
                     </div>
                 </section>
 
@@ -71,12 +93,14 @@ export default function Home() {
                         ↑
                     </button>
                 )}
+
                 {/* Embed Three.js Galaxy Scene */}
                 <section id="galaxy" className="h-screen">
                     <GalaxyScene />
                 </section>
 
-
+                {/* Cursor Effect */}
+                {isOutsideGalaxy && <CursorEffect />}
             </main>
         </div>
     );

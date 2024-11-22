@@ -120,7 +120,6 @@ export default function initializeScene(canvas) {
     water.position.y = -0.1;
     scene.add(water);    
 
-
     /**
         * Board
     */
@@ -173,6 +172,7 @@ export default function initializeScene(canvas) {
         controls.update();
         renderer.render(scene, camera);
         requestAnimationFrame(tick);
+
     };
     tick();
 
