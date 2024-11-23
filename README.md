@@ -81,9 +81,7 @@ Welcome to my portfolio website. This project is a showcase of my journey as a w
 ---
 
 ## Contact  
-This is a personal project, but I welcome suggestions, feedback, questions, or contributions. Feel free to use my contact form on the Contact page of my website [jeongbinson.com](jeongbinson.com) or email me directly at json10@crimson.ua.edu
-
-
+This is a personal project, but I welcome suggestions, feedback, questions, or contributions. Feel free to use my contact form on the Contact page of my website <a href="https://www.jeongbinson.com" target="_blank">jeongbinson.com</a> or email me directly at <a href="mailto:json10@crimson.ua.edu">json10@crimson.ua.edu</a>.
 
 ---
 
