@@ -85,6 +85,9 @@ This is a personal project, but I welcome suggestions, feedback, questions, or c
 
 
 
+---
+
+
 ### Personal Note for Development
 "scripts": {
     "dev": "next dev",
