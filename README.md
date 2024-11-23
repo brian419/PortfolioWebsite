@@ -1,4 +1,92 @@
-TEST MESSAGE
+# Portfolio Website | Jeongbin Son
+
+## Overview
+
+Welcome to my portfolio website. This project is a showcase of my journey as a web developer exploring different tech stacks for building web applications. It serves as a hub to display projects and additional websites I create, as well as having a working contact form in case you want to get in touch!
+
+---
+
+## Features
+
+### **1. Homepage**
+- **Three.js Integration**: The homepage features an interactive spinning galaxy that occasionally shoot stars towards the user.
+- **Dynamic Procedural Generation (Work in Progress)**: Exploring procedural generation to dynamically load and unload "chunks" of virtual land based on camera scrolling distance.
+
+### **2. Projects Page**
+- **Interactive Tetris Game**: A functional, mobile-friendly Tetris game with a global leaderboard stored in a MongoDB cluster.
+- **Gomoku Game**: A game-in-progress featuring multiple modes:
+  - Player vs Computer (algorithm-based logic)
+  - Player vs AI (deep reinforcement learning in progress)
+  - Player vs Player
+  - **Current Focus**: Refining the AI mode by implementing better reward systems and parallelizing training for efficient AI learning.
+
+### **3. Websites Page**
+- A collection of links to other websites I've built, displayed with interactive card animations. Can click on website cards to show more information about my contributions!
+
+### **4. Contact Form**
+- A functional "Contact Us" form to allow visitors to reach out easily.
+
+---
+
+## Tech Stack
+
+### **Frontend**
+- **React.js**: Core framework for building the user interface.
+- **Next.js**: For server-side rendering and enhanced routing capabilities.
+- **Tailwind CSS**: Used for responsive and mobile-friendly design.
+
+### **Backend**
+- **Node.js**: Handles server-side logic and API endpoints.
+- **Express.js**: Simplifies routing and middleware.
+
+### **Databases**
+- **MongoDB**: Stores leaderboard data for the Tetris game.
+- **MySQL**: A secondary database for experimenting with structured data.
+
+### **Additional Tools**
+- **Three.js**: For rendering and animating 3D galaxy effects.
+- **JWT (JSON Web Tokens)**: Authentication for potential user-based features in the future.
+
+---
+
+## Future Plans
+- **Expand Procedural Generation**: Dynamically generate landscapes based on camera scrolling and unload distant "chunks" for optimal performance.
+- **Enhance Gomoku AI**: Implement a robust reward system and optimize AI training through parallel processing.
+- **Mobile Optimization**: Further refine mobile layouts and interactions.
+- **Add More Projects**: Continuously update with new projects and experiments.
+
+---
+
+## How to Run Locally
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/brian419/PortfolioWebsite.git
+   cd PortfolioWebsite
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the Development Server**
+   ```bash
+   npm start
+   ```
+
+4. **Access the Website**
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## Contact  
+This is a personal project, but I welcome suggestions, feedback, questions, or contributions. Feel free to use my contact form on the Contact page of my website [jeongbinson.com](jeongbinson.com) or email me directly at json10@crimson.ua.edu
+
+
+
+---
+
 
 ### Personal Note for Development
 "scripts": {
@@ -9,46 +97,4 @@ TEST MESSAGE
     "lint": "next lint"
   },
 
-currently removed backend for development as I work on other things besides player vs ai (deep learning). 
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# PortfolioWebsite
-
-
-
-
+currently removed backend for development as I work on other things besides player vs ai (deep learning).
