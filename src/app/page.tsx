@@ -48,6 +48,7 @@ export default function Home() {
 
     return (
         <div className="min-h-screen flex flex-col">
+            <CursorEffect />
             <main className="flex-grow">
                 {/* Hero Section */}
                 <section className="text-white py-28">
@@ -99,8 +100,6 @@ export default function Home() {
                     <GalaxyScene />
                 </section>
 
-                {/* Cursor Effect */}
-                {isOutsideGalaxy && <CursorEffect />}
             </main>
         </div>
     );

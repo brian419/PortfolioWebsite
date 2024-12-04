@@ -1,57 +1,70 @@
-"use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-export default function CursorEffect() {
-    const containerRef = useRef<HTMLDivElement>(null); // container to hold all particles
+const CursorEffect = () => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
-        const container = containerRef.current;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-        if (!container) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-        // creates multiple particles
-        const particles: HTMLDivElement[] = [];
-        for (let i = 0; i < 6; i++) { // number of particles
-            const particle = document.createElement("div");
-            particle.className =
-                "absolute w-1 h-1 bg-[#C0C0C0] rounded-full opacity-0 transition-transform duration-500";
-            container.appendChild(particle);
-            particles.push(particle);
-        }
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles: { x: number; y: number; radius: number; color: string }[] = [];
+
+        const getRandomColor = () => {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgba(${r}, ${g}, ${b}, 0.7)`; 
+        };
+
+        const createParticle = (x: number, y: number) => {
+            particles.push({
+                x,
+                y,
+                radius: Math.random() * 3 + 1,
+                color: getRandomColor(),
+            });
+        };
+
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach((particle, index) => {
+                particle.radius *= 0.96; 
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+                ctx.closePath();
+
+                if (particle.radius < 0.5) particles.splice(index, 1); 
+            });
+
+            requestAnimationFrame(animate);
+        };
+        animate();
 
         const handleMouseMove = (e: MouseEvent) => {
-            particles.forEach((particle, index) => {
-                const offsetX = (Math.random() - 0.5) * 50; // random X offset
-                const offsetY = (Math.random() - 0.5) * 50; // random Y offset
-                setTimeout(() => {
-                    particle.style.left = `${e.pageX + offsetX}px`;
-                    particle.style.top = `${e.pageY + offsetY}px`;
-                    particle.style.opacity = "1";
-                    particle.style.transform = `scale(${Math.random() + 0.5})`;
-                }, index * 30); 
-            });
+            createParticle(e.clientX, e.clientY);
         };
-
-        const handleMouseLeave = () => {
-            particles.forEach((particle) => {
-                particle.style.opacity = "0";  // fades out particles
-            });
-        };
-
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseleave", handleMouseLeave);
+        window.addEventListener('mousemove', handleMouseMove);
 
         return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseleave", handleMouseLeave);
-            particles.forEach((particle) => particle.remove()); 
+            window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener('mousemove', handleMouseMove);
         };
     }, []);
 
-    return (
-        <div
-            ref={containerRef}
-            className="fixed pointer-events-none z-50 top-0 left-0 w-full h-full"
-        ></div>
-    );
-}
+    return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none"></canvas>;
+};
+
+export default CursorEffect;
