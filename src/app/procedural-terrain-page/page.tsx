@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import initializeScene from "../../components/ProceduralTerrainTestScene.js"; 
+// import ProceduralTerrainLayout from "../procedural-terrain-page/layout.jsx";
 
 export default function ProceduralTerrainPage() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -15,8 +16,8 @@ export default function ProceduralTerrainPage() {
     }, []);
 
     return (
-        <div className="min-h-screen">
-            <canvas ref={canvasRef} className="w-full h-full"></canvas>
+        <div>
+            <canvas ref={canvasRef}></canvas>
         </div>
     );
 }

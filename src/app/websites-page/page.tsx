@@ -6,6 +6,7 @@ import Image, { StaticImageData } from 'next/image';
 import uawaterskihomepageImage from '../../components/images/uawaterskihomepage.png';
 import codefortreeshomepageImage from '../../components/images/codefortreeshomepage.png';
 import tempWebsiteImage from '../../components/images/placeholderProjects.svg';
+import snowskiImage from '../../components/images/snowskiimage.png'
 
 interface Project {
     id: number;
@@ -29,7 +30,7 @@ const WebsitePage: React.FC = () => {
             description: "A website created by Anastasia Spencer, Brooke Boskus, Lilly Eide, and Jeongbin Son for the University of Alabama's waterski team.",
             image: uawaterskihomepageImage,
             link: 'https://www.uawaterski.com',
-            extraInfo: "Built using React.js, Node.js, Next.js, Express.js, and Tailwind CSS, and connected to an Amazon RDS MySQL database. The website is deployed through Vercel. My contributions include implementing secure login functionality using JWT tokens, creating a fully functional 'Contact Us' form, and developing a 'Forgot Password' page with the ability to reset passwords in the database. I also designed and implemented the 'Roster' page, which allows users to view team members from the database, with search and filter capabilities for enhanced usability. I also added a Super User (admin account) that will have access to modifying content on the website. Currently the admin account can delete users, but in the future, the admin account will have the ability to add, edit, and delete content on the website.",
+            extraInfo: "Built using React.js, Node.js, Next.js, Express.js, and Tailwind CSS, and connected to an Amazon RDS MySQL database. The website is deployed through Vercel. My contributions include implementing secure login functionality using JWT tokens, creating a fully functional 'Contact Us' form, and developing a 'Forgot Password' page with the ability to reset passwords in the database. I also designed and implemented the 'Roster' page, which allows users to view team members from the database, with search and filter capabilities for enhanced usability. I also added a Super User (admin account) that can modify content directly within the website. Currently the admin account can delete and edit users and their uploaded information, but in the future, the admin account will have the ability to confirm account creations as well as modify content (images and texts). For handling cybersecurity cases, the registration also checks to see if the user has put a valid email address (associated with the University of Alabama) and no accounts using the email exploit trick can be registered (email+1@email.com). Additionally, I implemented a verification step that sends a confirmation link in an email to the registered user, so fake emails cannot verify and therefore cannot login. In the future, I will set up a way so that the admin account can further handle verification to ensure that only the members of the waterski team can sign up for an account on the website!",
         },
         {
             id: 2,
@@ -41,11 +42,11 @@ const WebsitePage: React.FC = () => {
         },
         {
             id: 3,
-            title: "Future Website",
-            description: "This is a placeholder for a future website project.",
-            image: tempWebsiteImage,
-            link: '/',
-            extraInfo: "Details about this project will be added in the future.",
+            title: "Snow Ski",
+            description: "This is a C#, .NET tech stack website built for CS 330 Web Development's Final Project",
+            image: snowskiImage,
+            link: 'https://cs330-fall2024-finalproject.azurewebsites.net/',
+            extraInfo: "Built by Anastasia Spencer, Brooke Boskus, Collin [], Owen []. Deployed through Microsoft Azure. This was built using the student plan and utilizes OpenAI and OpenWeather apis. My personal contributions for this website includes handling login and register along with email confirmation, styling the initial frontend of the website, continuation of Chat Bot improvements based on the code provided by Anastasia Spencer. This website was a great experience in exploring other ways to do web development! I also added the cybersecurity checks I implemented in the Capstone website into this 330 website as well. Note: Snow Ski is not a real team! ",
         },
     ], []);
 
@@ -82,14 +83,28 @@ const WebsitePage: React.FC = () => {
     }, [selectedProject]);
 
     return (
-        <div className="flex flex-col items-center justify-start md:mt-[-40px] mt-4 h-screen text-white relative overflow-hidden">
-            <h1 className="text-4xl font-bold mb-8 mt-10">Websites</h1>
+        <div className="flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
+            {/* <h1 className="text-4xl font-bold mb-8 mt-10">Websites</h1> */}
+            <h1 className="py-10 text-6xl font-extrabold mt-10 text-[#49A097]">
+                Websites
+            </h1>
 
             <div className="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
-                {/* Previous Button */}
+                {/* Previous Button hidden on mobile view, visible on desktop view */}
                 <button
                     onClick={handlePrev}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                    className="hidden md:flex absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                    aria-label="Previous Project"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                {/* Previous Button hidden on desktop view, visible on mobile view*/}
+                <button
+                    onClick={handlePrev}
+                    className="md:hidden absolute left-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                     aria-label="Previous Project"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -131,6 +146,8 @@ const WebsitePage: React.FC = () => {
                     <LinkButton label="UA Waterski Team" href={websites[currentIndex].link} />
                 ) : websites[currentIndex].id === 2 ? (
                     <LinkButton label="Code for Trees" href={websites[currentIndex].link} />
+                ) : websites[currentIndex].id === 3 ? (
+                    <LinkButton label="Snow Ski" href={websites[currentIndex].link} />
                 ) : (
                     <DisabledButton label="Not Implemented Yet" />
                 )}
@@ -189,16 +206,29 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         {/* Wrapper for Modal and Arrows */}
         <div className="relative flex justify-center items-center w-full h-full">
-            {/* Left Arrow */}
+
+            {/* left arrow button only shown on desktop view, hidden on mobile view */}
             <button
                 onClick={onPrev}
-                className="absolute left-72 mt-5 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-20 text-white shadow-lg border-0 hover:border hover:border-white"
-                aria-label="Previous Website"
+                className="hidden md:flex absolute left-72 mt-5 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                aria-label="Previous Project"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
+
+            {/* left arrow button only shown on mobile view, hidden on desktop view */}
+            <button
+                onClick={onPrev}
+                className="md:hidden absolute left-10 mt-80 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                aria-label="Previous Project"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
 
             {/* Modal Content */}
             <div className="bg-gray-900 text-white p-6 rounded-lg max-w-lg w-full relative border border-gray-400">
@@ -235,11 +265,22 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
                 </a>
             </div>
 
-            {/* Right Arrow */}
+            {/* right arrow button only shown on desktop view, hidden on mobile view */}
             <button
                 onClick={onNext}
-                className="absolute right-72 mt-5 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-20 text-white shadow-lg border-0 hover:border hover:border-white"
-                aria-label="Next Website"
+                className="hidden md:flex absolute right-72 mt-5 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                aria-label="Next Project"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            {/* right arrow button only shown on mobile view, hidden on desktop view */}
+            <button
+                onClick={onNext}
+                className="md:hidden absolute right-10 mt-80 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                aria-label="Previous Project"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -248,7 +289,6 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
         </div>
     </div>
 );
-
 
 
 interface LinkButtonProps {
@@ -263,6 +303,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({ label, href }) => (
             <div className="relative z-20 flex w-full rounded-[0.60rem] bg-blue-600 p-2">
                 <a
                     href={href}
+                    target='_blank'
                     className="bg-blue-600 hover:text-black text-white text-xs font-bold py-2 px-4 rounded w-full text-center"
                 >
                     {label}
