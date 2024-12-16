@@ -67,7 +67,7 @@ const ProjectPage: React.FC = () => {
     const selectedProject = projects[currentIndex];
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
+        <div className="mt-[-20px] min-h-screen flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
             {/* <h1 className="text-4xl font-bold mb-8 mt-10">Projects</h1> */}
             <h1 className="py-10 text-6xl font-extrabold mt-10 text-[#49A097]">
                 Projects

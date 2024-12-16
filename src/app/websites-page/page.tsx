@@ -83,7 +83,7 @@ const WebsitePage: React.FC = () => {
     }, [selectedProject]);
 
     return (
-        <div className="flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
+        <div className="mt-[-20px] flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
             {/* <h1 className="text-4xl font-bold mb-8 mt-10">Websites</h1> */}
             <h1 className="py-10 text-6xl font-extrabold mt-10 text-[#49A097]">
                 Websites
@@ -93,7 +93,7 @@ const WebsitePage: React.FC = () => {
                 {/* Previous Button hidden on mobile view, visible on desktop view */}
                 <button
                     onClick={handlePrev}
-                    className="hidden md:flex absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                    className="hidden md:flex absolute left-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                     aria-label="Previous Project"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -128,16 +128,29 @@ const WebsitePage: React.FC = () => {
                     ))}
                 </motion.div>
 
-                {/* Next Button */}
+                {/* Next Button hidden on mobile view */}
                 <button
                     onClick={handleNext}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                    className="hidden md:flex absolute right-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                     aria-label="Next Project"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                     </svg>
                 </button>
+
+                {/* Next Button hidden on desktop view */}
+                <button
+                    onClick={handleNext}
+                    className="md:hidden absolute right-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                    aria-label="Next Project"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                
             </div>
 
             {/* Link Button */}
@@ -297,7 +310,7 @@ interface LinkButtonProps {
 }
 
 const LinkButton: React.FC<LinkButtonProps> = ({ label, href }) => (
-    <div className="mx-auto flex w-full max-w-lg items-center justify-center mt-8">
+    <div className="mx-auto flex w-full max-w-lg items-center justify-center mt-0">
         <div className="relative z-10 flex w-full cursor-pointer items-center overflow-hidden rounded-xl border border-slate-800 p-[1.5px]">
             <div className="animate-rotate absolute inset-0 h-full w-full rounded-full bg-[conic-gradient(#0ea5e9_20deg,transparent_120deg)]"></div>
             <div className="relative z-20 flex w-full rounded-[0.60rem] bg-blue-600 p-2">
