@@ -6,6 +6,7 @@ import Image, { StaticImageData } from 'next/image';
 import TetrisImage from '../../components/images/tetris.svg';
 import PlaceholderImage from '../../components/images/placeholderProjects.svg';
 import GomokuImage from '../../components/images/gomoku.svg';
+import proceduralProjectImage from '../../components/images/delete.png'
 
 interface Project {
     id: number;
@@ -46,7 +47,7 @@ const ProjectPage: React.FC = () => {
             id: 4,
             title: 'Advanced Procedural Terrain',
             description: 'This will be an ongoing test project for a more advanced project for procedural terrain generation with Three.js.',
-            image: PlaceholderImage,
+            image: proceduralProjectImage,
             link: '/procedural-terrain-page',
         }
     ], []);
@@ -66,8 +67,11 @@ const ProjectPage: React.FC = () => {
     const selectedProject = projects[currentIndex];
 
     return (
-        <div className="flex flex-col items-center justify-start md:mt-[-40px] mt-4 h-screen text-white relative overflow-hidden">
-            <h1 className="text-4xl font-bold mb-8 mt-10">Projects</h1>
+        <div className="mt-[-20px] min-h-screen flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
+            {/* <h1 className="text-4xl font-bold mb-8 mt-10">Projects</h1> */}
+            <h1 className="py-10 text-6xl font-extrabold mt-10 text-[#49A097]">
+                Projects
+            </h1>
 
             <div className="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
                 {/* Previous Button */}
@@ -136,9 +140,8 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive }) => (
     <motion.div
-        className={`min-w-[300px] mx-8 transition-transform duration-300 ${
-            isActive ? 'scale-105' : 'scale-90 opacity-50'
-        }`}
+        className={`min-w-[300px] mx-8 transition-transform duration-300 ${isActive ? 'scale-105' : 'scale-90 opacity-50'
+            }`}
     >
         <div className="bg-gray-800 text-white rounded-lg p-6 shadow-2xl transform transition-transform duration-300 hover:scale-105">
             <Image

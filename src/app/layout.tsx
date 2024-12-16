@@ -9,7 +9,7 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
     title: 'Portfolio Website',
-    description: 'TEMPORARY DESCRIPTION ABOUT MY PORTFOLIO WEBSITE',
+    description: 'Jeongbin Sonapos;s portfolio website.',
 };
 
 export default function RootLayout({
@@ -22,7 +22,7 @@ export default function RootLayout({
             <body className={dmSans.className}>
                 <div className='min-h-screen flex flex-col'>
                     <Navbar />
-                    <div className='flex-grow md:pt-10'>
+                    <div className='flex-grow'>
                         {children}
                     </div>
                     <Footer />

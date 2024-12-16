@@ -45,7 +45,7 @@ export default function Navbar() {
                 {/* Desktop Navigation Links (hidden on mobile) */}
                 <div className="hidden md:flex space-x-8">
                     <Link href="/" className="text-white text-lg hover:text-gray-400 transition duration-300">
-                        My Portfolio
+                        Home
                     </Link>
                     <Link href="/about-me-page" className="text-white text-lg hover:text-gray-400 transition duration-300">
                         About Me

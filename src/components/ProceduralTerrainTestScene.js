@@ -19,11 +19,12 @@ export default function initializeScene(canvas) {
         ambientLightIntensity: 0.5,
         directionalLightIntensity: 1.5,
         pointLightIntensity: 1.0,
+        backgroundColor: "#0b1d2d",
     };
 
     // Scene
     const scene = new THREE.Scene();
-
+    scene.background = new THREE.Color(debugObject.backgroundColor);
     // Camera
     const sizes = {
         width: window.innerWidth,
@@ -107,6 +108,7 @@ export default function initializeScene(canvas) {
     gui.addColor(debugObject, "colorGrass").onChange(() => uniforms.uColorGrass.value.set(debugObject.colorGrass)).name("Grass");
     gui.addColor(debugObject, "colorSnow").onChange(() => uniforms.uColorSnow.value.set(debugObject.colorSnow)).name("Snow");
     gui.addColor(debugObject, "colorRock").onChange(() => uniforms.uColorRock.value.set(debugObject.colorRock)).name("Rock");
+    gui.addColor(debugObject, "backgroundColor").onChange(() => scene.background.set(debugObject.backgroundColor)).name("Background");
 
     // Water
     const water = new THREE.Mesh(
@@ -172,6 +174,7 @@ export default function initializeScene(canvas) {
         controls.update();
         renderer.render(scene, camera);
         requestAnimationFrame(tick);
+
 
     };
     tick();
