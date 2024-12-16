@@ -46,7 +46,7 @@ const WebsitePage: React.FC = () => {
             description: "This is a C#, .NET tech stack website built for CS 330 Web Development's Final Project",
             image: snowskiImage,
             link: 'https://cs330-fall2024-finalproject.azurewebsites.net/',
-            extraInfo: "Built by Anastasia Spencer, Brooke Boskus, Collin [], Owen []. Deployed through Microsoft Azure. This was built using the student plan and utilizes OpenAI and OpenWeather apis. My personal contributions for this website includes handling login and register along with email confirmation, styling the initial frontend of the website, continuation of Chat Bot improvements based on the code provided by Anastasia Spencer. This website was a great experience in exploring other ways to do web development! I also added the cybersecurity checks I implemented in the Capstone website into this 330 website as well. Note: Snow Ski is not a real team! ",
+            extraInfo: "Built by Anastasia Spencer, Brooke Boskus, Collin Price, Owen McMenaman. Deployed through Microsoft Azure. This was built using the student plan and utilizes OpenAI and OpenWeather apis. My personal contributions for this website includes handling login and register along with email confirmation, styling the initial frontend of the website, continuation of Chat Bot improvements based on the code provided by Anastasia Spencer. This website was a great experience in exploring other ways to do web development! I also added the cybersecurity checks I implemented in the Capstone website into this 330 website as well. Note: Snow Ski is not a real team! ",
         },
     ], []);
 
