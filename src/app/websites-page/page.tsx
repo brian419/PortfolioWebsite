@@ -7,7 +7,7 @@ import uawaterskihomepageImage from '../../components/images/uawaterskihomepage.
 import codefortreeshomepageImage from '../../components/images/codefortreeshomepage.png';
 import tempWebsiteImage from '../../components/images/placeholderProjects.svg';
 import snowskiImage from '../../components/images/snowskiimage.png'
-import snowSkiVideo from '../../components/videos/CS330FinalProjectRecording.mp4'
+import snowSkiVideo from '../../../public/videos/CS330FinalProjectRecording.mp4';
 
 interface Project {
     id: number;
