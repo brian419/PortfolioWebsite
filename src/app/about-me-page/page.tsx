@@ -11,28 +11,28 @@ export default function AboutMe() {
         let animationFrame: number;
         let lastMoveTime = 0;
         const delay = 6000; // move every 6 seconds
-    
+
         const moveRabbit = (time: number) => {
             if (time - lastMoveTime >= delay) {
                 const rabbitWidth = 60;
                 const rabbitHeight = 60;
                 const viewportWidth = window.innerWidth;
                 const viewportHeight = window.innerHeight;
-    
+
                 const newTop = Math.random() * (viewportHeight - rabbitHeight);
                 const newLeft = Math.random() * (viewportWidth - rabbitWidth);
-    
+
                 setPosition({ top: newTop, left: newLeft });
                 lastMoveTime = time; // Update the last move time
             }
-    
+
             animationFrame = requestAnimationFrame(moveRabbit); // Continue the animation loop
         };
-    
+
         animationFrame = requestAnimationFrame(moveRabbit); // Start the animation loop
         return () => cancelAnimationFrame(animationFrame);  // Cleanup
     }, []);
-    
+
 
     return (
         <div className="min-h-screen flex flex-col text-gray-800 overflow-hidden">
@@ -73,28 +73,193 @@ export default function AboutMe() {
                         </p>
                     </div>
                 </div>
-            </section>
+                {/* Technical Stack / Skills Section */}
+                <br></br>
+                <br></br>
+                <br></br>
+                {/* <hr className="border-[#49A097] border-2 mt-10 mb-10"></hr> */}
+                <hr className="border-0 h-1 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 animate-gradient-x mt-10 mb-10"></hr>
 
-            {/* Skills Section */}
-            <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-20">
-                <div className="container mx-auto text-center">
-                    <h2 className="text-4xl font-bold text-[#49A097] mb-8">My Skills</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        <div className="bg-gray-800 p-6 rounded-lg">
-                            <h3 className="text-2xl font-bold mb-2">React.js</h3>
-                            <p className="text-gray-300">Creating interactive and dynamic user interfaces.</p>
+
+                <br></br>
+                <br></br>
+                <div className="container mx-auto text-center px-4">
+                    <h2 className="text-4xl font-extrabold text-[#7FB3AD] mb-8">
+                        Tech Stack
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {/* Frontend */}
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                React.js
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
                         </div>
-                        <div className="bg-gray-800 p-6 rounded-lg">
-                            <h3 className="text-2xl font-bold mb-2">Next.js</h3>
-                            <p className="text-gray-300">Developing server-side rendered web applications.</p>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                TypeScript
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
                         </div>
-                        <div className="bg-gray-800 p-6 rounded-lg">
-                            <h3 className="text-2xl font-bold mb-2">Three.js</h3>
-                            <p className="text-gray-300">Building immersive 3D experiences on the web.</p>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Next.js
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
                         </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Three.js
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Tailwind CSS
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                CSS
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                HTML
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Javascript
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        {/* Backend */}
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Node.js
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Express.js
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                MySQL: MongoDB & Amazon AWS (RDS)
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                RESTful APIs
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                TypeScript
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        {/* Tools */}
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Git
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                GitHub
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Visual Studio Code
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Figma
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
+                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
+                            <h3 className="text-2xl font-semibold text-white mb-4">
+                                Vercel
+                            </h3>
+                            <p className="text-gray-900 leading-relaxed">
+
+                            </p>
+                        </div>
+
                     </div>
                 </div>
             </section>
+
+
+            {/* what I know section */}
+            <hr className="border-0 h-1 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 animate-pulse2 mt-10 mb-10"></hr>
 
             {/* Rabbit */}
             <div
@@ -148,3 +313,4 @@ export default function AboutMe() {
         </div>
     );
 }
+

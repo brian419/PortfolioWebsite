@@ -7,6 +7,7 @@ import uawaterskihomepageImage from '../../components/images/uawaterskihomepage.
 import codefortreeshomepageImage from '../../components/images/codefortreeshomepage.png';
 import tempWebsiteImage from '../../components/images/placeholderProjects.svg';
 import snowskiImage from '../../components/images/snowskiimage.png'
+import snowSkiVideo from '../../components/videos/CS330FinalProjectRecording.mp4'
 
 interface Project {
     id: number;
@@ -15,6 +16,7 @@ interface Project {
     image: StaticImageData;
     link: string;
     extraInfo: string;
+    video?: string; // ? makes it optional!
 }
 
 const cardWidth = 340;
@@ -43,10 +45,11 @@ const WebsitePage: React.FC = () => {
         {
             id: 3,
             title: "Snow Ski",
-            description: "This is a C#, .NET tech stack website built for CS 330 Web Development's Final Project",
+            description: "This is a C#, .NET tech stack website built for CS 330 Web Development's Final Project.",
             image: snowskiImage,
             link: 'https://cs330-fall2024-finalproject.azurewebsites.net/',
-            extraInfo: "Built by Anastasia Spencer, Brooke Boskus, Collin Price, Owen McMenaman. Deployed through Microsoft Azure. This was built using the student plan and utilizes OpenAI and OpenWeather apis. My personal contributions for this website includes handling login and register along with email confirmation, styling the initial frontend of the website, continuation of Chat Bot improvements based on the code provided by Anastasia Spencer. This website was a great experience in exploring other ways to do web development! I also added the cybersecurity checks I implemented in the Capstone website into this 330 website as well. Note: Snow Ski is not a real team! ",
+            extraInfo: "NOTE: This website may not be accessible in the future as it was built using Azure's Student Plan and our group will not continue with this project since the class is over. However, in such a case, I have immortalized our project as a video!\n Built by Anastasia Spencer, Brooke Boskus, Collin Price, Owen McMenaman. Deployed through Microsoft Azure. This was built using the student plan and utilizes OpenAI and OpenWeather apis. My personal contributions for this website includes handling login and register along with email confirmation, styling the initial frontend of the website, continuation of Chat Bot improvements based on the code provided by Anastasia Spencer. This website was a great experience in exploring other ways to do web development! I also added the cybersecurity checks I implemented in the Capstone website into this 330 website as well.",
+            video: snowSkiVideo,
         },
     ], []);
 
@@ -256,6 +259,16 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
                     </svg>
                 </button>
 
+                {/* Display video if it exists */}
+                {project.video && (
+                    <div className="mt-4">
+                        <video controls autoPlay className="w-full rounded-lg">
+                            <source src={project.video} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                )}
+
                 {/* Modal Content */}
                 <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
                 <div className="border-b border-gray-400 my-4"></div>
@@ -338,3 +351,4 @@ const DisabledButton: React.FC<DisabledButtonProps> = ({ label }) => (
         {label}
     </button>
 );
+

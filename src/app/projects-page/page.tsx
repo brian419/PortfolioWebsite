@@ -7,6 +7,8 @@ import TetrisImage from '../../components/images/tetris.svg';
 import PlaceholderImage from '../../components/images/placeholderProjects.svg';
 import GomokuImage from '../../components/images/gomoku.svg';
 import proceduralProjectImage from '../../components/images/delete.png'
+import seaSceneImage from '../../components/images/seasceneimage.png'
+
 
 interface Project {
     id: number;
@@ -40,7 +42,7 @@ const ProjectPage: React.FC = () => {
             id: 3,
             title: 'The Sea',
             description: 'This will be a test project for using Three.js and learning procedural generations.',
-            image: PlaceholderImage,
+            image: seaSceneImage,
             link: '/sea-page',
         },
         {
@@ -192,3 +194,4 @@ const DisabledButton: React.FC<DisabledButtonProps> = ({ label }) => (
         {label}
     </button>
 );
+
