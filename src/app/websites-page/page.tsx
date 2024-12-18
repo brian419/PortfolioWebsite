@@ -33,7 +33,59 @@ const WebsitePage: React.FC = () => {
             description: "A website created by Anastasia Spencer, Brooke Boskus, Lilly Eide, and Jeongbin Son for the University of Alabama's waterski team.",
             image: uawaterskihomepageImage,
             link: 'https://www.uawaterski.com',
-            extraInfo: "Built using React.js, Node.js, Next.js, Express.js, and Tailwind CSS, and connected to an Amazon RDS MySQL database. The website is deployed through Vercel. My contributions include implementing secure login functionality using JWT tokens, creating a fully functional 'Contact Us' form, and developing a 'Forgot Password' page with the ability to reset passwords in the database. I also designed and implemented the 'Roster' page, which allows users to view team members from the database, with search and filter capabilities for enhanced usability. I also added a Super User (admin account) that can modify content directly within the website. Currently the admin account can delete and edit users and their uploaded information, but in the future, the admin account will have the ability to confirm account creations as well as modify content (images and texts). For handling cybersecurity cases, the registration also checks to see if the user has put a valid email address (associated with the University of Alabama) and no accounts using the email exploit trick can be registered (email+1@email.com). Additionally, I implemented a verification step that sends a confirmation link in an email to the registered user, so fake emails cannot verify and therefore cannot login. In the future, I will set up a way so that the admin account can further handle verification to ensure that only the members of the waterski team can sign up for an account on the website!",
+            extraInfo: `
+                <h3 class="text-lg font-bold text-[#52c77a]">Technologies Used:</h3>
+                <p>Built using <strong>React.js</strong>, <strong>Node.js</strong>, <strong>Next.js</strong>, <strong>Express.js</strong>, and <strong>Tailwind CSS</strong>, and connected to an Amazon RDS MySQL database. The website is deployed through Vercel.</p>
+                <br>
+
+                <h3 class="text-lg font-bold text-[#52c77a]">My Contributions:</h3>
+                <ul class="list-disc list-inside">
+                    <li>Implementing secure login functionality using JWT tokens</li>
+                    <li>Creating a fully functional 'Contact Us' form</li>
+                    <li>Developing a 'Forgot Password' page with the ability to reset passwords in the database</li>
+                    <li>Designing and implementing the 'Roster' page, which allows users to view team members from the database, with search and filter capabilities for enhanced usability</li>
+                    <li>Adding a Super User (admin account) that can modify content directly within the website.
+                        <ul class="list-disc list-inside ml-4">
+                            <li>Currently, an admin can delete users, edit user information (including their profile picture), as well as confirm / deny account registrations made by users.</li>
+                        </ul>
+                    </li>
+                    <li>Created Officers Resources Page which houses different sections that help the officers of the water ski team.
+                        <ul class="list-decimal list-inside ml-4">
+                            <li>Implemented Manage Members section that can toggle between Roster (page) and Confirm Member Registration Page while still being on the Officer Resources Page. This allows an admin to easily have access to the member roster, allowing the admin to delete users and edit user information as mentioned previously. The admin can also switch to Confirm Member Registration which holds a list of pending users, or returns text that says there are no pending users!</li>
+                            <li>Implemented Manage Notes section for officers to save notes from their meetings directly within the website. This section of the Officer Resources page currently allows an officer to delete and add new notes, but cannot edit a note afterwards currently.
+                        </ul>
+                    </li>
+                </ul>
+                <br>
+
+                <h3 class="text-lg font-bold text-[#52c77a]">Cybersecurity Measures:</h3>
+                <ul class="list-disc list-inside">
+                    <li>Registration checks for valid email addresses associated with the University of Alabama</li>
+                    <li>Prevention of accounts using the email exploit trick (email+1@email.com)</li>
+                    <li>Verification step that sends a confirmation link in an email to the registered user</li>
+                    <li>
+                        Verification step that sends a confirmation link in an email to the admin user where admin can confirm or deny an account creation within the Officer Resources page.
+                        <ul class="list-decimal list-inside ml-4">
+                            <li>Admin is initially taken to login page where they can login to the admin account. Then I handled automatic redirection to officer resources page after they login!</li>
+                        </ul>
+                    </li>
+                </ul>
+                <hr style="border: 0; height: 1px; background: linear-gradient(to right, #38bdf8, #6366f1, #ec4899); margin-top: 2.5rem; margin-bottom: 2.5rem;">
+
+                <h3 class="text-lg font-bold text-[#52c77a]">Future Plans:</h3>
+                <ul class="list-disc list-inside">
+                    <li>For the future, one of the first things I would like to focus on for this website is to allow the admin account modify texts and images within the website. Our initial set up did not have a headless CMS in mind, so I figure it would be a nice challenge to figure out a way for the admin account to change content on the website!</li>
+                    <li>Additionally, I need to focus on finishing the Officer Resources Page.
+                        <ul class="list-decimal list-inside ml-4">
+                            <li>For the Manage Notes section, I would like to add a feature that allows the officer to edit a note after it is created.</li>
+                            <li>A meeting notes section visible for logged in users (athletes) could also be a nice touch to the website. An admin could upload a note to be viewed by member type (athlete, officer)</li>
+                            <li>Depth Chart will need to be implemented. Skier rankings for the waterski team. View the performance and rankings of each team member based on their recent performances. </li>
+                            <li>Fundraising Addresses will need to be implemented. This can pull from Alumni Contacts as well as Roster Information. Users will have to be able to put in relative contact information, possibly within edit profile page (click on PFP on top right of Navbar if you're a user)</li>
+                            <li>Alumni Contacts will need to be implemented. This will showcase contact information of Alumnis (email, phone number, relative's contact information) that can be easily accessed by officers. </li>
+                        </ul>
+                    </li>
+                </ul>
+            `,
         },
         {
             id: 2,
@@ -154,7 +206,7 @@ const WebsitePage: React.FC = () => {
                     </svg>
                 </button>
 
-                
+
             </div>
 
             {/* Link Button */}
@@ -274,11 +326,25 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
                 <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
                 <div className="border-b border-gray-400 my-4"></div>
                 <div className="mt-2 text-white max-h-64 overflow-y-auto pr-2 space-y-4">
-                    {project.extraInfo.split('\n').map((paragraph, idx) => (
+                    {/* {project.extraInfo.split('\n').map((paragraph, idx) => (
                         <p key={idx} className="leading-relaxed text-gray-300">
                             {paragraph}
                         </p>
-                    ))}
+                    ))} */}
+                    {project.id === 1 ? (
+                        <div
+                            className="prose prose-sm prose-invert"
+                            dangerouslySetInnerHTML={{ __html: project.extraInfo }}
+                        />
+                    ) : project.id === 4 ? (
+                        <div dangerouslySetInnerHTML={{ __html: project.extraInfo }} />
+                    ) : (
+                        project.extraInfo.split('\n').map((paragraph, idx) => (
+                            <p key={idx} className="leading-relaxed text-gray-300">
+                                {paragraph}
+                            </p>
+                        ))
+                    )}
                 </div>
 
                 {/* Visit Website */}

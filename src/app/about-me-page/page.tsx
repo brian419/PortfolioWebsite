@@ -58,7 +58,7 @@ export default function AboutMe() {
 
                 <div className="flex flex-wrap justify-center items-start space-y-8 md:space-y-0 md:space-x-8">
                     {/* Personal Section */}
-                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md bg-[#AEADBD]">
+                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md">
                         <h2 className="text-3xl font-bold text-[#49A097] mb-4">Personal Background</h2>
                         <p className="text-gray-700 leading-relaxed">
                             I was born and raised in South Korea and have spent over 15 years in the United States, which has given me a unique perspective on both cultures. With my bilingual skills, I have a deep passion for helping bridge communication gaps through technology and language.
@@ -66,7 +66,7 @@ export default function AboutMe() {
                     </div>
 
                     {/* Professional Section */}
-                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md bg-[#AEADBD]">
+                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md">
                         <h2 className="text-3xl font-bold text-[#49A097] mb-4">Professional Journey</h2>
                         <p className="text-gray-700 leading-relaxed">
                             I am a Computer Science major at the University of Alabama, currently interning at ChemTalk where I build web applications to promote chemistry education. With experience in React.js, Next.js, and Tailwind CSS, I aim to develop intuitive and impactful user experiences.
@@ -80,6 +80,23 @@ export default function AboutMe() {
                 {/* <hr className="border-[#49A097] border-2 mt-10 mb-10"></hr> */}
                 <hr className="border-0 h-1 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 animate-gradient-x mt-10 mb-10"></hr>
 
+                {/* Legend Section*/}
+                <div className="container mx-auto text-center px-4">
+                    <div className="flex justify-center space-x-8">
+                        <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 "></div>
+                            <span className="text-lg text-[#B0C3AA]">Frontend</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 "></div>
+                            <span className="text-lg text-[#A6C5D6]">Backend</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <div className="w-4 h-4 \"></div>
+                            <span className="text-lg text-[#C3A7D6]">Tools</span>
+                        </div>
+                    </div>
+                </div>
 
                 <br></br>
                 <br></br>
