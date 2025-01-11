@@ -16,9 +16,9 @@ const config: Config = {
             animation: {
                 rotate: "rotate 10s linear infinite",
                 pulse: "pulse 10s ease-in-out infinite", //pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite
-                bounce: "bounce 5s infinite",
-                bounce2: "bounce2 1s infinite",
-                rainbow: 'rainbow 5s linear infinite'
+                bounce: "bounce 7s infinite",
+                bounce2: "bounce2 7s infinite 1s",
+                rainbow: 'rainbow 10s linear infinite'
             },
             keyframes: {
                 rotate: {
@@ -26,12 +26,16 @@ const config: Config = {
                     "100%": { transform: "rotate(-360deg) scale(10)" },
                 },
                 rainbow: {
-                    '0%, 100%': { color: '#FF0000' }, // r
-                    '16%': { color: '#FF7F00' }, // o
-                    '33%': { color: '#FFFF00' }, // y
-                    '50%': { color: '#00FF00' }, // g
-                    '66%': { color: '#0000FF' }, // b
-                    '83%': { color: '#8B00FF' }, // p
+                    // '0%, 100%': { color: '#FF0000' }, // r
+                    // '16%': { color: '#FF7F00' }, // o
+                    // '33%': { color: '#FFFF00' }, // y
+                    // '50%': { color: '#00FF00' }, // g
+                    // '66%': { color: '#0000FF' }, // b
+                    // '83%': { color: '#8B00FF' }, // p
+                    // gray 808080
+                    '0%, 100%': { color: '#706190' }, // purple
+                    '25%': { color: '#61908b' }, // blue
+                    '50%': { color: '#6e9061' }, // green
                 },
                 bounce2: {
                     '0%, 100%': {
