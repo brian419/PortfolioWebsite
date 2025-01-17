@@ -39,9 +39,11 @@ export default function AboutMe() {
             {/* About Me Section */}
             <section className="container mx-auto px-4 py-20">
                 <div className="text-center mb-12">
-                    <h1 className="text-5xl font-extrabold text-[#49A097] mb-6">About Me</h1>
+                    <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#49A097] to-[#1D976C] mb-6 shadow-xl p-4">
+                        About Me
+                    </h1>
                     <p className="text-lg text-white max-w-3xl mx-auto">
-                        Hi, I&apos;m Jeongbin Son, a passionate web developer specializing in creating interactive web applications with React.js, Next.js, and Three.js. I enjoy building websites and learning new technologies to push the limits of what&apos;s possible in web development.
+                        Welcome to my portfolio! I&apos;m Jeongbin (Brian) Son, an aspiring web developer.
                     </p>
                 </div>
 
@@ -56,20 +58,21 @@ export default function AboutMe() {
                     />
                 </div>
 
-                <div className="flex flex-wrap justify-center items-start space-y-8 md:space-y-0 md:space-x-8">
+                <div className="flex flex-wrap justify-center items-stretch space-y-8 md:space-y-0 md:space-x-8">
                     {/* Personal Section */}
-                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md">
-                        <h2 className="text-3xl font-bold text-[#49A097] mb-4">Personal Background</h2>
+                    <div className="bg-[#f6fff7] shadow-lg rounded-lg p-6 flex-1 border-t-4 border-[#49A097]">
+                        <h2 className="text-3xl font-bold text-[#49A097] mb-4 text-center">Personal Background</h2>
                         <p className="text-gray-700 leading-relaxed">
-                            I was born and raised in South Korea and have spent over 15 years in the United States, which has given me a unique perspective on both cultures. With my bilingual skills, I have a deep passion for helping bridge communication gaps through technology and language.
+                            I was born in South Korea but have spent over 15 years in the United States, which has given me a unique perspective on both cultures. I&apos;ve also received my green card and embraced opportunities to grow in a multicultural environment. With my bilingual skills, I am passionate about bridging communication gaps through technology. Beyond this, I aspire to make a broader impact by helping communities through my software solutions.
                         </p>
                     </div>
 
                     {/* Professional Section */}
-                    <div className="bg-white shadow-lg rounded-lg p-6 max-w-md">
-                        <h2 className="text-3xl font-bold text-[#49A097] mb-4">Professional Journey</h2>
+                    {/* was using bg-[#d7f3e4] for the first div but changed for now */}
+                    <div className="bg-[#f6fff7] shadow-lg rounded-lg p-6 flex-1 border-t-4 border-[#49A097]">
+                        <h2 className="text-3xl font-bold text-[#49A097] mb-4 text-center">Professional Journey</h2>
                         <p className="text-gray-700 leading-relaxed">
-                            I am a Computer Science major at the University of Alabama, currently interning at ChemTalk where I build web applications to promote chemistry education. With experience in React.js, Next.js, and Tailwind CSS, I aim to develop intuitive and impactful user experiences.
+                            I have studied Computer Science at the University of Alabama, where I built a strong foundation in software development. My journey into web development began during my internship at ChemTalk, where I first learned to create web applications, sparking my interest in the field. Since then, I have revamped my personal portfolio website with a modern tech stack and collaborated on a full stack web application for UA&apos;s Waterski Team. I aspire to continue growing as a software developer to create meaningful solutions that drive positive change!
                         </p>
                     </div>
                 </div>
@@ -104,10 +107,11 @@ export default function AboutMe() {
                     <h2 className="text-4xl font-extrabold text-[#7FB3AD] mb-8">
                         Tech Stack
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {/* sm:grid-cols-2 lg:grid-cols-3 gap-8 */}
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {/* Frontend */}
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 React.js
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -115,8 +119,8 @@ export default function AboutMe() {
                             </p>
                         </div>
 
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                        <div lang="en" className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 TypeScript
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -125,7 +129,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Next.js
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -134,7 +138,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Three.js
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -143,7 +147,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Tailwind CSS
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -152,7 +156,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 CSS
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -161,7 +165,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 HTML
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -170,7 +174,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Javascript
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -180,7 +184,7 @@ export default function AboutMe() {
 
                         {/* Backend */}
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Node.js
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -189,7 +193,8 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Express.js
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -198,7 +203,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 MySQL: MongoDB & Amazon AWS (RDS)
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -207,7 +212,8 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 RESTful APIs
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -216,7 +222,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 TypeScript
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -226,7 +232,7 @@ export default function AboutMe() {
 
                         {/* Tools */}
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Git
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -235,7 +241,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 GitHub
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -244,7 +250,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Visual Studio Code
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -253,7 +259,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Figma
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -262,7 +268,7 @@ export default function AboutMe() {
                         </div>
 
                         <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4">
+                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
                                 Vercel
                             </h3>
                             <p className="text-gray-900 leading-relaxed">
@@ -276,7 +282,7 @@ export default function AboutMe() {
 
 
             {/* what I know section */}
-            <hr className="border-0 h-1 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 animate-pulse2 mt-10 mb-10"></hr>
+            {/* <hr className="border-0 h-1 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 animate-pulse2 mt-10 mb-10"></hr> */}
 
             {/* Rabbit */}
             <div

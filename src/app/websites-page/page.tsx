@@ -176,13 +176,19 @@ const WebsitePage: React.FC = () => {
     }, [selectedProject]);
 
     return (
-        <div className="mt-[-20px] flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
-            {/* <h1 className="text-4xl font-bold mb-8 mt-10">Websites</h1> */}
-            <h1 className="py-10 text-6xl font-extrabold mt-10 text-[#49A097]">
-                Websites
-            </h1>
-
-            <div className="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
+        <div className="mt-[-20px] mb-60 flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
+            <section className="container mx-auto px-4 py-20">
+                <div className="text-center mb-12">
+                    <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#49A097] to-[#1D976C] mb-6 shadow-xl p-4">
+                        Websites
+                    </h1>
+                    {/* <p className="text-lg text-white max-w-3xl mx-auto">
+                        Figure out some message to put here
+                    </p> */}
+                </div>
+            </section>
+            
+            <div className="relative flex items-center justify-center w-full max-w-4xl overflow-visible">
                 {/* Previous Button hidden on mobile view, visible on desktop view */}
                 <button
                     onClick={handlePrev}
@@ -247,7 +253,7 @@ const WebsitePage: React.FC = () => {
             </div>
 
             {/* Link Button */}
-            <div className="mt-8">
+            <div className="absolute bottom-0 flex justify-center -p-72">
                 {websites[currentIndex].id === 1 ? (
                     <LinkButton label="UA Waterski Team" href={websites[currentIndex].link} />
                 ) : websites[currentIndex].id === 2 ? (
@@ -316,7 +322,7 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
             {/* left arrow button only shown on desktop view, hidden on mobile view */}
             <button
                 onClick={onPrev}
-                className="hidden md:flex absolute left-72 mt-5 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                className="hidden md:flex absolute left-72 mt-32 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                 aria-label="Previous Project"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -406,7 +412,7 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
             {/* right arrow button only shown on desktop view, hidden on mobile view */}
             <button
                 onClick={onNext}
-                className="hidden md:flex absolute right-72 mt-5 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                className="hidden md:flex absolute right-72 mt-32 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                 aria-label="Next Project"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">

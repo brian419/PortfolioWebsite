@@ -67,10 +67,15 @@ export default function Contact() {
         <div className="min-h-screen flex flex-col text-gray-800">
             <section className="container mx-auto px-4 py-20">
                 <div className="text-center mb-12">
-                    <h1 className="text-5xl font-extrabold text-[#49A097] mb-6">Contact Me</h1>
+                    <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#49A097] to-[#1D976C] mb-6 shadow-xl p-4">
+                        Contact Form
+                    </h1>                    
                     <p className="text-lg text-white max-w-3xl mx-auto">
                         I would love to hear from you! Whether you have a question, a project you’d like to discuss, or just want to say hello, feel free to get in touch.
                     </p>
+                    <br></br>
+                    <br></br>
+
                 </div>
 
                 {/* Contact Form */}

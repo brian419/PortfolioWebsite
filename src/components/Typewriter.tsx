@@ -40,18 +40,18 @@ const Typewriter: React.FC<TypewriterProps> = ({ text, speed = 100, id }) => {
     const getClassName = () => {
         switch (id) {
             case 'home-page-intro-text':
-                return 'text-5xl font-extrabold mb-6 text-[#49A097]';
-            // case 'home-page-extra-text':
-            //     return 'text-2xl mb-12 text-gray-300 max-w-3xl mx-auto';
+                return 'text-5xl font-extrabold mb-6 text-[#49A097] text-center';
+
             default:
-                return 'text-5xl text-transparent';
+                return 'text-5xl text-transparent text-center';
                 // goal is to display a fake sentence that's not visible to the eye that is also not clickable
 
         }
     };
-
+    
     return (
-        <div style={{ minHeight: '3rem', textAlign: 'left', width: '100%', paddingLeft: '12rem' }}> 
+
+        <div className="w-full flex justify-center px-4 sm:px-6 lg:px-8" style={{ minHeight: '3rem' }}> 
             <p id={id} className={getClassName()} style={{ whiteSpace: 'pre-line', cursor: 'none', display: 'inline-block' }}>
                 {displayedText || fakeText}
             </p>

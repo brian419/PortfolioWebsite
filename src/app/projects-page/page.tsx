@@ -71,9 +71,19 @@ const ProjectPage: React.FC = () => {
     return (
         <div className="mt-[-20px] min-h-screen flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
             {/* <h1 className="text-4xl font-bold mb-8 mt-10">Projects</h1> */}
-            <h1 className="py-10 text-6xl font-extrabold mt-10 text-[#49A097]">
+            {/* <h1 className="py-10 text-6xl font-extrabold mt-10 text-[#49A097]">
                 Projects
-            </h1>
+            </h1> */}
+            <section className="container mx-auto px-4 py-20">
+                <div className="text-center mb-12">
+                    <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#49A097] to-[#1D976C] mb-6 shadow-xl p-4">
+                        Projects
+                    </h1>
+                    {/* <p className="text-lg text-white max-w-3xl mx-auto">
+                        Figure out some message to put here
+                    </p> */}
+                </div>
+            </section>
 
             <div className="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
                 {/* Previous Button */}
