@@ -5,10 +5,11 @@ import { motion } from 'framer-motion';
 import Image, { StaticImageData } from 'next/image';
 import uawaterskihomepageImage from '../../components/images/uawaterskihomepage.png';
 import codefortreeshomepageImage from '../../components/images/codefortreeshomepage.png';
-import tempWebsiteImage from '../../components/images/placeholderProjects.svg';
+// import tempWebsiteImage from '../../components/images/placeholderProjects.svg';
 import snowskiImage from '../../components/images/snowskiimage.png'
 // import snowSkiVideo from '../../../public/videos/CS330FinalProjectRecording.mp4';
 const snowSkiVideo = '/videos/CS330FinalProjectRecording.mp4';
+import infoCircleSVG from '../../components/images/info-circle-svgrepo-com.svg';
 
 interface Project {
     id: number;
@@ -17,7 +18,7 @@ interface Project {
     image: StaticImageData;
     link: string;
     extraInfo: string;
-    video?: string; // ? makes it optional!
+    video?: string; // '?' makes it optional
 }
 
 const cardWidth = 340;
@@ -25,6 +26,7 @@ const cardWidth = 340;
 const WebsitePage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [isExtraInfoActive, setIsExtraInfoActive] = useState(false);
 
     const websites: Project[] = useMemo(() => [
         {
@@ -83,6 +85,7 @@ const WebsitePage: React.FC = () => {
                             </ul>
                         </li>
                     </ul>
+                    <br />
                 </div>
             `,
         },
@@ -143,6 +146,9 @@ const WebsitePage: React.FC = () => {
         },
     ], []);
 
+    // console.log(websites);
+
+
     const handleNext = () => {
         const nextIndex = currentIndex === websites.length - 1 ? 0 : currentIndex + 1;
         setCurrentIndex(nextIndex);
@@ -161,99 +167,121 @@ const WebsitePage: React.FC = () => {
 
     const handleModalOpen = (project: Project) => {
         setSelectedProject(project);
+        setIsExtraInfoActive(true);
     };
 
     const handleModalClose = () => {
         setSelectedProject(null);
+        setIsExtraInfoActive(false);
     };
-
-    useEffect(() => {
-        if (selectedProject) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "auto";
-        }
-    }, [selectedProject]);
 
     return (
         <div className="mt-[-20px] mb-60 flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
-            <section className="container mx-auto px-4 py-20">
+            <section className="container mx-auto px-4 pt-20">
                 <div className="text-center mb-12">
                     <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#49A097] to-[#1D976C] mb-6 shadow-xl p-4">
                         Websites
                     </h1>
                     {/* <p className="text-lg text-white max-w-3xl mx-auto">
-                        Figure out some message to put here
-                    </p> */}
+                    Figure out some message to put here
+                </p> */}
                 </div>
             </section>
-            
-            <div className="relative flex items-center justify-center w-full max-w-4xl overflow-visible">
-                {/* Previous Button hidden on mobile view, visible on desktop view */}
-                <button
-                    onClick={handlePrev}
-                    className="hidden md:flex absolute left-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
-                    aria-label="Previous Project"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
 
-                {/* Previous Button hidden on desktop view, visible on mobile view*/}
-                <button
-                    onClick={handlePrev}
-                    className="md:hidden absolute left-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
-                    aria-label="Previous Project"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
+            {/* information button */}
+            <div className="p-4">
+                <div className="flex items-center justify-center bg-gray-700 ">
+                    <Image src={infoCircleSVG} alt="Information Circle" width={20} height={20} className="ml-4" />
+                    <button
+                        // onClick={() => setIsExtraInfoActive(!isExtraInfoActive)}
+                        className="p-2 mr-3 rounded-lg text-white ml-2 pointer-events-none"
+                    >
+                        {/* {isExtraInfoActive ? "Close Extra Info" : "Click on a website card to read more information!"} */}
+                        Click on a website card to view more details about the website!
+                    </button>
+                </div>
+                <br />
+            </div>
+
+            {/* min-height: calc(100% + 40px); */}
+            <div className="relative flex items-center justify-center w-full max-w-4xl h-auto overflow-hidden">
+
+                {/* Left Arrow for Desktop View*/}
+                {!isExtraInfoActive && (
+                    <button
+                        onClick={handlePrev}
+                        className="hidden md:flex absolute left-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                        aria-label="Previous Project"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                )}
 
                 {/* Project Cards */}
-                <motion.div
-                    className="flex"
-                    animate={{ x: `calc(50% - ${currentIndex * (cardWidth + 32)}px - ${cardWidth / 2}px)` }}
-                    transition={{ type: "spring", stiffness: 50, damping: 20 }}
-                >
-                    {websites.map((project, index) => (
-                        <ProjectCard
-                            key={project.id}
-                            project={project}
-                            isActive={index === currentIndex}
-                            onClick={() => handleModalOpen(project)}
-                        />
-                    ))}
-                </motion.div>
+                <div className="relative flex items-center justify-center w-full h-full">
+                    <motion.div
+                        className="flex h-[600px]]"
+                        animate={{ x: `calc(50% - ${currentIndex * (cardWidth + 32)}px - ${cardWidth / 2}px)` }}
+                        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+                    >
+                        {websites.map((project, index) => (
+                            <ProjectCard
+                                key={project.id}
+                                project={project}
+                                isActive={index === currentIndex}
+                                onClick={() => handleModalOpen(project)}
+                            />
+                        ))}
+                    </motion.div>
+                </div>
 
-                {/* Next Button hidden on mobile view */}
-                <button
-                    onClick={handleNext}
-                    className="hidden md:flex absolute right-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
-                    aria-label="Next Project"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
+                {/* Right Arrow (Desktop view) */}
+                {!isExtraInfoActive && (
+                    <button
+                        onClick={handleNext}
+                        className="hidden md:flex absolute right-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                        aria-label="Next Project"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                )}
 
-                {/* Next Button hidden on desktop view */}
-                <button
-                    onClick={handleNext}
-                    className="md:hidden absolute right-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
-                    aria-label="Next Project"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
+                {/* Right Arrow (Mobile view) */}
+                {!isExtraInfoActive && (
+                    <button
+                        onClick={handleNext}
+                        className="md:hidden absolute right-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                        aria-label="Next Project"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                )}
+
+                {/* Left Arrow (Mobile view) */}
+                {!isExtraInfoActive && (
+                    <button
+                        onClick={handlePrev}
+                        className="md:hidden absolute left-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                        aria-label="Previous Project"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                )}
 
 
             </div>
 
-            {/* Link Button */}
-            <div className="absolute bottom-0 flex justify-center -p-72">
+
+            {/* link buttons to link the websites to their https link */}
+            <div className="mt-10">
                 {websites[currentIndex].id === 1 ? (
                     <LinkButton label="UA Waterski Team" href={websites[currentIndex].link} />
                 ) : websites[currentIndex].id === 2 ? (
@@ -279,6 +307,7 @@ const WebsitePage: React.FC = () => {
 };
 
 
+
 export default WebsitePage;
 
 interface ProjectCardProps {
@@ -287,25 +316,36 @@ interface ProjectCardProps {
     onClick: () => void;
 }
 
+// scale-105 and scale-90 or scale-90 and scale-75
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive, onClick }) => (
     <motion.div
         onClick={onClick}
-        className={`min-w-[300px] mx-8 transition-transform duration-300 ${isActive ? 'scale-105' : 'scale-90 opacity-50'}`}
+        className={`cursor-pointer min-w-[300px] max-w-[340px] mx-8 transition-transform duration-300 ${isActive ? 'scale-100' : 'scale-90 opacity-50'}`}
     >
-        <div className="relative perspective bg-gray-800 text-white rounded-lg p-6 shadow-2xl transform transition-transform duration-300 hover:scale-105">
+        <div className="cursor-text max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 space-y-4 mt-4 relative perspective bg-gray-800 text-white rounded-lg p-4 shadow-2xl transform transition-transform duration-300 border border-transparent min-h-[450px]">
+            {/* Image */}
             <Image
                 src={project.image}
                 alt={project.title}
                 width={300}
                 height={200}
-                className="rounded-t-lg object-cover"
+                className="rounded-t-lg object-cover w-full"
             />
+            {/* Title */}
             <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
             <div className="border-b border-gray-400 my-4"></div>
-            <p className="mt-2 text-white">{project.description}</p>
+            {/* Scrollable Content */}
+            {/* used to have this in the below classname for the div
+            cursor-text mt-2 text-white max-h-32 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 
+            */}
+            <div className="">
+                <p>{project.description}</p>
+                {/* <div dangerouslySetInnerHTML={{ __html: project.extraInfo }} /> */}
+            </div>
         </div>
     </motion.div>
 );
+
 
 interface ModalProps {
     project: Project;
@@ -368,7 +408,7 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
                 {/* Modal Content */}
                 <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
                 <div className="border-b border-gray-400 my-4"></div>
-                <div className="mt-2 text-white max-h-64 overflow-y-auto pr-2 space-y-4">
+                <div className="cursor-text scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 mt-2 text-white max-h-64 overflow-y-auto pr-2 space-y-4">
                     {/* {project.extraInfo.split('\n').map((paragraph, idx) => (
                         <p key={idx} className="leading-relaxed text-gray-300">
                             {paragraph}
