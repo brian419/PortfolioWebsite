@@ -135,7 +135,7 @@ export default function Contact() {
                             ></textarea>
                         </div>
                         {/* user can send attachment(s) in the email */}
-                        <div className="mb-6">
+                        {/* <div className="mb-6">
                             <label htmlFor="attachment" className="cursor-pointer border-2 border-black rounded-lg p-2 flex justify-between items-center">
                                 Attachment(s) <span className="text-gray-500">(Optional)</span>
                                 <input
@@ -158,7 +158,7 @@ export default function Contact() {
                                     </ul>
                                 </div>
                             )}
-                        </div>
+                        </div> */}
 
                         {/* send message button */}
                         <div className="text-center">
