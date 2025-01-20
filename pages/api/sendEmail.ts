@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import multiparty from 'multiparty';
+// import multiparty from 'multiparty';
+import multiparty, { File as MultipartyFile } from 'multiparty';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 
