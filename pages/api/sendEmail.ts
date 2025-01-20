@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
             });
 
-            const nodemailerAttachments = attachments.map((file: any) => ({
+            const nodemailerAttachments = attachments.map((file) => ({
                 filename: file.originalFilename,
                 path: file.path,
             }));
