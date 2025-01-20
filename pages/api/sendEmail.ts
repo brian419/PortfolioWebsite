@@ -25,7 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // const attachment = files.attachment?.[0]; // grab first file, if any
 
             // const attachments = files.attachment || [];
-            const attachments = files.attachments || [];
+            // const attachments = files.attachments || [];
+            const attachments = (files.attachments || []) as MultipartyFile[]; 
+
 
 
             if (!name || !email || !message) {
@@ -118,7 +120,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(500).json({ error: 'Error sending email.' });
             } finally {
                 // delete all temporary files
-                attachments.forEach((file: any) => {
+                attachments.forEach((file) => {
                     if (file.path) {
                         fs.unlinkSync(file.path); // Delete the temporary file
                     }
