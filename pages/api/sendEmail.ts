@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
 
-            const maxFileSize = 15 * 1024 * 1024; // 15MB
+            const maxFileSize = 5 * 1024 * 1024; // 5MB
 
             for (const file of attachments) {
                 if (file.size > maxFileSize) {
