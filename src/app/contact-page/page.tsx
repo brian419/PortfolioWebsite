@@ -23,8 +23,13 @@ export default function Contact() {
             formData.append('attachments', file); // 
         });
 
-        const apiUrl = process.env.NODE_ENV === 'production'
-            ? 'https://jeongbinson.com/api/sendEmail'
+        // const apiUrl = process.env.NODE_ENV === 'production'
+        //     ? 'https://jeongbinson.com/api/sendEmail'
+        //     : '/api/sendEmail';
+
+        const apiUrl = (process.env.NODE_ENV === 'production' && 
+            (window.location.origin === 'https://jeongbinson.com' || window.location.origin === 'https://dev.jeongbinson.com'))
+            ? `${window.location.origin}/api/sendEmail`
             : '/api/sendEmail';
 
         try {
@@ -45,6 +50,7 @@ export default function Contact() {
             }
         } catch (error) {
             setFormStatus('An unexpected error occurred. Please try again.');
+            console.log(apiUrl);
         }
     };
 
@@ -135,7 +141,7 @@ export default function Contact() {
                             ></textarea>
                         </div>
                         {/* user can send attachment(s) in the email */}
-                        {/* <div className="mb-6">
+                        <div className="mb-6">
                             <label htmlFor="attachment" className="cursor-pointer border-2 border-black rounded-lg p-2 flex justify-between items-center">
                                 Attachment(s) <span className="text-gray-500">(Optional)</span>
                                 <input
@@ -158,7 +164,7 @@ export default function Contact() {
                                     </ul>
                                 </div>
                             )}
-                        </div> */}
+                        </div>
 
                         {/* send message button */}
                         <div className="text-center">
