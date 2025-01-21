@@ -215,11 +215,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const availableTime = getUserTimeZoneDate(nextAvailableTime);
 
             return res.status(429).json({
-                error: `Rate limit exceeded. You can send an email again at ${availableTime}`,
+                error: `The maximum allowed emails per hour has been reached. You can send an email again at ${availableTime}`,
             });
         }
 
-        // Add current request timestamp
+        // adds current request timestamp
         rateLimitStore[ip].timestamps.push(currentTime);
 
         const form = new multiparty.Form();
