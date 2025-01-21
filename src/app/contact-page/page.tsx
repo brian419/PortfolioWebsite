@@ -71,7 +71,7 @@ export default function Contact() {
                 if (errorData.error && errorData.error.includes('You can send an email again at')) {
                     const serverTime = new Date(errorData.error.split('at ')[1]);
                     const localTime = serverTime.toLocaleString(); // convert to user's local time zone
-                    setFormStatus(`Failed to send message - Rate limit exceeded. You can send an email again at ${localTime}`);
+                    setFormStatus(`The maximum allowed emails per hour has been reached. You can send an email again at ${localTime}`);
                 } else {
                     setFormStatus('Failed to send message - ' + (errorData.error || 'An error occurred.'));
                 }
