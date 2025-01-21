@@ -174,11 +174,15 @@ const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour in milliseconds
 //     return localTime.toLocaleString();
 // }
 
-function getUserTimeZoneDate(utcTime: number) {
-    const localTime = new Date(utcTime);
-    console.log('Local Time:', localTime);
-    return localTime.toLocaleString(); // converts the UTC time to local time
+// function getUserTimeZoneDate(utcTime: number) {
+//     const localTime = new Date(utcTime);
+//     console.log('Local Time:', localTime);
+//     return localTime.toLocaleString(); // converts the UTC time to local time
 
+// }
+
+function getUserTimeZoneDate(utcTime: number) {
+    return new Date(utcTime).toISOString(); // returns UTC in ISO format
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -324,3 +328,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(405).json({ message: 'Only POST requests allowed' });
     }
 }
+c

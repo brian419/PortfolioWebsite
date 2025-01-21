@@ -27,6 +27,31 @@ export default function Contact() {
             ? `${window.location.origin}/api/sendEmail`
             : '/api/sendEmail';
 
+        // try {
+        //     const res = await fetch(apiUrl, {
+        //         method: 'POST',
+        //         body: formData,
+        //     });
+
+        //     if (res.status === 200) {
+        //         setFormStatus('Your message has been sent successfully!');
+        //         // console.log('Successful API URL: ' + apiUrl);
+        //         setName('');
+        //         setEmail('');
+        //         setMessage('');
+        //         setAttachments([]);
+        //         setFileNames([]);
+        //         (document.getElementById('attachment') as HTMLInputElement).value = ''; // clears the file input
+
+        //     } else {
+        //         const errorData = await res.json();
+        //         setFormStatus('Failed to send message - ' + (errorData.error || 'An error occurred.'));
+        //     }
+        // } catch (error) {
+        //     setFormStatus('An unexpected error occurred.');
+        //     // console.log('Failed API URL: ' + apiUrl);
+        // }
+
         try {
             const res = await fetch(apiUrl, {
                 method: 'POST',
@@ -35,22 +60,26 @@ export default function Contact() {
 
             if (res.status === 200) {
                 setFormStatus('Your message has been sent successfully!');
-                // console.log('Successful API URL: ' + apiUrl);
                 setName('');
                 setEmail('');
                 setMessage('');
                 setAttachments([]);
                 setFileNames([]);
                 (document.getElementById('attachment') as HTMLInputElement).value = ''; // clears the file input
-
             } else {
                 const errorData = await res.json();
-                setFormStatus('Failed to send message - ' + (errorData.error || 'An error occurred.'));
+                if (errorData.error && errorData.error.includes('You can send an email again at')) {
+                    const serverTime = new Date(errorData.error.split('at ')[1]);
+                    const localTime = serverTime.toLocaleString(); // convert to user's local time zone
+                    setFormStatus(`Failed to send message - Rate limit exceeded. You can send an email again at ${localTime}`);
+                } else {
+                    setFormStatus('Failed to send message - ' + (errorData.error || 'An error occurred.'));
+                }
             }
         } catch (error) {
             setFormStatus('An unexpected error occurred.');
-            // console.log('Failed API URL: ' + apiUrl);
         }
+
     };
 
 
