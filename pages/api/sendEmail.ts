@@ -176,8 +176,9 @@ function getUserTimeZoneDate(offset: number) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        const ip = req.headers['x-real-ip'] || req.socket.remoteAddress || 'unknown';
-        const userAgent = req.headers['user-agent'];
+        const ipRaw = req.headers['x-real-ip'] || req.socket.remoteAddress || 'unknown';
+        const ip = Array.isArray(ipRaw) ? ipRaw[0] : ipRaw;        
+        // const userAgent = req.headers['user-agent'];
 
         // console.log('IP:', ip);
         // console.log('User Agent:', userAgent);
