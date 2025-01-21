@@ -176,7 +176,9 @@ const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour in milliseconds
 
 function getUserTimeZoneDate(utcTime: number) {
     const localTime = new Date(utcTime);
+    console.log('Local Time:', localTime);
     return localTime.toLocaleString(); // converts the UTC time to local time
+
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
