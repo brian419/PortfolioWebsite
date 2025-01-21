@@ -40,6 +40,7 @@ export default function Contact() {
 
             if (res.status === 200) {
                 setFormStatus('Your message has been sent successfully!');
+                console.log('Successful API URL: ' + apiUrl);
                 setName('');
                 setEmail('');
                 setMessage('');
@@ -49,8 +50,8 @@ export default function Contact() {
                 setFormStatus('Failed to send message - ' + (errorData.error || 'An error occurred.'));
             }
         } catch (error) {
-            setFormStatus('An unexpected error occurred. Please try again.');
-            console.log(apiUrl);
+            setFormStatus('An unexpected error occurred.');
+            console.log('Failed API URL: ' + apiUrl);
         }
     };
 
