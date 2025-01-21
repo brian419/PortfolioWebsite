@@ -23,11 +23,6 @@ export default function Contact() {
             formData.append('attachments', file); // 
         });
 
-        // const apiUrl = process.env.NODE_ENV === 'production'
-        //     ? 'https://jeongbinson.com/api/sendEmail'
-        //     : '/api/sendEmail';
-
-
         const apiUrl = process.env.NODE_ENV === 'production'
             ? `${window.location.origin}/api/sendEmail`
             : '/api/sendEmail';
@@ -40,18 +35,21 @@ export default function Contact() {
 
             if (res.status === 200) {
                 setFormStatus('Your message has been sent successfully!');
-                console.log('Successful API URL: ' + apiUrl);
+                // console.log('Successful API URL: ' + apiUrl);
                 setName('');
                 setEmail('');
                 setMessage('');
                 setAttachments([]);
+                setFileNames([]);
+                (document.getElementById('attachment') as HTMLInputElement).value = ''; // clears the file input
+
             } else {
                 const errorData = await res.json();
                 setFormStatus('Failed to send message - ' + (errorData.error || 'An error occurred.'));
             }
         } catch (error) {
             setFormStatus('An unexpected error occurred.');
-            console.log('Failed API URL: ' + apiUrl);
+            // console.log('Failed API URL: ' + apiUrl);
         }
     };
 
@@ -81,6 +79,8 @@ export default function Contact() {
             setFileNames((prevFileNames) => [...prevFileNames, ...newFiles.map((file) => file.name)]); // appends the file names
         }
     };
+
+
 
     return (
         <div className="min-h-screen flex flex-col text-gray-800">
