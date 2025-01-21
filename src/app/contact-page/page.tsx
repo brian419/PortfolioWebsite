@@ -27,8 +27,8 @@ export default function Contact() {
         //     ? 'https://jeongbinson.com/api/sendEmail'
         //     : '/api/sendEmail';
 
-        const apiUrl = (process.env.NODE_ENV === 'production' && 
-            (window.location.origin === 'https://jeongbinson.com' || window.location.origin === 'https://dev.jeongbinson.com'))
+
+        const apiUrl = process.env.NODE_ENV === 'production'
             ? `${window.location.origin}/api/sendEmail`
             : '/api/sendEmail';
 
