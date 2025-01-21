@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 to: email,
                 subject: 'Email Confirmation: Your message has been sent and received',
                 text: `Hello ${name},\n\nThank you for getting in touch! Here’s a copy of your message:\n\n${message}\n\nI'll get back to you as soon as I can.\n\nBest regards,\nJeongbin Son`,
-                attachments: nodemailerAttachments,
+                // attachments: nodemailerAttachments, 
                 html: `
                     <div style="font-family: Arial, sans-serif; color: #333;">
                         <h3 style="color: #49A097; margin-bottom: 20px;">Hello ${name},</h3>
@@ -92,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             <p style="font-size: 16px; color: #333;"><strong>Message:</strong><br>${message}</p>
                         </div>
                         <p style="font-size: 16px; line-height: 1.5;">
-                            I'll get back to you as soon as I can.
+                            If you have attached any files, this email confirms that they were also sent! I'll get back to you as soon as I can.
                         </p>
                         <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">
                             Best regards,<br>
@@ -122,7 +122,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 // delete all temporary files
                 attachments.forEach((file) => {
                     if (file.path) {
-                        fs.unlinkSync(file.path); // Delete the temporary file
+                        fs.unlinkSync(file.path); // deletes the temporary file
                     }
                 });
             }
