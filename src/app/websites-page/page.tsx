@@ -176,7 +176,7 @@ const WebsitePage: React.FC = () => {
     };
 
     return (
-        <div className="mt-[-20px] mb-60 flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
+        <div className="mt-[-20px] mb-32 flex flex-col items-center justify-start h-screen text-white relative">
             <section className="container mx-auto px-4 pt-20">
                 <div className="text-center mb-12">
                     <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#49A097] to-[#1D976C] mb-6 shadow-xl p-4">
@@ -204,13 +204,13 @@ const WebsitePage: React.FC = () => {
             </div>
 
             {/* min-height: calc(100% + 40px); */}
-            <div className="relative flex items-center justify-center w-full max-w-4xl h-auto overflow-hidden">
+            <div className="relative flex items-center justify-center w-full max-w-4xl h-auto ">
 
                 {/* Left Arrow for Desktop View*/}
                 {!isExtraInfoActive && (
                     <button
                         onClick={handlePrev}
-                        className="hidden md:flex absolute left-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                        className="outline outline-white hidden md:flex absolute left-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 "
                         aria-label="Previous Project"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -219,10 +219,11 @@ const WebsitePage: React.FC = () => {
                     </button>
                 )}
 
+
                 {/* Project Cards */}
-                <div className="relative flex items-center justify-center w-full h-full">
+                <div className="relative flex items-center justify-center w-full h-full overflow-x-hidden">
                     <motion.div
-                        className="flex h-[600px]]"
+                        className="flex"
                         animate={{ x: `calc(50% - ${currentIndex * (cardWidth + 32)}px - ${cardWidth / 2}px)` }}
                         transition={{ type: "spring", stiffness: 50, damping: 20 }}
                     >
@@ -241,7 +242,7 @@ const WebsitePage: React.FC = () => {
                 {!isExtraInfoActive && (
                     <button
                         onClick={handleNext}
-                        className="hidden md:flex absolute right-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                        className="outline outline-white hidden md:flex absolute right-4 top-1/2 -mt-11 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 "
                         aria-label="Next Project"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -254,7 +255,7 @@ const WebsitePage: React.FC = () => {
                 {!isExtraInfoActive && (
                     <button
                         onClick={handleNext}
-                        className="md:hidden absolute right-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                        className="outline outline-white md:hidden absolute right-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                         aria-label="Next Project"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -267,7 +268,7 @@ const WebsitePage: React.FC = () => {
                 {!isExtraInfoActive && (
                     <button
                         onClick={handlePrev}
-                        className="md:hidden absolute left-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                        className="outline outline-white md:hidden absolute left-10 mt-0 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                         aria-label="Previous Project"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -275,12 +276,11 @@ const WebsitePage: React.FC = () => {
                         </svg>
                     </button>
                 )}
-
-
             </div>
 
-
             {/* link buttons to link the websites to their https link */}
+            {/* issue: remove link buttons section, and the website cards are not cutt off. keep this section, website cards get cut off.  */}
+
             <div className="mt-10">
                 {websites[currentIndex].id === 1 ? (
                     <LinkButton label="UA Waterski Team" href={websites[currentIndex].link} />
@@ -320,9 +320,9 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive, onClick }) => (
     <motion.div
         onClick={onClick}
-        className={`cursor-pointer min-w-[300px] max-w-[340px] mx-8 transition-transform duration-300 ${isActive ? 'scale-100' : 'scale-90 opacity-50'}`}
+        className={`cursor-pointer min-w-[300px] max-w-[300px] mx-8 transition-transform duration-300 ${isActive ? 'scale-100' : 'scale-90 opacity-50'}`}
     >
-        <div className="cursor-text max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 space-y-4 mt-4 relative perspective bg-gray-800 text-white rounded-lg p-4 shadow-2xl transform transition-transform duration-300 border border-transparent min-h-[450px]">
+        <div className="outline outline-green-100 max-h-32 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 space-y-4 mt-4 relative perspective bg-gray-800 text-white rounded-lg p-4 shadow-2xl transform transition-transform duration-300 border border-transparent min-h-[450px]">
             {/* Image */}
             <Image
                 src={project.image}
@@ -360,9 +360,11 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
         <div className="relative flex justify-center items-center w-full h-full">
 
             {/* left arrow button only shown on desktop view, hidden on mobile view */}
+            {/* 1/21/25 3:46pm cst, removed mt-32 from desktop view left and right button for extra info modal */}
+
             <button
                 onClick={onPrev}
-                className="hidden md:flex absolute left-72 mt-32 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                className="outline outline-white hidden md:flex absolute left-72 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 "
                 aria-label="Previous Project"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -373,7 +375,7 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
             {/* left arrow button only shown on mobile view, hidden on desktop view */}
             <button
                 onClick={onPrev}
-                className="md:hidden absolute left-10 mt-80 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                className="outline outline-white md:hidden absolute left-10 mt-80 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                 aria-label="Previous Project"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -383,7 +385,7 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
 
 
             {/* Modal Content */}
-            <div className="bg-gray-900 text-white p-6 rounded-lg max-w-lg w-full relative border border-gray-400">
+            <div className="bg-gray-900 text-white p-6 rounded-lg max-w-lg w-full relative border border-gray-400  border-opacity-50">
                 {/* Close Button */}
                 <button
                     onClick={onClose}
@@ -452,7 +454,7 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
             {/* right arrow button only shown on desktop view, hidden on mobile view */}
             <button
                 onClick={onNext}
-                className="hidden md:flex absolute right-72 mt-32 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                className="outline outline-white hidden md:flex absolute right-72 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 "
                 aria-label="Next Project"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
@@ -463,7 +465,7 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
             {/* right arrow button only shown on mobile view, hidden on desktop view */}
             <button
                 onClick={onNext}
-                className="md:hidden absolute right-10 mt-80 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
+                className="outline outline-white md:hidden absolute right-10 mt-80 top-1/2 transform -translate-y-1/2 bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition z-10 text-white shadow-lg opacity-80 hover:opacity-100 border-0 hover:border hover:border-white"
                 aria-label="Previous Project"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
