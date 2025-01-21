@@ -168,10 +168,15 @@ export const config = {
 const RATE_LIMIT = 5; // max emails per hour
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour in milliseconds
 
-function getUserTimeZoneDate(offset: number) {
-    const now = new Date();
-    const localTime = new Date(now.getTime() + offset * 60 * 60 * 1000);
-    return localTime.toLocaleString();
+// function getUserTimeZoneDate(offset: number) {
+//     const now = new Date();
+//     const localTime = new Date(now.getTime() + offset * 60 * 60 * 1000);
+//     return localTime.toLocaleString();
+// }
+
+function getUserTimeZoneDate(utcTime: number) {
+    const localTime = new Date(utcTime);
+    return localTime.toLocaleString(); // converts the UTC time to local time
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -196,9 +201,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         if (rateLimitStore[ip].timestamps.length >= RATE_LIMIT) {
+            // const nextAvailableTime = rateLimitStore[ip].timestamps[0] + RATE_LIMIT_WINDOW_MS;
+            // const timeZoneOffset = new Date().getTimezoneOffset() / -60; // calculates user's time zone offset
+            // const availableTime = getUserTimeZoneDate(timeZoneOffset);
+
             const nextAvailableTime = rateLimitStore[ip].timestamps[0] + RATE_LIMIT_WINDOW_MS;
-            const timeZoneOffset = new Date().getTimezoneOffset() / -60; // calculates user's time zone offset
-            const availableTime = getUserTimeZoneDate(timeZoneOffset);
+            const availableTime = getUserTimeZoneDate(nextAvailableTime);
 
             return res.status(429).json({
                 error: `Rate limit exceeded. You can send an email again at ${availableTime}`,
