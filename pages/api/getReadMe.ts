@@ -37,7 +37,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         res.status(200).json({ content: fileContent });
     } catch (error) {
-        console.error('Error reading file:', error.message);
+        console.error('Error reading file:', (error as Error).message);
         res.status(500).json({ error: 'File not found or unable to read' });
     }
 }
