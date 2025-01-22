@@ -28,6 +28,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",
+    "react-markdown": "^9.0.3",
     "sharp": "^0.33.5",
     "tailwind-scrollbar": "^3.1.0",
     "three": "^0.166.1",
@@ -50,5 +51,10 @@
     "tailwindcss": "^3.4.10",
     "typescript": "^5",
     "vite": "^5.4.11"
-  }
+  },
+  "browser": {
+  "fs": false,
+  "path": false,
+  "os": false
+}
 }

@@ -11,6 +11,11 @@ import snowskiImage from '../../components/images/snowskiimage.png'
 const snowSkiVideo = '/videos/CS330FinalProjectRecording.mp4';
 import infoCircleSVG from '../../components/images/info-circle-svgrepo-com.svg';
 
+//readme stuff
+import fs from 'fs';
+import path from 'path';
+import ReactMarkdown from 'react-markdown';
+
 interface Project {
     id: number;
     title: string;
@@ -19,6 +24,7 @@ interface Project {
     link: string;
     extraInfo: string;
     video?: string; // '?' makes it optional
+    readmePath?: string;
 }
 
 const cardWidth = 340;
@@ -27,6 +33,7 @@ const WebsitePage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [isExtraInfoActive, setIsExtraInfoActive] = useState(false);
+    const [readmeContent, setReadmeContent] = useState<string | null>(null);
 
     const websites: Project[] = useMemo(() => [
         {
@@ -123,7 +130,7 @@ const WebsitePage: React.FC = () => {
         {
             id: 3,
             title: "Code for Trees",
-            description: "Solo website project for solving coding problems and gaining points to plant trees.",
+            description: "Solo website project for solving coding problems and gaining points to plant trees. Note: This website is under heavy construction, and many features will not be available at this time.",
             image: codefortreeshomepageImage,
             link: 'https://codefortrees.org/',
             extraInfo: `
@@ -143,6 +150,7 @@ const WebsitePage: React.FC = () => {
                     <p>This will be a solo project where I handle all aspects of development, from frontend to backend.</p>
                 </div>
             `,
+            readmePath: 'CodingForTrees_README.md',
         },
     ], []);
 
@@ -175,8 +183,27 @@ const WebsitePage: React.FC = () => {
         setIsExtraInfoActive(false);
     };
 
+    const fetchReadmeContent = async (filename: string) => {
+        try {
+            const response = await fetch(`/api/getReadMe?filename=${filename}`);
+            const data = await response.json();
+            setReadmeContent(data.content || 'Unable to fetch README content');
+        } catch (error) {
+            console.error('Error fetching README:', error);
+            setReadmeContent('Error fetching README content.');
+        }
+    };
+
+    useEffect(() => {
+        if (selectedProject?.readmePath) {
+            fetchReadmeContent(selectedProject.readmePath);
+        } else {
+            setReadmeContent(null);
+        }
+    }, [selectedProject]);
+
     return (
-        <div className="mt-[-20px] mb-32 flex flex-col items-center justify-start h-screen text-white relative">
+        <div className="mb-32 flex flex-col items-center justify-start h-screen text-white relative">
             <section className="container mx-auto px-4 pt-20">
                 <div className="text-center mb-12">
                     <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#49A097] to-[#1D976C] mb-6 shadow-xl p-4">
@@ -228,7 +255,7 @@ const WebsitePage: React.FC = () => {
                         transition={{ type: "spring", stiffness: 50, damping: 20 }}
                     >
                         {websites.map((project, index) => (
-                            <ProjectCard
+                            <WebsiteCard
                                 key={project.id}
                                 project={project}
                                 isActive={index === currentIndex}
@@ -300,6 +327,7 @@ const WebsitePage: React.FC = () => {
                     onClose={handleModalClose}
                     onPrev={handlePrev}
                     onNext={handleNext}
+                    readmeContent={readmeContent}
                 />
             )}
         </div>
@@ -310,14 +338,14 @@ const WebsitePage: React.FC = () => {
 
 export default WebsitePage;
 
-interface ProjectCardProps {
+interface WebsiteCardProps {
     project: Project;
     isActive: boolean;
     onClick: () => void;
 }
 
 // scale-105 and scale-90 or scale-90 and scale-75
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive, onClick }) => (
+const WebsiteCard: React.FC<WebsiteCardProps> = ({ project, isActive, onClick }) => (
     <motion.div
         onClick={onClick}
         className={`cursor-pointer min-w-[300px] max-w-[300px] mx-8 transition-transform duration-300 ${isActive ? 'scale-100' : 'scale-90 opacity-50'}`}
@@ -329,7 +357,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive, onClick })
                 alt={project.title}
                 width={300}
                 height={200}
-                className="rounded-t-lg object-cover w-full"
+                className="rounded-t-lg object-cover"
             />
             {/* Title */}
             <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>
@@ -352,9 +380,10 @@ interface ModalProps {
     onClose: () => void;
     onPrev: () => void;
     onNext: () => void;
+    readmeContent: string | null;
 }
 
-const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
+const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext, readmeContent }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         {/* Wrapper for Modal and Arrows */}
         <div className="relative flex justify-center items-center w-full h-full">
@@ -406,6 +435,17 @@ const Modal: React.FC<ModalProps> = ({ project, onClose, onPrev, onNext }) => (
                         </video>
                     </div>
                 )}
+
+                {/* Display readme if it exists */}
+                {readmeContent && (
+                    <div className="bg-gray-800 p-4 rounded-lg shadow-lg mt-4 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 pr-2">
+                        <div className="text-center text-xl font-bold text-blue-400">
+                            Readme:
+                        </div>
+                        <ReactMarkdown>{readmeContent}</ReactMarkdown>
+                    </div>
+                )}
+
 
                 {/* Modal Content */}
                 <h2 className="text-xl font-bold mt-4 text-blue-400">{project.title}</h2>

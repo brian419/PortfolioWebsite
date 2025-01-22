@@ -69,7 +69,7 @@ const ProjectPage: React.FC = () => {
     const selectedProject = projects[currentIndex];
 
     return (
-        <div className="mt-[-20px] min-h-screen flex flex-col items-center justify-start h-screen text-white relative overflow-hidden">
+        <div className="mb-32 min-h-screen flex flex-col items-center justify-start h-screen text-white relative">
             {/* <h1 className="text-4xl font-bold mb-8 mt-10">Projects</h1> */}
             {/* <h1 className="py-10 text-6xl font-extrabold mt-10 text-[#49A097]">
                 Projects
@@ -85,7 +85,7 @@ const ProjectPage: React.FC = () => {
                 </div>
             </section>
 
-            <div className="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
+            <div className="relative flex items-center justify-center w-full max-w-4xl h-auto ">
                 {/* Previous Button */}
                 <button
                     onClick={handlePrev}
@@ -98,19 +98,21 @@ const ProjectPage: React.FC = () => {
                 </button>
 
                 {/* Project Cards */}
-                <motion.div
-                    className="flex"
-                    animate={{ x: `calc(50% - ${currentIndex * (cardWidth + 32)}px - ${cardWidth / 2}px)` }}
-                    transition={{ type: "spring", stiffness: 50, damping: 20 }}
-                >
-                    {projects.map((project, index) => (
-                        <MemoizedProjectCard
-                            key={project.id}
-                            project={project}
-                            isActive={index === currentIndex}
-                        />
-                    ))}
-                </motion.div>
+                <div className="relative flex items-center justify-center w-full h-full overflow-x-hidden">
+                    <motion.div
+                        className="flex"
+                        animate={{ x: `calc(50% - ${currentIndex * (cardWidth + 32)}px - ${cardWidth / 2}px)` }}
+                        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+                    >
+                        {projects.map((project, index) => (
+                            <MemoizedProjectCard
+                                key={project.id}
+                                project={project}
+                                isActive={index === currentIndex}
+                            />
+                        ))}
+                    </motion.div>
+                </div>
 
                 {/* Next Button */}
                 <button
@@ -126,7 +128,7 @@ const ProjectPage: React.FC = () => {
             <br />
 
             {/* Link Button */}
-            <div className="mt-8">
+            <div className="mt-10">
                 {selectedProject.id === 1 ? (
                     <LinkButton label="Black & White Tetris" href={selectedProject.link} />
                 ) : selectedProject.id === 2 ? (
@@ -152,10 +154,10 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive }) => (
     <motion.div
-        className={`min-w-[300px] mx-8 transition-transform duration-300 ${isActive ? 'scale-105' : 'scale-90 opacity-50'
+        className={`cursor-pointer min-w-[300px] max-w-[300px] mx-8 transition-transform duration-300 ${isActive ? 'scale-100' : 'scale-90 opacity-50'
             }`}
     >
-        <div className="bg-gray-800 text-white rounded-lg p-6 shadow-2xl transform transition-transform duration-300 hover:scale-105">
+        <div className="outline outline-green-100 max-h-32 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 space-y-4 mt-4 relative perspective bg-gray-800 text-white rounded-lg p-4 shadow-2xl transform transition-transform duration-300 border border-transparent min-h-[450px]">
             <Image
                 src={project.image}
                 alt={project.title}
