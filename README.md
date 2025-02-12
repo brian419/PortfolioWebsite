@@ -113,3 +113,7 @@ currently removed backend for development as I work on other things besides play
 5) Figure out idea for user based login (like why would they sign up and login)
    a. implement forgot password (like the one we did in capstone project)
    b. have fun with newletter system (automated email with option to turn off) with cybersecurity features in mind. 
+
+6) Offering SAAS as a new option on Navbar
+   a. start simple yet unique. Converting video (multiple video formats) into text and pdf files (transcript with option to export to file but also return transcript on the page). cybersecurity features / filtering to prevent users abusing the system to display insensitive / racist / inappropriate transcripts on my website.
+      - Before returning the transcript onto page, check if filtered words were caught (allow max of [] words) and block the render and display an appropriate message notifying the user that their transcript could not be displayed due to "some reason"
