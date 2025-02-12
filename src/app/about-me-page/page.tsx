@@ -4,6 +4,16 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import headshot from '../../components/Photo.png';
 
+// adding a new component that simplifies the lines needed when creating a new tech stack item
+const TechStackItem: React.FC<{ title: string, bgColor: string }> = ({ title, bgColor }) => (
+    <div className={`flex items-center justify-center border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 ${bgColor}`}>
+        <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
+            {title}
+        </h3>
+        <p className="text-gray-900 leading-relaxed"></p>
+    </div>
+)
+
 export default function AboutMe() {
     const [position, setPosition] = useState({ top: 50, left: 50 });
 
@@ -31,6 +41,7 @@ export default function AboutMe() {
 
         animationFrame = requestAnimationFrame(moveRabbit); // Start the animation loop
         return () => cancelAnimationFrame(animationFrame);  // Cleanup
+
     }, []);
 
 
@@ -109,173 +120,28 @@ export default function AboutMe() {
                     </h2>
                     {/* sm:grid-cols-2 lg:grid-cols-3 gap-8 */}
                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* Frontend */}
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                React.js
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div lang="en" className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                TypeScript
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Next.js
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Three.js
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Tailwind CSS
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                CSS
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                HTML
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#B0C3AA]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Javascript
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        {/* Backend */}
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Node.js
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Express.js
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                MySQL: MongoDB & Amazon AWS (RDS)
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                RESTful APIs
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                TypeScript
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        {/* Tools */}
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#A6C5D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Git
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                GitHub
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Visual Studio Code
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Figma
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
-                        <div className="border border-b-gray-100 shadow-lg rounded-lg p-6 transition-transform transform hover:-translate-y-2 bg-[#C3A7D6]">
-                            <h3 className="text-2xl font-semibold text-white mb-4 break-words hyphens-auto">
-                                Vercel
-                            </h3>
-                            <p className="text-gray-900 leading-relaxed">
-
-                            </p>
-                        </div>
-
+                        {[
+                            { title: "React.js", bgColor: "bg-[#B0C3AA]" },
+                            { title: "TypeScript", bgColor: "bg-[#B0C3AA]" },
+                            { title: "Next.js", bgColor: "bg-[#B0C3AA]" },
+                            { title: "Three.js", bgColor: "bg-[#B0C3AA]" },
+                            { title: "Tailwind CSS", bgColor: "bg-[#B0C3AA]" },
+                            { title: "CSS", bgColor: "bg-[#B0C3AA]" },
+                            { title: "HTML", bgColor: "bg-[#B0C3AA]" },
+                            { title: "JavaScript", bgColor: "bg-[#B0C3AA]" },
+                            { title: "Node.js", bgColor: "bg-[#A6C5D6]" },
+                            { title: "Express.js", bgColor: "bg-[#A6C5D6]" },
+                            { title: "MySQL: MongoDB & Amazon AWS (RDS)", bgColor: "bg-[#A6C5D6]" },
+                            { title: "RESTful APIs", bgColor: "bg-[#A6C5D6]" },
+                            { title: "TypeScript", bgColor: "bg-[#A6C5D6]" },
+                            { title: "Git", bgColor: "bg-[#A6C5D6]" },
+                            { title: "GitHub", bgColor: "bg-[#C3A7D6]" },
+                            { title: "Visual Studio Code", bgColor: "bg-[#C3A7D6]" },
+                            { title: "Figma", bgColor: "bg-[#C3A7D6]" },
+                            { title: "Vercel", bgColor: "bg-[#C3A7D6]" },
+                        ].map(item => (
+                            <TechStackItem key={item.title} title={item.title} bgColor={item.bgColor} />
+                        ))}
                     </div>
                 </div>
             </section>
