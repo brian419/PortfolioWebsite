@@ -5,6 +5,13 @@ import { useState, useEffect } from 'react';
 import TypeWriterEffect from '../components/Typewriter';
 import RainbowTextEffect from '../components/RainbowText';
 
+// todo: figure out a way to add scroll-based animation to the homepage.
+// idea 1 for that: as we transition from welcome section to galaxy scene, we have a scroll based animation that happens.
+// idea: we acn see the main section and the galaxy scene. the galaxy scene is smaller when we first load the page. 
+// the user scrolls down to the galaxy scene and as the galaxy scene comes into view (by percentage / pixels), we enlarge the galaxy scene to full screen.
+// possibly: snap the galaxy scene into full screen at a certain scroll position based on scroll direction, and snap out when the user wants to go up again.
+// might not be best practice for later if we want to expand the homepage further downwards after the galaxy scene
+
 export default function Home() {
     const [isOutsideGalaxy, setIsOutsideGalaxy] = useState(true);
     const [showScrollTop, setShowScrollTop] = useState(false);

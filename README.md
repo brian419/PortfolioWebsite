@@ -96,3 +96,20 @@ This is a personal project, but I welcome suggestions, feedback, questions, or c
   },
 
 currently removed backend for development as I work on other things besides player vs ai (deep learning).
+
+### To-Do Checklist
+1) Adding scroll-based animation to pages.
+   a. Homepage: On initial load, the galaxy scene will be smaller. On user-scroll, gradually enlarge the scene until a certain threshold (of how much of the scene is centered) is met. Offer a snap based scroll as well.
+   b. Scroll-based images look great I think.
+
+2) Fixing primary, secondary, tertiary color schemes. 
+
+3) Learn how to implement multiple languages, accessibility features (color blind & enlarge text options, etc)
+
+4) Learn how to implement content based management system. Might be crude without using services like sanity.io. 
+   a. Login to admin account and offer direct content management.
+   b. secure login with jwt & multi factor authentication (through email code or link) with cybersecurity features in mind. 
+
+5) Figure out idea for user based login (like why would they sign up and login)
+   a. implement forgot password (like the one we did in capstone project)
+   b. have fun with newletter system (automated email with option to turn off) with cybersecurity features in mind. 
